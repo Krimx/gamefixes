@@ -1,0 +1,22 @@
+{
+  "pack": {
+    "pack_format": 48,
+    "description": "Game Fixes Filters"
+  },
+  "filter": {
+    "block": [
+      {
+        "namespace": "minecraft",
+        "path": "recipe/.*_from_smelting_raw_.*"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "recipe/.*_from_smelting_.*_ore.*"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "recipe/netherite_scrap_from_smelting_ancient_debris.*"
+      }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+	"required": true,
+	"package": "com.krimx.gamefixes.client.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"client": [
+		"ExampleClientMixin",
+		"MaceItemInHandRendererMixin",
+		"MacePlayerModelMixin",
+		"MacePlayerItemInHandLayerMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}
