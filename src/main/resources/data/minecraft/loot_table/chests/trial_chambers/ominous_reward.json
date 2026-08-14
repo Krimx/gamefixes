@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 2.0,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "gamefixes:chests/trial_chambers/ominous_special"
+        }
+      ]
+    },
+    {
+      "rolls": 4.0,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "gamefixes:chests/trial_chambers/ominous_goodies"
+        }
+      ]
+    },
+    {
+      "rolls": 4.0,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "gamefixes:chests/trial_chambers/ominous_healing"
+        }
+      ]
+    }
+  ],
+  "random_sequence": "minecraft:chests/trial_chambers/reward_ominous"
+}

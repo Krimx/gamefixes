@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bolt_armor_trim_smithing_template",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:guster_banner_pattern",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:music_disc_precipice",
+          "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:heavy_core",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "random_sequence": "gamefixes:chests/trial_chambers/special"
+}

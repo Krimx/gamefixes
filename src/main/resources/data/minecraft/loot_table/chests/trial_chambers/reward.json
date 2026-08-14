@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "gamefixes:chests/trial_chambers/special"
+        }
+      ]
+    },
+    {
+      "rolls": 2.0,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "gamefixes:chests/trial_chambers/goodies"
+        }
+      ]
+    },
+    {
+      "rolls": 2.0,
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "value": "gamefixes:chests/trial_chambers/healing"
+        }
+      ]
+    }
+  ],
+  "random_sequence": "minecraft:chests/trial_chambers/reward"
+}
