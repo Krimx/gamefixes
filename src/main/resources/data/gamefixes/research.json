@@ -1,0 +1,32 @@
+{
+  "minecraft:librarian": {
+    "wind_burst": {
+      "name": "Wind Burst",
+
+      "inputs": [
+        {
+          "item": "minecraft:breeze_rod",
+          "count": 1
+        },
+        {
+          "item": "minecraft:wind_charge",
+          "count": 1
+        }
+      ],
+
+      "output": {
+        "item": "minecraft:enchanted_book",
+        "enchantment": "minecraft:wind_burst",
+        "level": 3,
+        "count": 1
+      },
+
+      "trade": {
+        "emerald_cost": 10,
+        "max_uses": 12,
+        "villager_xp": 15,
+        "price_multiplier": 0.05
+      }
+    }
+  }
+}

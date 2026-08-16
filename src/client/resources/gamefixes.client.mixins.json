@@ -6,7 +6,8 @@
 		"ExampleClientMixin",
 		"MaceItemInHandRendererMixin",
 		"MacePlayerModelMixin",
-		"MacePlayerItemInHandLayerMixin"
+		"MacePlayerItemInHandLayerMixin",
+		"MerchantScreenMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
