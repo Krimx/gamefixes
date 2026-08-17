@@ -5,7 +5,7 @@ import com.krimx.gamefixes.network.ResearchNetworking;
 import com.krimx.gamefixes.research.ResearchAttachments;
 import com.krimx.gamefixes.research.ResearchRegistry;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.player.ItemEvents;
+import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.registry.FuelValueEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -69,8 +69,8 @@ public class Gamefixes implements ModInitializer {
 				}
 		);
 
-		ItemEvents.USE.register(
-				(level, player, hand) -> {
+		UseItemCallback.EVENT.register(
+				(player, level, hand) -> {
 
 					ItemStack stack =
 							player.getItemInHand(hand);
@@ -90,6 +90,7 @@ public class Gamefixes implements ModInitializer {
 		ResearchRegistry.initialize();
 		ResearchNetworking.registerCommon();
 		MaceNetworking.registerCommon();
+		ConcreteConversion.initialize();
 
 		LOGGER.info(
 				"GameFixes Mod initialized successfully!"

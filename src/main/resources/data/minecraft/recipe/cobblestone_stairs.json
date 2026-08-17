@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "# ",
+    "##"
+  ],
+  "key": {
+    "#": "minecraft:cobblestone"
+  },
+  "result": {
+    "count": 4,
+    "id": "minecraft:cobblestone_stairs"
+  }
+}
