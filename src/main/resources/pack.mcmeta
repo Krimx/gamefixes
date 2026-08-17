@@ -16,6 +16,54 @@
       {
         "namespace": "minecraft",
         "path": "recipe/netherite_scrap_from_smelting_ancient_debris.*"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "recipe/stone_sword"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "recipe/stone_pickaxe"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "recipe/stone_axe"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "recipe/stone_shovel"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "recipe/stone_hoe"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "recipe/golden_sword"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "recipe/golden_pickaxe"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "recipe/golden_axe"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "recipe/golden_shovel"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "recipe/golden_hoe"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "recipe/stone_spear"
+      },
+      {
+        "namespace": "minecraft",
+        "path": "recipe/golden_spear"
       }
     ]
   }
