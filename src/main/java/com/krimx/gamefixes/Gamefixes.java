@@ -4,6 +4,8 @@ import com.krimx.gamefixes.network.MaceNetworking;
 import com.krimx.gamefixes.network.ResearchNetworking;
 import com.krimx.gamefixes.research.ResearchAttachments;
 import com.krimx.gamefixes.research.ResearchRegistry;
+import com.krimx.gamefixes.loot.EnchantWithLevelsMendingFunction;
+import com.mojang.serialization.MapCodec;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.registry.FuelValueEvents;
@@ -17,6 +19,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.MaceItem;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +31,17 @@ public class Gamefixes implements ModInitializer {
 			LoggerFactory.getLogger(MOD_ID);
 
 	public static Item REFINED_SULFUR;
+
+	private static final ThreadLocal<Boolean> ALLOW_MENDING =
+			ThreadLocal.withInitial(() -> false);
+
+	public static void setMendingAllowed(boolean allowed) {
+		ALLOW_MENDING.set(allowed);
+	}
+
+	public static boolean isMendingAllowed() {
+		return ALLOW_MENDING.get();
+	}
 
 	@Override
 	public void onInitialize() {
@@ -91,6 +105,15 @@ public class Gamefixes implements ModInitializer {
 		ResearchNetworking.registerCommon();
 		MaceNetworking.registerCommon();
 		ConcreteConversion.initialize();
+
+		Registry.register(
+				BuiltInRegistries.LOOT_FUNCTION_TYPE,
+				Identifier.fromNamespaceAndPath(
+						"gamefixes",
+						"enchant_with_levels_mending"
+				),
+				EnchantWithLevelsMendingFunction.MAP_CODEC
+		);
 
 		LOGGER.info(
 				"GameFixes Mod initialized successfully!"

@@ -293,24 +293,44 @@ public final class ResearchRegistry
                         .getAsJsonObject();
 
         Identifier firstInput =
-                Identifier.parse(
-                        inputA.get("item")
-                                .getAsString()
-                );
+                inputA.has("item")
+                        ? Identifier.parse(
+                                inputA.get("item")
+                                        .getAsString()
+                        )
+                        : null;
 
         int firstInputCount =
                 inputA.get("count")
                         .getAsInt();
 
+        Identifier firstInputEnchantment =
+                inputA.has("enchantment")
+                        ? Identifier.parse(
+                                inputA.get("enchantment")
+                                        .getAsString()
+                        )
+                        : null;
+
         Identifier secondInput =
-                Identifier.parse(
-                        inputB.get("item")
-                                .getAsString()
-                );
+                inputB.has("item")
+                        ? Identifier.parse(
+                                inputB.get("item")
+                                        .getAsString()
+                        )
+                        : null;
 
         int secondInputCount =
                 inputB.get("count")
                         .getAsInt();
+
+        Identifier secondInputEnchantment =
+                inputB.has("enchantment")
+                        ? Identifier.parse(
+                                inputB.get("enchantment")
+                                        .getAsString()
+                        )
+                        : null;
 
         if (firstInputCount <= 0
                 || secondInputCount <= 0) {
@@ -462,9 +482,11 @@ public final class ResearchRegistry
 
                 firstInput,
                 firstInputCount,
+                firstInputEnchantment,
 
                 secondInput,
                 secondInputCount,
+                secondInputEnchantment,
 
                 outputItem,
                 outputCount,

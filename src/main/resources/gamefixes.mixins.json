@@ -7,7 +7,9 @@
 		"MaceItemMixin",
 		"LivingEntityMixin",
 		"MerchantMenuMixin",
-		"AbstractContainerMenuMixin"
+		"AbstractContainerMenuMixin",
+		"EnchantRandomlyLootFunctionMixin",
+		"EnchantmentHelperMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

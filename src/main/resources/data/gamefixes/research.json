@@ -27,6 +27,64 @@
         "villager_xp": 15,
         "price_multiplier": 0.05
       }
+    },
+
+    "mending": {
+      "name": "Mending",
+
+      "inputs": [
+        {
+          "enchantment": "minecraft:mending",
+          "count": 1
+        },
+        {
+          "item": "minecraft:book",
+          "count": 1
+        }
+      ],
+
+      "output": {
+        "item": "minecraft:enchanted_book",
+        "enchantment": "minecraft:mending",
+        "level": 1,
+        "count": 1
+      },
+
+      "trade": {
+        "emerald_cost": 10,
+        "max_uses": 12,
+        "villager_xp": 15,
+        "price_multiplier": 0.05
+      }
+    },
+
+    "frost_walker": {
+      "name": "Frost Walker",
+
+      "inputs": [
+        {
+          "item": "minecraft:ice",
+          "count": 1
+        },
+        {
+          "item": "minecraft:book",
+          "count": 1
+        }
+      ],
+
+      "output": {
+        "item": "minecraft:enchanted_book",
+        "enchantment": "minecraft:frost_walker",
+        "level": 2,
+        "count": 1
+      },
+
+      "trade": {
+        "emerald_cost": 10,
+        "max_uses": 12,
+        "villager_xp": 15,
+        "price_multiplier": 0.05
+      }
     }
   }
 }

@@ -111,24 +111,12 @@ public final class VillagerResearch {
             return null;
         }
 
-        IdentifierHolder first =
-                new IdentifierHolder(
-                        firstInput.getItem()
-                );
-
-        IdentifierHolder second =
-                new IdentifierHolder(
-                        secondInput.getItem()
-                );
-
         for (ResearchProject project :
                 ResearchRegistry.all()) {
 
             if (project.matchesInputs(
-                    first.id(),
-                    firstInput.getCount(),
-                    second.id(),
-                    secondInput.getCount()
+                    firstInput,
+                    secondInput
             )) {
                 return project;
             }
@@ -201,18 +189,5 @@ public final class VillagerResearch {
                 project.getVillagerXp(),
                 project.getPriceMultiplier()
         );
-    }
-
-    private record IdentifierHolder(
-            net.minecraft.resources.Identifier id
-    ) {
-        private IdentifierHolder(
-                net.minecraft.world.item.Item item
-        ) {
-            this(
-                    net.minecraft.core.registries.BuiltInRegistries.ITEM
-                            .getKey(item)
-            );
-        }
     }
 }
