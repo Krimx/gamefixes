@@ -9,7 +9,8 @@
 		"MerchantMenuMixin",
 		"AbstractContainerMenuMixin",
 		"EnchantRandomlyLootFunctionMixin",
-		"EnchantmentHelperMixin"
+		"EnchantmentHelperMixin",
+		"AnvilMenuMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
