@@ -86,5 +86,182 @@
         "price_multiplier": 0.05
       }
     }
+  },
+  "minecraft:cleric": {
+    "haste": {
+      "name": "Haste",
+
+      "inputs": [
+        {
+          "item": "minecraft:netherite_ingot",
+          "count": 1
+        },
+        {
+          "item": "minecraft:nether_wart",
+          "count": 1
+        }
+      ],
+
+      "output": {
+        "item": "minecraft:potion",
+        "count": 1,
+        "potion": {
+          "effects": [
+            {
+              "effect": "minecraft:haste",
+              "duration": 180,
+              "amplifier": 0
+            }
+          ]
+        }
+      },
+
+      "trade": {
+        "emerald_cost": 10,
+        "max_uses": 12,
+        "villager_xp": 15,
+        "price_multiplier": 0.05
+      }
+    },
+    "levitation": {
+      "name": "Levitation",
+
+      "inputs": [
+        {
+          "item": "minecraft:shulker_shell",
+          "count": 1
+        },
+        {
+          "item": "minecraft:nether_wart",
+          "count": 1
+        }
+      ],
+
+      "output": {
+        "item": "minecraft:potion",
+        "count": 1,
+        "potion": {
+          "effects": [
+            {
+              "effect": "minecraft:levitation",
+              "duration": 10,
+              "amplifier": 0
+            }
+          ]
+        }
+      },
+
+      "trade": {
+        "emerald_cost": 10,
+        "max_uses": 12,
+        "villager_xp": 15,
+        "price_multiplier": 0.05
+      }
+    },
+    "jump_boost": {
+      "name": "Jump Boost",
+
+      "inputs": [
+        {
+          "item": "minecraft:rabbit_foot",
+          "count": 1
+        },
+        {
+          "item": "minecraft:nether_wart",
+          "count": 1
+        }
+      ],
+
+      "output": {
+        "item": "minecraft:potion",
+        "count": 1,
+        "potion": {
+          "effects": [
+            {
+              "effect": "minecraft:jump_boost",
+              "duration": 180,
+              "amplifier": 0
+            }
+          ]
+        }
+      },
+
+      "trade": {
+        "emerald_cost": 10,
+        "max_uses": 12,
+        "villager_xp": 15,
+        "price_multiplier": 0.05
+      }
+    },
+    "nausea": {
+      "name": "Nausea",
+
+      "inputs": [
+        {
+          "item": "gamefixes:refined_sulfur",
+          "count": 1
+        },
+        {
+          "item": "minecraft:nether_wart",
+          "count": 1
+        }
+      ],
+
+      "output": {
+        "item": "minecraft:potion",
+        "count": 1,
+        "potion": {
+          "effects": [
+            {
+              "effect": "minecraft:nausea",
+              "duration": 60,
+              "amplifier": 0
+            }
+          ]
+        }
+      },
+
+      "trade": {
+        "emerald_cost": 10,
+        "max_uses": 12,
+        "villager_xp": 15,
+        "price_multiplier": 0.05
+      }
+    },
+    "saturation": {
+      "name": "Saturation",
+
+      "inputs": [
+        {
+          "item": "minecraft:honey_bottle",
+          "count": 1
+        },
+        {
+          "item": "minecraft:nether_wart",
+          "count": 1
+        }
+      ],
+
+      "output": {
+        "item": "minecraft:potion",
+        "count": 1,
+        "potion": {
+          "effects": [
+            {
+              "effect": "minecraft:saturation",
+              "duration": 180,
+              "amplifier": 0
+            }
+          ]
+        }
+      },
+
+      "trade": {
+        "emerald_cost": 10,
+        "max_uses": 12,
+        "villager_xp": 15,
+        "price_multiplier": 0.05
+      }
+    }
   }
 }
