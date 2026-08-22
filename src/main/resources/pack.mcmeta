@@ -61,10 +61,10 @@
         "namespace": "minecraft",
         "path": "recipe/stone_spear"
       },
-      {
-        "namespace": "minecraft",
-        "path": "recipe/golden_spear"
-      }
+     {
+       "namespace": "minecraft",
+       "path": "recipe/golden_carrot"
+     }
     ]
   }
 }

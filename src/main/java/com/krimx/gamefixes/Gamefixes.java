@@ -15,6 +15,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -22,6 +23,8 @@ import net.minecraft.world.item.MaceItem;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
+import net.minecraft.world.item.CreativeModeTabs;
 
 public class Gamefixes implements ModInitializer {
 
@@ -31,6 +34,7 @@ public class Gamefixes implements ModInitializer {
 			LoggerFactory.getLogger(MOD_ID);
 
 	public static Item REFINED_SULFUR;
+	public static Item GOLDEN_POTATO;
 
 	private static final ThreadLocal<Boolean> ALLOW_MENDING =
 			ThreadLocal.withInitial(() -> false);
@@ -46,27 +50,19 @@ public class Gamefixes implements ModInitializer {
 	@Override
 	public void onInitialize() {
 
-		Identifier id =
-				Identifier.parse(
-						MOD_ID + ":refined_sulfur"
-				);
+		REFINED_SULFUR = registerItem("refined_sulfur", new Item.Properties());
+		GOLDEN_POTATO = registerItem("golden_potato", new Item.Properties()
+				.food(
+				new FoodProperties.Builder()
+						.nutrition(6)
+						.saturationModifier(9.6F)
+						.build()
+		));
 
-		ResourceKey<Item> key =
-				ResourceKey.create(
-						Registries.ITEM,
-						id
-				);
-
-		Item.Properties properties =
-				new Item.Properties()
-						.setId(key);
-
-		REFINED_SULFUR =
-				Registry.register(
-						BuiltInRegistries.ITEM,
-						id,
-						new Item(properties)
-				);
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS)
+				.register(output -> output.accept(GOLDEN_POTATO));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
+				.register(output -> output.accept(REFINED_SULFUR));
 
 		FuelValueEvents.BUILD.register(
 				(builder, context) -> {
@@ -117,6 +113,28 @@ public class Gamefixes implements ModInitializer {
 
 		LOGGER.info(
 				"GameFixes Mod initialized successfully!"
+		);
+	}
+
+	private static Item registerItem(String name, Item.Properties properties) {
+		Identifier id =
+				Identifier.parse(
+						MOD_ID + ":" + name
+				);
+
+		ResourceKey<Item> key =
+				ResourceKey.create(
+						Registries.ITEM,
+						id
+				);
+
+		properties =
+				properties.setId(key);
+
+		return Registry.register(
+				BuiltInRegistries.ITEM,
+				id,
+				new Item(properties)
 		);
 	}
 }

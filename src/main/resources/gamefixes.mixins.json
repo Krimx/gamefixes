@@ -10,7 +10,9 @@
 		"AbstractContainerMenuMixin",
 		"EnchantRandomlyLootFunctionMixin",
 		"EnchantmentHelperMixin",
-		"AnvilMenuMixin"
+		"AnvilMenuMixin",
+		"BeehiveBlockEntityMixin",
+		"BeehiveBlockEntityMixinInvoker"
 	],
 	"injectors": {
 		"defaultRequire": 1
