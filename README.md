@@ -2,6 +2,11 @@
 
 A Minecraft mod made to improve certain aspects of the game and create a smoother progression experience.
 
+This mod is meant to be used in a modpack available through these links:
+<Modpack pages don't exist yet>
+
+### This mod is not finished yet
+
 ## ⚠️ Spoilers!
 
 Everything below contains spoilers for the mod. If you like discovering things on your own, do not read past this point.
