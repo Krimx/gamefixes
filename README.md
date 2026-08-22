@@ -1,9 +1,18 @@
-# gamefixes
+# This is a mode made to fix certain aspects of Minecraft to improve progression
 
-## Setup
+#Spoilers!!!
+Everything below contains spoilers for the mod. If you like to discover things on your own, do not read past this point
 
-For setup instructions, please see the [Fabric Documentation page](https://docs.fabricmc.net/develop/getting-started/creating-a-project#setting-up) related to the IDE that you are using.
+##Added
+-More golden crops
+-Villager research system
+-New mace right-click swing attack
 
-## License
+##Removed
+-Golden carrot trade
+-Mending trade
+-Furnace functionality (block is still in the game for those who want it, but it won't do anything)
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+##Changed
+-Stair recipe (3 blocks for 4 stairs)
+-Blast furnace crafting recipe
