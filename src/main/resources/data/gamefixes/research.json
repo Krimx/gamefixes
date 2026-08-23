@@ -2,7 +2,6 @@
   "minecraft:librarian": {
     "wind_burst": {
       "name": "Wind Burst",
-
       "inputs": [
         {
           "item": "minecraft:breeze_rod",
@@ -13,14 +12,12 @@
           "count": 1
         }
       ],
-
       "output": {
         "item": "minecraft:enchanted_book",
         "enchantment": "minecraft:wind_burst",
         "level": 3,
         "count": 1
       },
-
       "trade": {
         "emerald_cost": 10,
         "max_uses": 12,
@@ -28,10 +25,8 @@
         "price_multiplier": 0.05
       }
     },
-
     "mending": {
       "name": "Mending",
-
       "inputs": [
         {
           "enchantment": "minecraft:mending",
@@ -42,14 +37,12 @@
           "count": 1
         }
       ],
-
       "output": {
         "item": "minecraft:enchanted_book",
         "enchantment": "minecraft:mending",
         "level": 1,
         "count": 1
       },
-
       "trade": {
         "emerald_cost": 10,
         "max_uses": 12,
@@ -57,10 +50,8 @@
         "price_multiplier": 0.05
       }
     },
-
     "frost_walker": {
       "name": "Frost Walker",
-
       "inputs": [
         {
           "item": "minecraft:ice",
@@ -71,14 +62,12 @@
           "count": 1
         }
       ],
-
       "output": {
         "item": "minecraft:enchanted_book",
         "enchantment": "minecraft:frost_walker",
         "level": 2,
         "count": 1
       },
-
       "trade": {
         "emerald_cost": 10,
         "max_uses": 12,
@@ -90,7 +79,6 @@
   "minecraft:cleric": {
     "haste": {
       "name": "Haste",
-
       "inputs": [
         {
           "item": "minecraft:netherite_ingot",
@@ -101,23 +89,106 @@
           "count": 1
         }
       ],
-
       "output": {
         "item": "minecraft:potion",
-        "count": 1,
+        "count": 3,
         "potion": {
           "effects": [
             {
               "effect": "minecraft:haste",
-              "duration": 180,
+              "duration": 360,
               "amplifier": 0
             }
           ]
         }
       },
-
       "trade": {
         "emerald_cost": 10,
+        "item_cost": {
+          "item": "minecraft:netherite_scrap",
+          "count": 3
+        },
+        "max_uses": 12,
+        "villager_xp": 15,
+        "price_multiplier": 0.05
+      }
+    },
+    "diakrete": {
+      "name": "Diakrete",
+      "inputs": [
+        {
+          "item": "minecraft:breeze_rod",
+          "count": 1
+        },
+        {
+          "item": "minecraft:diamond",
+          "count": 1
+        }
+      ],
+      "output": {
+        "item": "gamefixes:diakrete",
+        "count": 1
+      },
+      "trade": {
+        "emerald_cost": 4,
+        "item_cost": {
+          "item": "minecraft:diamond",
+          "count": 1
+        },
+        "max_uses": 12,
+        "villager_xp": 15,
+        "price_multiplier": 0.05
+      }
+    },
+    "tide_shell": {
+      "name": "Tide Shell",
+      "inputs": [
+        {
+          "item": "minecraft:shulker_shell",
+          "count": 1
+        },
+        {
+          "item": "minecraft:prismarine_shard",
+          "count": 1
+        }
+      ],
+      "output": {
+        "item": "gamefixes:tide_shell",
+        "count": 1
+      },
+      "trade": {
+        "emerald_cost": 5,
+        "item_cost": {
+          "item": "minecraft:shulker_shell",
+          "count": 1
+        },
+        "max_uses": 12,
+        "villager_xp": 15,
+        "price_multiplier": 0.05
+      }
+    },
+    "wingweave": {
+      "name": "Wingweave",
+      "inputs": [
+        {
+          "item": "minecraft:phantom_membrane",
+          "count": 1
+        },
+        {
+          "item": "minecraft:feather",
+          "count": 1
+        }
+      ],
+      "output": {
+        "item": "gamefixes:wingweave",
+        "count": 1
+      },
+      "trade": {
+        "emerald_cost": 5,
+        "item_cost": {
+          "item": "minecraft:phantom_membrane",
+          "count": 1
+        },
         "max_uses": 12,
         "villager_xp": 15,
         "price_multiplier": 0.05
@@ -125,7 +196,6 @@
     },
     "levitation": {
       "name": "Levitation",
-
       "inputs": [
         {
           "item": "minecraft:shulker_shell",
@@ -136,10 +206,9 @@
           "count": 1
         }
       ],
-
       "output": {
         "item": "minecraft:potion",
-        "count": 1,
+        "count": 3,
         "potion": {
           "effects": [
             {
@@ -150,9 +219,12 @@
           ]
         }
       },
-
       "trade": {
-        "emerald_cost": 10,
+        "emerald_cost": 3,
+        "item_cost": {
+          "item": "minecraft:shulker_shell",
+          "count": 1
+        },
         "max_uses": 12,
         "villager_xp": 15,
         "price_multiplier": 0.05
@@ -160,7 +232,6 @@
     },
     "jump_boost": {
       "name": "Jump Boost",
-
       "inputs": [
         {
           "item": "minecraft:rabbit_foot",
@@ -171,10 +242,9 @@
           "count": 1
         }
       ],
-
       "output": {
         "item": "minecraft:potion",
-        "count": 1,
+        "count": 3,
         "potion": {
           "effects": [
             {
@@ -185,9 +255,12 @@
           ]
         }
       },
-
       "trade": {
-        "emerald_cost": 10,
+        "emerald_cost": 1,
+        "item_cost": {
+          "item": "minecraft:rabbit_foot",
+          "count": 1
+        },
         "max_uses": 12,
         "villager_xp": 15,
         "price_multiplier": 0.05
@@ -195,7 +268,6 @@
     },
     "nausea": {
       "name": "Nausea",
-
       "inputs": [
         {
           "item": "gamefixes:refined_sulfur",
@@ -206,10 +278,9 @@
           "count": 1
         }
       ],
-
       "output": {
         "item": "minecraft:potion",
-        "count": 1,
+        "count": 3,
         "potion": {
           "effects": [
             {
@@ -220,9 +291,12 @@
           ]
         }
       },
-
       "trade": {
-        "emerald_cost": 10,
+        "emerald_cost": 2,
+        "item_cost": {
+          "item": "gamefixes:refined_sulfur",
+          "count": 1
+        },
         "max_uses": 12,
         "villager_xp": 15,
         "price_multiplier": 0.05
@@ -230,7 +304,6 @@
     },
     "saturation": {
       "name": "Saturation",
-
       "inputs": [
         {
           "item": "minecraft:honey_bottle",
@@ -241,10 +314,9 @@
           "count": 1
         }
       ],
-
       "output": {
         "item": "minecraft:potion",
-        "count": 1,
+        "count": 3,
         "potion": {
           "effects": [
             {
@@ -255,9 +327,12 @@
           ]
         }
       },
-
       "trade": {
-        "emerald_cost": 10,
+        "emerald_cost": 2,
+        "item_cost": {
+          "item": "minecraft:honey_bottle",
+          "count": 1
+        },
         "max_uses": 12,
         "villager_xp": 15,
         "price_multiplier": 0.05

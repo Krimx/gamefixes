@@ -1,5 +1,13 @@
 {
   "item.gamefixes.refined_sulfur": "Refined Sulfur",
   "item.gamefixes.golden_potato": "Golden Potato",
-  "trim_pattern.gamefixes.test": "GameFixes Test Trim"
+  "item.gamefixes.reduced_ghast_tear": "Reduced Ghast Tear",
+  "item.gamefixes.diakrete": "Diakrete",
+  "item.gamefixes.framed_elytra_trim": "Framed Elytra Trim",
+  "item.gamefixes.ghast_resin": "Ghast Resin",
+  "item.gamefixes.tide_shell": "Tide Shell",
+  "item.gamefixes.wingwoven_elytra": "Wingwoven Elytra",
+  "trim_pattern.gamefixes.test": "GameFixes Test Trim",
+  "item.gamefixes.gilded_elytra": "Gilded Elytra",
+  "item.gamefixes.gilded_wingwoven_elytra": "Gilded Wingwoven Elytra"
 }

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "ingredient": "minecraft:ghast_tear",
+  "result": {
+    "id": "gamefixes:reduced_ghast_tear"
+  },
+  "experience": 0.5,
+  "cookingtime": 100
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "gamefixes:item/framed_elytra_trim"
+  }
+}
