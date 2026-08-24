@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "gamefixes:gilded_wingwoven_elytra",
+  "base": "gamefixes:diakrete_chestplate",
+  "result": {
+    "id": "gamefixes:elytra_chestplate"
+  }
+}

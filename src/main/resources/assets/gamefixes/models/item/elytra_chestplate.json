@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "gamefixes:item/reduced_ghast_tear"
+    "layer0": "gamefixes:item/elytra_chestplate"
   }
 }

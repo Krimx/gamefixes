@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "gamefixes:wingweave",
+  "base": "gamefixes:gilded_elytra",
+  "result": {
+    "id": "gamefixes:gilded_wingwoven_elytra"
+  }
+}

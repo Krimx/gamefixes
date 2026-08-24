@@ -1,13 +1,19 @@
 {
   "item.gamefixes.refined_sulfur": "Refined Sulfur",
   "item.gamefixes.golden_potato": "Golden Potato",
-  "item.gamefixes.reduced_ghast_tear": "Reduced Ghast Tear",
   "item.gamefixes.diakrete": "Diakrete",
   "item.gamefixes.framed_elytra_trim": "Framed Elytra Trim",
   "item.gamefixes.ghast_resin": "Ghast Resin",
   "item.gamefixes.tide_shell": "Tide Shell",
+  "item.gamefixes.wingweave": "Wingweave",
   "item.gamefixes.wingwoven_elytra": "Wingwoven Elytra",
   "trim_pattern.gamefixes.test": "GameFixes Test Trim",
   "item.gamefixes.gilded_elytra": "Gilded Elytra",
-  "item.gamefixes.gilded_wingwoven_elytra": "Gilded Wingwoven Elytra"
+  "item.gamefixes.gilded_wingwoven_elytra": "Gilded Wingwoven Elytra",
+  "block.gamefixes.twilight_prismarine": "Twilight Prismarine",
+  "item.gamefixes.diakrete_helmet": "Diakrete Helmet",
+  "item.gamefixes.diakrete_chestplate": "Diakrete Chestplate",
+  "item.gamefixes.diakrete_leggings": "Diakrete Leggings",
+  "item.gamefixes.diakrete_boots": "Diakrete Boots",
+  "item.gamefixes.elytra_chestplate": "Elytra Chestplate"
 }

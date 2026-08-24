@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "gamefixes:diakrete_recolored"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "gamefixes:diamond_diakrete_palette"
+      }
+    ],
+    "wings": [
+      {
+        "texture": "gamefixes:gilded_wingwoven_elytra"
+      }
+    ]
+  }
+}

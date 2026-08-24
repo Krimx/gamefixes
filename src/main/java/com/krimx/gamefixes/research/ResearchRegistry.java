@@ -4,12 +4,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.krimx.gamefixes.Gamefixes;
-import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.server.packs.PackType;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -21,7 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public final class ResearchRegistry
-        implements ResourceManagerReloadListener {
+        implements SimpleSynchronousResourceReloadListener {
 
     public static final ResearchRegistry INSTANCE =
             new ResearchRegistry();
@@ -38,62 +39,32 @@ public final class ResearchRegistry
     private ResearchRegistry() {
     }
 
-    /*
-     * ============================================================
-     * REGISTRATION
-     * ============================================================
-     */
-
     public static void initialize() {
-
-        ResourceLoader
+        ResourceManagerHelper
                 .get(PackType.SERVER_DATA)
-                .registerReloadListener(
-                        Identifier.fromNamespaceAndPath(
-                                Gamefixes.MOD_ID,
-                                "research_definitions"
-                        ),
-                        INSTANCE
-                );
+                .registerReloadListener(INSTANCE);
     }
-
-    /*
-     * ============================================================
-     * RESOURCE RELOAD
-     * ============================================================
-     */
 
     @Override
-    public void onResourceManagerReload(
-            ResourceManager resourceManager
-    ) {
-        load(resourceManager);
+    public Identifier getFabricId() {
+        return Identifier.fromNamespaceAndPath(
+                Gamefixes.MOD_ID,
+                "research_definitions"
+        );
     }
 
-    /*
-     * ============================================================
-     * LOAD RESEARCH JSON
-     * ============================================================
-     */
-
-    private void load(
-            ResourceManager manager
-    ) {
+    @Override
+    public void onResourceManagerReload(ResourceManager manager) {
         Optional<Resource> resource =
-                manager.getResource(
-                        RESEARCH_FILE
-                );
+                manager.getResource(RESEARCH_FILE);
 
         if (resource.isEmpty()) {
-
             Gamefixes.LOGGER.warn(
                     "Could not find {}. No research definitions were loaded.",
                     RESEARCH_FILE
             );
 
-            projects =
-                    Collections.emptyMap();
-
+            projects = Collections.emptyMap();
             return;
         }
 
@@ -107,28 +78,14 @@ public final class ResearchRegistry
                                 StandardCharsets.UTF_8
                         )
         ) {
-
             JsonObject root =
                     JsonParser.parseReader(reader)
                             .getAsJsonObject();
-
-            /*
-             * ====================================================
-             * PROFESSIONS
-             * ====================================================
-             *
-             * Example:
-             *
-             * "minecraft:librarian": {
-             *     "wind_burst": { ... }
-             * }
-             */
 
             for (
                     Map.Entry<String, JsonElement> professionEntry
                     : root.entrySet()
             ) {
-
                 Identifier profession =
                         Identifier.parse(
                                 professionEntry.getKey()
@@ -137,12 +94,10 @@ public final class ResearchRegistry
                 if (!professionEntry
                         .getValue()
                         .isJsonObject()) {
-
                     Gamefixes.LOGGER.warn(
                             "Research profession '{}' is not an object.",
                             professionEntry.getKey()
                     );
-
                     continue;
                 }
 
@@ -151,27 +106,18 @@ public final class ResearchRegistry
                                 .getValue()
                                 .getAsJsonObject();
 
-                /*
-                 * =================================================
-                 * RESEARCH DEFINITIONS
-                 * =================================================
-                 */
-
                 for (
                         Map.Entry<String, JsonElement> researchEntry
                         : researchObject.entrySet()
                 ) {
-
                     if (!researchEntry
                             .getValue()
                             .isJsonObject()) {
-
                         Gamefixes.LOGGER.warn(
                                 "Research '{}' for profession '{}' is not an object.",
                                 researchEntry.getKey(),
                                 profession
                         );
-
                         continue;
                     }
 
@@ -181,7 +127,6 @@ public final class ResearchRegistry
                                     + researchEntry.getKey();
 
                     try {
-
                         ResearchProject project =
                                 parseProject(
                                         id,
@@ -191,19 +136,13 @@ public final class ResearchRegistry
                                                 .getAsJsonObject()
                                 );
 
-                        if (loaded.put(
-                                id,
-                                project
-                        ) != null) {
-
+                        if (loaded.put(id, project) != null) {
                             Gamefixes.LOGGER.warn(
                                     "Duplicate research definition '{}'.",
                                     id
                             );
                         }
-
                     } catch (RuntimeException exception) {
-
                         Gamefixes.LOGGER.error(
                                 "Failed to load research definition '{}'.",
                                 id,
@@ -212,18 +151,14 @@ public final class ResearchRegistry
                     }
                 }
             }
-
         } catch (Exception exception) {
-
             Gamefixes.LOGGER.error(
                     "Failed to load research definitions from {}.",
                     RESEARCH_FILE,
                     exception
             );
 
-            projects =
-                    Collections.emptyMap();
-
+            projects = Collections.emptyMap();
             return;
         }
 
@@ -238,45 +173,18 @@ public final class ResearchRegistry
         );
     }
 
-    /*
-     * ============================================================
-     * PARSE ONE RESEARCH PROJECT
-     * ============================================================
-     */
-
     private ResearchProject parseProject(
             String id,
             Identifier profession,
             JsonObject json
     ) {
-
-        /*
-         * --------------------------------------------------------
-         * Name
-         * --------------------------------------------------------
-         */
-
-        if (!json.has("name")) {
-
-            throw new IllegalArgumentException(
-                    "Research is missing 'name'."
-            );
-        }
-
         String displayName =
                 json.get("name")
                         .getAsString();
 
-        /*
-         * --------------------------------------------------------
-         * Inputs
-         * --------------------------------------------------------
-         */
-
         if (!json.has("inputs")
                 || !json.get("inputs").isJsonArray()
                 || json.getAsJsonArray("inputs").size() != 2) {
-
             throw new IllegalArgumentException(
                     "Research must contain exactly two inputs."
             );
@@ -292,65 +200,46 @@ public final class ResearchRegistry
                         .get(1)
                         .getAsJsonObject();
 
+        String firstInputString =
+                inputA.get("item")
+                        .getAsString();
+
+        boolean firstInputTag =
+                firstInputString.startsWith("#");
+
         Identifier firstInput =
-                inputA.has("item")
-                        ? Identifier.parse(
-                                inputA.get("item")
-                                        .getAsString()
-                        )
-                        : null;
+                Identifier.parse(
+                        firstInputTag
+                                ? firstInputString.substring(1)
+                                : firstInputString
+                );
 
         int firstInputCount =
                 inputA.get("count")
                         .getAsInt();
 
-        Identifier firstInputEnchantment =
-                inputA.has("enchantment")
-                        ? Identifier.parse(
-                                inputA.get("enchantment")
-                                        .getAsString()
-                        )
-                        : null;
+        String secondInputString =
+                inputB.get("item")
+                        .getAsString();
+
+        boolean secondInputTag =
+                secondInputString.startsWith("#");
 
         Identifier secondInput =
-                inputB.has("item")
-                        ? Identifier.parse(
-                                inputB.get("item")
-                                        .getAsString()
-                        )
-                        : null;
+                Identifier.parse(
+                        secondInputTag
+                                ? secondInputString.substring(1)
+                                : secondInputString
+                );
 
         int secondInputCount =
                 inputB.get("count")
                         .getAsInt();
 
-        Identifier secondInputEnchantment =
-                inputB.has("enchantment")
-                        ? Identifier.parse(
-                                inputB.get("enchantment")
-                                        .getAsString()
-                        )
-                        : null;
-
         if (firstInputCount <= 0
                 || secondInputCount <= 0) {
-
             throw new IllegalArgumentException(
                     "Research input counts must be greater than zero."
-            );
-        }
-
-        /*
-         * --------------------------------------------------------
-         * Output
-         * --------------------------------------------------------
-         */
-
-        if (!json.has("output")
-                || !json.get("output").isJsonObject()) {
-
-            throw new IllegalArgumentException(
-                    "Research is missing an output object."
             );
         }
 
@@ -366,21 +255,13 @@ public final class ResearchRegistry
         int outputCount =
                 output.has("count")
                         ? output.get("count")
-                        .getAsInt()
+                                .getAsInt()
                         : 1;
 
-        /*
-         * --------------------------------------------------------
-         * Optional enchantment
-         * --------------------------------------------------------
-         */
-
         Identifier outputEnchantment = null;
-
         int outputEnchantmentLevel = 0;
 
         if (output.has("enchantment")) {
-
             outputEnchantment =
                     Identifier.parse(
                             output.get("enchantment")
@@ -390,29 +271,8 @@ public final class ResearchRegistry
             outputEnchantmentLevel =
                     output.has("level")
                             ? output.get("level")
-                            .getAsInt()
+                                    .getAsInt()
                             : 1;
-
-            if (outputEnchantmentLevel <= 0) {
-
-                throw new IllegalArgumentException(
-                        "Enchantment level must be greater than zero."
-                );
-            }
-        }
-
-        /*
-         * --------------------------------------------------------
-         * Trade
-         * --------------------------------------------------------
-         */
-
-        if (!json.has("trade")
-                || !json.get("trade").isJsonObject()) {
-
-            throw new IllegalArgumentException(
-                    "Research is missing a trade object."
-            );
         }
 
         JsonObject trade =
@@ -421,6 +281,39 @@ public final class ResearchRegistry
         int emeraldCost =
                 trade.get("emerald_cost")
                         .getAsInt();
+
+        Identifier itemCost = null;
+        int itemCostCount = 0;
+
+        if (trade.has("item_cost")) {
+            JsonObject itemCostObject =
+                    trade.getAsJsonObject("item_cost");
+
+            itemCost =
+                    Identifier.parse(
+                            itemCostObject
+                                    .get("item")
+                                    .getAsString()
+                    );
+
+            itemCostCount =
+                    itemCostObject
+                            .get("count")
+                            .getAsInt();
+
+            if (itemCostCount <= 0) {
+                throw new IllegalArgumentException(
+                        "Research item cost count must be greater than zero."
+                );
+            }
+
+            if (!BuiltInRegistries.ITEM.containsKey(itemCost)) {
+                throw new IllegalArgumentException(
+                        "Unknown research item cost: "
+                                + itemCost
+                );
+            }
+        }
 
         int maxUses =
                 trade.get("max_uses")
@@ -434,46 +327,15 @@ public final class ResearchRegistry
                 trade.get("price_multiplier")
                         .getAsFloat();
 
-        if (outputCount <= 0) {
-
+        if (outputCount <= 0
+                || emeraldCost <= 0
+                || maxUses <= 0
+                || villagerXp < 0
+                || priceMultiplier < 0.0F) {
             throw new IllegalArgumentException(
-                    "Output count must be greater than zero."
+                    "Invalid output or trade values."
             );
         }
-
-        if (emeraldCost <= 0) {
-
-            throw new IllegalArgumentException(
-                    "Emerald cost must be greater than zero."
-            );
-        }
-
-        if (maxUses <= 0) {
-
-            throw new IllegalArgumentException(
-                    "Max uses must be greater than zero."
-            );
-        }
-
-        if (villagerXp < 0) {
-
-            throw new IllegalArgumentException(
-                    "Villager XP cannot be negative."
-            );
-        }
-
-        if (priceMultiplier < 0.0F) {
-
-            throw new IllegalArgumentException(
-                    "Price multiplier cannot be negative."
-            );
-        }
-
-        /*
-         * --------------------------------------------------------
-         * Create definition
-         * --------------------------------------------------------
-         */
 
         return new ResearchProject(
                 id,
@@ -481,12 +343,12 @@ public final class ResearchRegistry
                 profession,
 
                 firstInput,
+                firstInputTag,
                 firstInputCount,
-                firstInputEnchantment,
 
                 secondInput,
+                secondInputTag,
                 secondInputCount,
-                secondInputEnchantment,
 
                 outputItem,
                 outputCount,
@@ -495,21 +357,16 @@ public final class ResearchRegistry
                 outputEnchantmentLevel,
 
                 emeraldCost,
+                itemCost,
+                itemCostCount,
+
                 maxUses,
                 villagerXp,
                 priceMultiplier
         );
     }
 
-    /*
-     * ============================================================
-     * LOOKUP
-     * ============================================================
-     */
-
-    public static ResearchProject get(
-            String id
-    ) {
+    public static ResearchProject get(String id) {
         return INSTANCE.projects.get(id);
     }
 

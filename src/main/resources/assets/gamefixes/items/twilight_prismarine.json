@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "gamefixes:item/reduced_ghast_tear"
+    "model": "gamefixes:block/twilight_prismarine"
   }
 }

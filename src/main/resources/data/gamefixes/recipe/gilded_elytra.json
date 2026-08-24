@@ -1,9 +1,9 @@
 {
   "type": "minecraft:smithing_transform",
-  "addition": "gamefixes:wingweave",
+  "addition": "gamefixes:tide_shell",
   "base": "minecraft:elytra",
   "result": {
-    "id": "minecraft:netherite_axe"
+    "id": "gamefixes:gilded_elytra"
   },
   "template": "gamefixes:framed_elytra_trim"
 }

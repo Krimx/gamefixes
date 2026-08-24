@@ -12,7 +12,11 @@
 		"EnchantmentHelperMixin",
 		"AnvilMenuMixin",
 		"BeehiveBlockEntityMixin",
-		"BeehiveBlockEntityMixinInvoker"
+		"BeehiveBlockEntityMixinInvoker",
+		"BrewingStandBlockEntityMixin",
+		"BrewingStandPotionSlotMixin",
+		"BrewingStandIngredientsSlotMixin",
+		"ConduitBlockEntityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

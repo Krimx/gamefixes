@@ -58,18 +58,18 @@ import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.MaceItem;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.minecraft.world.item.equipment.Equippable;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.equipment.EquipmentAsset;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 
 public class Gamefixes implements ModInitializer {
@@ -81,8 +81,11 @@ public class Gamefixes implements ModInitializer {
 
 	public static Item REFINED_SULFUR;
 	public static Item GOLDEN_POTATO;
-	public static Item REDUCED_GHAST_TEAR;
 	public static Item DIAKRETE;
+	public static Item DIAKRETE_HELMET;
+	public static Item DIAKRETE_CHESTPLATE;
+	public static Item DIAKRETE_LEGGINGS;
+	public static Item DIAKRETE_BOOTS;
 	public static Item FRAMED_ELYTRA_TRIM;
 	public static Item GHAST_RESIN;
 	public static Item TIDE_SHELL;
@@ -90,6 +93,8 @@ public class Gamefixes implements ModInitializer {
 	public static Item WINGWOVEN_ELYTRA;
 	public static Item GILDED_ELYTRA;
 	public static Item GILDED_WINGWOVEN_ELYTRA;
+	public static Block TWILIGHT_PRISMARINE;
+	public static Item ELYTRA_CHESTPLATE;
 
 	private static final ResourceKey<EquipmentAsset> WINGWOVEN_ELYTRA_ASSET =
 			ResourceKey.create(
@@ -108,11 +113,20 @@ public class Gamefixes implements ModInitializer {
 					EquipmentAssets.ROOT_ID,
 					Identifier.fromNamespaceAndPath(MOD_ID, "gilded_wingwoven_elytra")
 			);
+	private static final ResourceKey<EquipmentAsset> ELYTRA_CHESTPLATE_ASSET =
+			ResourceKey.create(
+					EquipmentAssets.ROOT_ID,
+					Identifier.fromNamespaceAndPath(MOD_ID, "elytra_chestplate")
+			);
 
 	private static final Identifier WINGWOVEN_SPEED_MODIFIER_ID =
 			Identifier.fromNamespaceAndPath(MOD_ID, "wingwoven_elytra_speed");
 	private static final Identifier GILDED_ELYTRA_ARMOR_MODIFIER_ID =
 			Identifier.fromNamespaceAndPath(MOD_ID, "gilded_elytra_armor");
+	private static final Identifier ELYTRA_CHESTPLATE_SPEED_MODIFIER_ID =
+			Identifier.fromNamespaceAndPath(MOD_ID, "elytra_chestplate_speed");
+	private static final Identifier ELYTRA_CHESTPLATE_ARMOR_MODIFIER_ID =
+			Identifier.fromNamespaceAndPath(MOD_ID, "elytra_chestplate_armor");
 
 	private static final ThreadLocal<Boolean> ALLOW_MENDING =
 			ThreadLocal.withInitial(() -> false);
@@ -129,8 +143,24 @@ public class Gamefixes implements ModInitializer {
 	public void onInitialize() {
 
 		REFINED_SULFUR = registerItem("refined_sulfur", new Item.Properties());
-		REDUCED_GHAST_TEAR = registerItem("reduced_ghast_tear", new Item.Properties());
 		DIAKRETE = registerItem("diakrete", new Item.Properties());
+
+		DIAKRETE_HELMET = registerArmorItem(
+				"diakrete_helmet",
+				ArmorType.HELMET
+		);
+		DIAKRETE_CHESTPLATE = registerArmorItem(
+				"diakrete_chestplate",
+				ArmorType.CHESTPLATE
+		);
+		DIAKRETE_LEGGINGS = registerArmorItem(
+				"diakrete_leggings",
+				ArmorType.LEGGINGS
+		);
+		DIAKRETE_BOOTS = registerArmorItem(
+				"diakrete_boots",
+				ArmorType.BOOTS
+		);
 		FRAMED_ELYTRA_TRIM = registerItem("framed_elytra_trim", new Item.Properties());
 		GHAST_RESIN = registerItem("ghast_resin", new Item.Properties());
 		TIDE_SHELL = registerItem("tide_shell", new Item.Properties());
@@ -165,13 +195,22 @@ public class Gamefixes implements ModInitializer {
 						2.0
 				)
 		);
+		ELYTRA_CHESTPLATE = registerElytraChestplate();
+
 		GOLDEN_POTATO = registerItem("golden_potato", new Item.Properties()
 				.food(
-				new FoodProperties.Builder()
-						.nutrition(6)
-						.saturationModifier(9.6F)
-						.build()
-		));
+						new FoodProperties.Builder()
+								.nutrition(6)
+								.saturationModifier(9.6F)
+								.build()
+				));
+
+		TWILIGHT_PRISMARINE = registerBlock(
+				"twilight_prismarine",
+				BlockBehaviour.Properties.of()
+						.strength(2.0F)
+						.sound(SoundType.STONE)
+		);
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS)
 				.register(output -> output.accept(GOLDEN_POTATO));
@@ -179,8 +218,14 @@ public class Gamefixes implements ModInitializer {
 				.register(output -> output.accept(REFINED_SULFUR));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
 				.register(output -> output.accept(DIAKRETE));
-		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
-				.register(output -> output.accept(REDUCED_GHAST_TEAR));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(DIAKRETE_HELMET));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(DIAKRETE_CHESTPLATE));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(DIAKRETE_LEGGINGS));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(DIAKRETE_BOOTS));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
 				.register(output -> output.accept(FRAMED_ELYTRA_TRIM));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
@@ -189,12 +234,16 @@ public class Gamefixes implements ModInitializer {
 				.register(output -> output.accept(TIDE_SHELL));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
 				.register(output -> output.accept(WINGWEAVE));
-		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
 				.register(output -> output.accept(WINGWOVEN_ELYTRA));
-		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
 				.register(output -> output.accept(GILDED_ELYTRA));
-		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
 				.register(output -> output.accept(GILDED_WINGWOVEN_ELYTRA));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(ELYTRA_CHESTPLATE));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS)
+				.register(output -> output.accept(TWILIGHT_PRISMARINE.asItem()));
 
 		FuelValueEvents.BUILD.register(
 				(builder, context) -> {
@@ -245,6 +294,59 @@ public class Gamefixes implements ModInitializer {
 
 		LOGGER.info(
 				"GameFixes Mod initialized successfully!"
+		);
+	}
+
+	private static Item registerElytraChestplate() {
+		Identifier id =
+				Identifier.parse(
+						MOD_ID + ":elytra_chestplate"
+				);
+
+		ResourceKey<Item> key =
+				ResourceKey.create(
+						Registries.ITEM,
+						id
+				);
+
+		Item.Properties properties =
+				new Item.Properties()
+						.humanoidArmor(
+								DiakreteArmorMaterial.INSTANCE,
+								ArmorType.CHESTPLATE
+						)
+						.durability(864)
+						.repairable(DIAKRETE)
+						.component(
+								DataComponents.GLIDER,
+								Unit.INSTANCE
+						)
+						.component(
+								DataComponents.EQUIPPABLE,
+								Equippable.builder(EquipmentSlot.CHEST)
+										.setAsset(ELYTRA_CHESTPLATE_ASSET)
+										.setEquipSound(SoundEvents.ARMOR_EQUIP_ELYTRA)
+										.build()
+						)
+						.attributes(
+								ItemAttributeModifiers.builder()
+										.add(
+												Attributes.ARMOR,
+												new AttributeModifier(
+														ELYTRA_CHESTPLATE_ARMOR_MODIFIER_ID,
+														8.0,
+														AttributeModifier.Operation.ADD_VALUE
+												),
+												EquipmentSlotGroup.CHEST
+										)
+										.build()
+						)
+						.setId(key);
+
+		return Registry.register(
+				BuiltInRegistries.ITEM,
+				id,
+				new Item(properties)
 		);
 	}
 
@@ -300,6 +402,41 @@ public class Gamefixes implements ModInitializer {
 		return properties;
 	}
 
+	private static Item registerArmorItem(
+			String name,
+			ArmorType type
+	) {
+		Identifier id =
+				Identifier.parse(
+						MOD_ID + ":" + name
+				);
+
+		ResourceKey<Item> key =
+				ResourceKey.create(
+						Registries.ITEM,
+						id
+				);
+
+		Item.Properties properties =
+				new Item.Properties()
+						.humanoidArmor(
+								DiakreteArmorMaterial.INSTANCE,
+								type
+						)
+						.durability(
+								type.getDurability(
+										DiakreteArmorMaterial.BASE_DURABILITY
+								)
+						)
+						.setId(key);
+
+		return Registry.register(
+				BuiltInRegistries.ITEM,
+				id,
+				new Item(properties)
+		);
+	}
+
 	private static Item registerItem(String name, Item.Properties properties) {
 		Identifier id =
 				Identifier.parse(
@@ -320,5 +457,45 @@ public class Gamefixes implements ModInitializer {
 				id,
 				new Item(properties)
 		);
+	}
+
+	private static Block registerBlock(
+			String name,
+			BlockBehaviour.Properties properties
+	) {
+		Identifier id = Identifier.parse(MOD_ID + ":" + name);
+
+		ResourceKey<Block> blockKey =
+				ResourceKey.create(
+						Registries.BLOCK,
+						id
+				);
+
+		properties = properties.setId(blockKey);
+
+		Block block = Registry.register(
+				BuiltInRegistries.BLOCK,
+				id,
+				new Block(properties)
+		);
+
+		ResourceKey<Item> itemKey =
+				ResourceKey.create(
+						Registries.ITEM,
+						id
+				);
+
+		Registry.register(
+				BuiltInRegistries.ITEM,
+				id,
+				new BlockItem(
+						block,
+						new Item.Properties()
+								.useBlockDescriptionPrefix()
+								.setId(itemKey)
+				)
+		);
+
+		return block;
 	}
 }

@@ -1,32 +1,34 @@
 package com.krimx.gamefixes.research;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 public final class ResearchProject {
 
     private final String id;
     private final String displayName;
-
     private final Identifier profession;
 
     private final Identifier firstInput;
+    private final boolean firstInputTag;
     private final int firstInputCount;
-    private final Identifier firstInputEnchantment;
 
     private final Identifier secondInput;
+    private final boolean secondInputTag;
     private final int secondInputCount;
-    private final Identifier secondInputEnchantment;
 
     private final Identifier outputItem;
     private final int outputCount;
-
     private final Identifier outputEnchantment;
     private final int outputEnchantmentLevel;
 
     private final int emeraldCost;
+    private final Identifier itemCost;
+    private final int itemCostCount;
     private final int maxUses;
     private final int villagerXp;
     private final float priceMultiplier;
@@ -36,16 +38,18 @@ public final class ResearchProject {
             String displayName,
             Identifier profession,
             Identifier firstInput,
+            boolean firstInputTag,
             int firstInputCount,
-            Identifier firstInputEnchantment,
             Identifier secondInput,
+            boolean secondInputTag,
             int secondInputCount,
-            Identifier secondInputEnchantment,
             Identifier outputItem,
             int outputCount,
             Identifier outputEnchantment,
             int outputEnchantmentLevel,
             int emeraldCost,
+            Identifier itemCost,
+            int itemCostCount,
             int maxUses,
             int villagerXp,
             float priceMultiplier
@@ -54,88 +58,50 @@ public final class ResearchProject {
         this.displayName = displayName;
         this.profession = profession;
         this.firstInput = firstInput;
+        this.firstInputTag = firstInputTag;
         this.firstInputCount = firstInputCount;
-        this.firstInputEnchantment = firstInputEnchantment;
         this.secondInput = secondInput;
+        this.secondInputTag = secondInputTag;
         this.secondInputCount = secondInputCount;
-        this.secondInputEnchantment = secondInputEnchantment;
         this.outputItem = outputItem;
         this.outputCount = outputCount;
         this.outputEnchantment = outputEnchantment;
         this.outputEnchantmentLevel = outputEnchantmentLevel;
         this.emeraldCost = emeraldCost;
+        this.itemCost = itemCost;
+        this.itemCostCount = itemCostCount;
         this.maxUses = maxUses;
         this.villagerXp = villagerXp;
         this.priceMultiplier = priceMultiplier;
     }
 
-    public String getId() {
-        return id;
-    }
+    public String getId() { return id; }
+    public String getDisplayName() { return displayName; }
+    public Identifier getProfession() { return profession; }
 
-    public String getDisplayName() {
-        return displayName;
-    }
+    public Identifier getFirstInputId() { return firstInput; }
+    public boolean isFirstInputTag() { return firstInputTag; }
+    public int getFirstInputCount() { return firstInputCount; }
 
-    public Identifier getProfession() {
-        return profession;
-    }
+    public Identifier getSecondInputId() { return secondInput; }
+    public boolean isSecondInputTag() { return secondInputTag; }
+    public int getSecondInputCount() { return secondInputCount; }
 
-    public Identifier getFirstInputId() {
-        return firstInput;
-    }
+    public Identifier getOutputItemId() { return outputItem; }
+    public int getOutputCount() { return outputCount; }
 
-    public int getFirstInputCount() {
-        return firstInputCount;
-    }
+    public Identifier getOutputEnchantmentId() { return outputEnchantment; }
+    public int getOutputEnchantmentLevel() { return outputEnchantmentLevel; }
 
-    public Identifier getFirstInputEnchantmentId() {
-        return firstInputEnchantment;
-    }
+    public int getEmeraldCost() { return emeraldCost; }
 
-    public Identifier getSecondInputId() {
-        return secondInput;
-    }
+    public Identifier getItemCostId() { return itemCost; }
+    public int getItemCostCount() { return itemCostCount; }
+    public boolean hasItemCost() { return itemCost != null; }
 
-    public int getSecondInputCount() {
-        return secondInputCount;
-    }
-
-    public Identifier getSecondInputEnchantmentId() {
-        return secondInputEnchantment;
-    }
-
-    public Identifier getOutputItemId() {
-        return outputItem;
-    }
-
-    public int getOutputCount() {
-        return outputCount;
-    }
-
-    public Identifier getOutputEnchantmentId() {
-        return outputEnchantment;
-    }
-
-    public int getOutputEnchantmentLevel() {
-        return outputEnchantmentLevel;
-    }
-
-    public int getEmeraldCost() {
-        return emeraldCost;
-    }
-
-    public int getMaxUses() {
-        return maxUses;
-    }
-
-    public int getVillagerXp() {
-        return villagerXp;
-    }
-
-    public float getPriceMultiplier() {
-        return priceMultiplier;
-    }
+    public int getMaxUses() { return maxUses; }
+    public int getVillagerXp() { return villagerXp; }
+    public float getPriceMultiplier() { return priceMultiplier; }
 
     public boolean matchesInputs(
             ItemStack firstStack,
@@ -145,28 +111,28 @@ public final class ResearchProject {
                 matchesInput(
                         firstStack,
                         firstInput,
-                        firstInputCount,
-                        firstInputEnchantment
+                        firstInputTag,
+                        firstInputCount
                 )
                         && matchesInput(
                         secondStack,
                         secondInput,
-                        secondInputCount,
-                        secondInputEnchantment
+                        secondInputTag,
+                        secondInputCount
                 );
 
         boolean reversedOrder =
                 matchesInput(
                         firstStack,
                         secondInput,
-                        secondInputCount,
-                        secondInputEnchantment
+                        secondInputTag,
+                        secondInputCount
                 )
                         && matchesInput(
                         secondStack,
                         firstInput,
-                        firstInputCount,
-                        firstInputEnchantment
+                        firstInputTag,
+                        firstInputCount
                 );
 
         return normalOrder || reversedOrder;
@@ -174,45 +140,26 @@ public final class ResearchProject {
 
     private boolean matchesInput(
             ItemStack stack,
-            Identifier requiredItem,
-            int requiredCount,
-            Identifier requiredEnchantment
+            Identifier requiredInput,
+            boolean requiredInputTag,
+            int requiredCount
     ) {
-        if (stack.getCount() < requiredCount) {
+        if (stack.isEmpty() || stack.getCount() < requiredCount) {
             return false;
         }
 
-        if (requiredItem != null) {
-            Identifier actualItem =
-                    BuiltInRegistries.ITEM.getKey(stack.getItem());
+        if (requiredInputTag) {
+            TagKey<Item> tag =
+                    TagKey.create(
+                            Registries.ITEM,
+                            requiredInput
+                    );
 
-            if (!requiredItem.equals(actualItem)) {
-                return false;
-            }
+            return stack.is(tag);
         }
 
-        return matchesEnchantment(
-                stack,
-                requiredEnchantment
-        );
-    }
-
-    private boolean matchesEnchantment(
-            ItemStack stack,
-            Identifier requiredEnchantment
-    ) {
-        if (requiredEnchantment == null) {
-            return true;
-        }
-
-        return EnchantmentHelper
-                .getEnchantmentsForCrafting(stack)
-                .entrySet()
-                .stream()
-                .anyMatch(entry ->
-                        entry.getKey()
-                                .getRegisteredName()
-                                .equals(requiredEnchantment.toString())
-                );
+        return BuiltInRegistries.ITEM
+                .getKey(stack.getItem())
+                .equals(requiredInput);
     }
 }

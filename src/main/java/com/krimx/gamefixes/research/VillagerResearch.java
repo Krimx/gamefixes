@@ -1,7 +1,9 @@
 package com.krimx.gamefixes.research;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -132,7 +134,7 @@ public final class VillagerResearch {
         return villager.getVillagerData()
                 .profession()
                 .is(
-                        net.minecraft.resources.ResourceKey.create(
+                        ResourceKey.create(
                                 Registries.VILLAGER_PROFESSION,
                                 project.getProfession()
                         )
@@ -145,7 +147,7 @@ public final class VillagerResearch {
     ) {
         ItemStack result =
                 new ItemStack(
-                        net.minecraft.core.registries.BuiltInRegistries.ITEM
+                        BuiltInRegistries.ITEM
                                 .getValue(
                                         project.getOutputItemId()
                                 ),
@@ -160,7 +162,7 @@ public final class VillagerResearch {
                                     Registries.ENCHANTMENT
                             )
                             .get(
-                                    net.minecraft.resources.ResourceKey.create(
+                                    ResourceKey.create(
                                             Registries.ENCHANTMENT,
                                             project.getOutputEnchantmentId()
                                     )
@@ -178,12 +180,24 @@ public final class VillagerResearch {
             );
         }
 
+        Optional<ItemCost> itemCost =
+                project.hasItemCost()
+                        ? Optional.of(
+                        new ItemCost(
+                                BuiltInRegistries.ITEM.getValue(
+                                        project.getItemCostId()
+                                ),
+                                project.getItemCostCount()
+                        )
+                )
+                        : Optional.empty();
+
         return new MerchantOffer(
                 new ItemCost(
                         Items.EMERALD,
                         project.getEmeraldCost()
                 ),
-                Optional.empty(),
+                itemCost,
                 result,
                 project.getMaxUses(),
                 project.getVillagerXp(),

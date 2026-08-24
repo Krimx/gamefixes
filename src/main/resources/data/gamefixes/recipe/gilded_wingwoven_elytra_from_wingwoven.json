@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "gamefixes:tide_shell",
+  "base": "gamefixes:wingwoven_elytra",
+  "result": {
+    "id": "gamefixes:gilded_wingwoven_elytra"
+  },
+  "template": "gamefixes:framed_elytra_trim"
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "gamefixes:twilight_prismarine",
+    "minecraft:shulker_shell"
+  ],
+  "result": {
+    "id": "gamefixes:tide_shell",
+    "count": 1
+  }
+}
