@@ -1,36 +1,17 @@
 /*
 TODO:
-Add Elytra chestplate item
-Finalize the Elytra progression tree
-Implement Framed Elytra
-Create the final Framed Elytra crafting recipe
-Set the final armor values for custom Elytra items
 Add specific item inputs to villager research trades
-Fix villager research input-count validation for reversed inputs
 Finalize the villager research trade pool
 Finish the villager research UI
-Finalize the custom mace attack
-Remove Mending from unintended progression sources and establish its final acquisition paths
-Finalize the Echo Shard anvil repair-cost mechanic
 Add any additional intended golden crops
 Overhaul Trial Chamber loot
-Add Framed Elytra Trim to its intended progression
 Add Mending-containing End City loot
-Remove the Golden Carrot villager trade
-Finalize the sulfur progression
 Give Ghast Resin a gameplay purpose
 Rename and reconcile the Reduced/Condensed Ghast Tear implementation
 Give Diakrete a gameplay purpose
-Modify bee behavior around smokers
-Implement accelerated furnace fuel tiers
-Implement concrete powder conversion in water
-Finish missing custom item localization and assets
-Remove development/test content from the mod
-Replace the default Fabric mod metadata
-Redesign the Minecraft title screen
 Add Honeycomb Boots
 Implement the Honeycomb Boots wall-jump mechanic
-Complete the overall progression and balance design
+Add armadillo chestplate item
  */
 
 package com.krimx.gamefixes;
@@ -95,6 +76,7 @@ public class Gamefixes implements ModInitializer {
 	public static Item GILDED_WINGWOVEN_ELYTRA;
 	public static Block TWILIGHT_PRISMARINE;
 	public static Item ELYTRA_CHESTPLATE;
+	public static Item HONEYCOMB_BOOTS;
 
 	private static final ResourceKey<EquipmentAsset> WINGWOVEN_ELYTRA_ASSET =
 			ResourceKey.create(
@@ -117,6 +99,11 @@ public class Gamefixes implements ModInitializer {
 			ResourceKey.create(
 					EquipmentAssets.ROOT_ID,
 					Identifier.fromNamespaceAndPath(MOD_ID, "elytra_chestplate")
+			);
+	private static final ResourceKey<EquipmentAsset> HONEYCOMB_ASSET =
+			ResourceKey.create(
+					EquipmentAssets.ROOT_ID,
+					Identifier.fromNamespaceAndPath(MOD_ID, "honeycomb")
 			);
 
 	private static final Identifier WINGWOVEN_SPEED_MODIFIER_ID =
@@ -165,6 +152,8 @@ public class Gamefixes implements ModInitializer {
 		GHAST_RESIN = registerItem("ghast_resin", new Item.Properties());
 		TIDE_SHELL = registerItem("tide_shell", new Item.Properties());
 		WINGWEAVE = registerItem("wingweave", new Item.Properties());
+
+		HONEYCOMB_BOOTS = registerHoneycombBoots();
 
 		WINGWOVEN_ELYTRA = registerItem(
 				"wingwoven_elytra",
@@ -242,6 +231,8 @@ public class Gamefixes implements ModInitializer {
 				.register(output -> output.accept(GILDED_WINGWOVEN_ELYTRA));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
 				.register(output -> output.accept(ELYTRA_CHESTPLATE));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(HONEYCOMB_BOOTS));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS)
 				.register(output -> output.accept(TWILIGHT_PRISMARINE.asItem()));
 
@@ -497,5 +488,44 @@ public class Gamefixes implements ModInitializer {
 		);
 
 		return block;
+	}
+
+	private static Item registerHoneycombBoots() {
+		Identifier id =
+				Identifier.parse(
+						MOD_ID + ":honeycomb_boots"
+				);
+
+		ResourceKey<Item> key =
+				ResourceKey.create(
+						Registries.ITEM,
+						id
+				);
+
+		Item.Properties properties =
+				new Item.Properties()
+						.humanoidArmor(
+								DiakreteArmorMaterial.INSTANCE,
+								ArmorType.BOOTS
+						)
+						.durability(
+								ArmorType.BOOTS.getDurability(
+										DiakreteArmorMaterial.BASE_DURABILITY
+								)
+						)
+						.component(
+								DataComponents.EQUIPPABLE,
+								Equippable.builder(EquipmentSlot.FEET)
+										.setAsset(HONEYCOMB_ASSET)
+										.setEquipSound(SoundEvents.ARMOR_EQUIP_LEATHER)
+										.build()
+						)
+						.setId(key);
+
+		return Registry.register(
+				BuiltInRegistries.ITEM,
+				id,
+				new Item(properties)
+		);
 	}
 }

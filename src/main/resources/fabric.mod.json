@@ -2,10 +2,10 @@
 	"schemaVersion": 1,
 	"id": "gamefixes",
 	"version": "${version}",
-	"name": "gamefixes",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "Minecraft Rehaul",
+	"description": "A vanilla+ enhancement of Minecraft Survival in order to make the progression better overall.",
 	"authors": [
-		"Me!"
+		"Krimx"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
