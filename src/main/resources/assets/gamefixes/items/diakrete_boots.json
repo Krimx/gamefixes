@@ -1,6 +1,19 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "gamefixes:item/diakrete_boots"
+    "type": "minecraft:select",
+    "cases": [
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "gamefixes:item/diakrete_boots_diakrete_trim"
+        },
+        "when": "gamefixes:diakrete"
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "gamefixes:item/diakrete_boots"
+    },
+    "property": "minecraft:trim_material"
   }
 }

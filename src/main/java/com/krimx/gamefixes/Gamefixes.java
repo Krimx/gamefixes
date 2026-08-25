@@ -8,7 +8,7 @@ Overhaul Trial Chamber loot
 Add Mending-containing End City loot
 Give Ghast Resin a gameplay purpose
 Rename and reconcile the Reduced/Condensed Ghast Tear implementation
-Give Diakrete a gameplay purpose
+Add diakrete armor floating in water
 Add Honeycomb Boots
 Implement the Honeycomb Boots wall-jump mechanic
 Add armadillo chestplate item
@@ -130,7 +130,20 @@ public class Gamefixes implements ModInitializer {
 	public void onInitialize() {
 
 		REFINED_SULFUR = registerItem("refined_sulfur", new Item.Properties());
-		DIAKRETE = registerItem("diakrete", new Item.Properties());
+		FRAMED_ELYTRA_TRIM = registerItem("framed_elytra_trim", new Item.Properties());
+		GHAST_RESIN = registerItem("ghast_resin", new Item.Properties());
+		TIDE_SHELL = registerItem("tide_shell", new Item.Properties());
+		WINGWEAVE = registerItem("wingweave", new Item.Properties());
+
+		DIAKRETE = registerItem(
+				"diakrete", new Item.Properties().delayedHolderComponent(
+								DataComponents.PROVIDES_TRIM_MATERIAL,
+								ResourceKey.create(
+										Registries.TRIM_MATERIAL,
+										Identifier.fromNamespaceAndPath(MOD_ID, "diakrete")
+								)
+						)
+		);
 
 		DIAKRETE_HELMET = registerArmorItem(
 				"diakrete_helmet",
@@ -148,10 +161,6 @@ public class Gamefixes implements ModInitializer {
 				"diakrete_boots",
 				ArmorType.BOOTS
 		);
-		FRAMED_ELYTRA_TRIM = registerItem("framed_elytra_trim", new Item.Properties());
-		GHAST_RESIN = registerItem("ghast_resin", new Item.Properties());
-		TIDE_SHELL = registerItem("tide_shell", new Item.Properties());
-		WINGWEAVE = registerItem("wingweave", new Item.Properties());
 
 		HONEYCOMB_BOOTS = registerHoneycombBoots();
 
