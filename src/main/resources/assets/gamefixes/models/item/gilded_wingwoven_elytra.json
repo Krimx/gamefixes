@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "gamefixes:item/gilded_wingwoven_elytra"
+  }
+}
