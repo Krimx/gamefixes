@@ -1,13 +1,8 @@
 {
   "layers": {
-    "humanoid": [
+    "wings": [
       {
-        "texture": "gamefixes:honeycomb"
-      }
-    ],
-    "humanoid_leggings": [
-      {
-        "texture": "gamefixes:honeycomb"
+        "texture": "gamefixes:wingwoven_elytra"
       }
     ]
   }

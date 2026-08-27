@@ -48,6 +48,7 @@ public class Gamefixes implements ModInitializer {
 	public static Item DIAKRETE_CHESTPLATE;
 	public static Item DIAKRETE_LEGGINGS;
 	public static Item DIAKRETE_BOOTS;
+	public static final double diakreteArmorFloatSpeed = 0.1D;
 
 	public static Item PINK_DIAMOND_HELMET;
 	public static Item PINK_DIAMOND_CHESTPLATE;
@@ -355,7 +356,6 @@ public class Gamefixes implements ModInitializer {
 		ResearchNetworking.registerCommon();
 		MaceNetworking.registerCommon();
 		ConcreteConversion.initialize();
-		DiakreteArmorFloating.initialize();
 
 		Registry.register(
 				BuiltInRegistries.LOOT_FUNCTION_TYPE,

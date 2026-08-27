@@ -2,12 +2,12 @@
   "layers": {
     "humanoid": [
       {
-        "texture": "gamefixes:diakrete_recolored"
+        "texture": "gamefixes:diakrete"
       }
     ],
     "humanoid_leggings": [
       {
-        "texture": "gamefixes:diamond_diakrete_palette"
+        "texture": "gamefixes:diakrete"
       }
     ]
   }

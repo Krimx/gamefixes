@@ -1,5 +1,6 @@
 package com.krimx.gamefixes.mixin;
 
+import com.krimx.gamefixes.DiakreteArmorFloating;
 import com.krimx.gamefixes.Gamefixes;
 import com.krimx.gamefixes.network.MaceNetworking;
 import net.minecraft.server.level.ServerLevel;
@@ -12,6 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MaceItem;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -42,6 +44,7 @@ public class LivingEntityMixin {
     @Unique private int gamefixes$maceAttackDelay = 0;
     @Unique private float gamefixes$macePendingDamage = 0.0F;
 
+    // --- Mace attack start ---
     @Inject(method = "startUsingItem", at = @At("HEAD"))
     private void gamefixes$maceStart(
             InteractionHand hand,
@@ -61,6 +64,7 @@ public class LivingEntityMixin {
         MaceNetworking.sendChargeStart((ServerPlayer) entity);
     }
 
+    // --- Mace release ---
     @Inject(method = "releaseUsingItem", at = @At("HEAD"))
     private void gamefixes$maceRelease(CallbackInfo ci) {
         LivingEntity entity = (LivingEntity) (Object) this;
@@ -102,6 +106,7 @@ public class LivingEntityMixin {
         );
     }
 
+    // --- Pending mace attack ---
     @Inject(method = "tick", at = @At("HEAD"))
     private void gamefixes$maceAttackTick(CallbackInfo ci) {
         LivingEntity entity = (LivingEntity) (Object) this;
@@ -118,6 +123,29 @@ public class LivingEntityMixin {
                 serverLevel,
                 player,
                 gamefixes$macePendingDamage
+        );
+    }
+
+    // --- Diakrete floating ---
+    @Inject(method = "travel", at = @At("TAIL"))
+    private void gamefixes$diakreteFloating(
+            Vec3 movementInput,
+            CallbackInfo ci
+    ) {
+        LivingEntity entity = (LivingEntity) (Object) this;
+
+        if (!(entity instanceof Player player)) {
+            return;
+        }
+
+        Vec3 velocity = player.getDeltaMovement();
+
+        player.setDeltaMovement(
+                DiakreteArmorFloating.applyFloatingVelocity(
+                        player,
+                        velocity,
+                        movementInput
+                )
         );
     }
 
