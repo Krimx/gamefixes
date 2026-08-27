@@ -85,6 +85,27 @@
           "model": "minecraft:item/diamond_chestplate_diakrete_trim"
         },
         "when": "gamefixes:diakrete"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/diamond_chestplate_pink_diamond_trim"
+        },
+        "when": "gamefixes:pink_diamond"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/diamond_chestplate_yellow_diamond_trim"
+        },
+        "when": "gamefixes:yellow_diamond"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/diamond_chestplate_rose_gold_ingot_trim"
+        },
+        "when": "gamefixes:rose_gold_ingot"
       }
     ],
     "fallback": {

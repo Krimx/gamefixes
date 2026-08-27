@@ -1,0 +1,10 @@
+{
+  "asset_name": "yellow_diamond",
+  "description": {
+    "color": "#CCBD61",
+    "translate": "trim_material.gamefixes.yellow_diamond"
+  },
+  "override_armor_assets": {
+    "gamefixes:yellow_diamond": "yellow_diamond_darker"
+  }
+}

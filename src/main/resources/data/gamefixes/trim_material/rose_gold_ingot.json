@@ -1,0 +1,10 @@
+{
+  "asset_name": "rose_gold_ingot",
+  "description": {
+    "color": "#FF978C",
+    "translate": "trim_material.gamefixes.rose_gold_ingot"
+  },
+  "override_armor_assets": {
+    "gamefixes:rose_gold_ingot": "rose_gold_darker"
+  }
+}

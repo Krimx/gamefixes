@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "gamefixes:diakrete"
+    "gamefixes:diakrete",
+    "gamefixes:pink_diamond",
+    "gamefixes:yellow_diamond",
+    "gamefixes:rose_gold_ingot"
   ]
 }

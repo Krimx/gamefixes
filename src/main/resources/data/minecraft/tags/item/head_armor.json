@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "gamefixes:diakrete_helmet"
+    "gamefixes:diakrete_helmet",
+    "gamefixes:pink_diamond_helmet",
+    "gamefixes:yellow_diamond_helmet",
+    "gamefixes:rose_gold_helmet"
   ]
 }

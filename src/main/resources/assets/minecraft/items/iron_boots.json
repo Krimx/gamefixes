@@ -85,6 +85,27 @@
           "model": "minecraft:item/iron_boots_diakrete_trim"
         },
         "when": "gamefixes:diakrete"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/iron_boots_pink_diamond_trim"
+        },
+        "when": "gamefixes:pink_diamond"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/iron_boots_yellow_diamond_trim"
+        },
+        "when": "gamefixes:yellow_diamond"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "minecraft:item/iron_boots_rose_gold_ingot_trim"
+        },
+        "when": "gamefixes:rose_gold_ingot"
       }
     ],
     "fallback": {

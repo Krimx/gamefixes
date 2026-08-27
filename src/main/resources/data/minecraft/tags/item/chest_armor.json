@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "gamefixes:diakrete_chestplate"
+    "gamefixes:diakrete_chestplate",
+    "gamefixes:pink_diamond_chestplate",
+    "gamefixes:yellow_diamond_chestplate",
+    "gamefixes:rose_gold_chestplate"
   ]
 }

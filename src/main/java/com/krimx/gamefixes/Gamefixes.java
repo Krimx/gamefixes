@@ -22,7 +22,6 @@ import com.krimx.gamefixes.research.ResearchAttachments;
 import com.krimx.gamefixes.research.ResearchRegistry;
 import com.krimx.gamefixes.loot.EnchantWithLevelsMendingFunction;
 import net.minecraft.util.Unit;
-import com.mojang.serialization.MapCodec;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.registry.FuelValueEvents;
@@ -45,7 +44,6 @@ import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
@@ -61,57 +59,52 @@ public class Gamefixes implements ModInitializer {
 			LoggerFactory.getLogger(MOD_ID);
 
 	public static Item REFINED_SULFUR;
-	public static Item GOLDEN_POTATO;
+
 	public static Item DIAKRETE;
 	public static Item DIAKRETE_HELMET;
 	public static Item DIAKRETE_CHESTPLATE;
 	public static Item DIAKRETE_LEGGINGS;
 	public static Item DIAKRETE_BOOTS;
+
+	public static Item PINK_DIAMOND_HELMET;
+	public static Item PINK_DIAMOND_CHESTPLATE;
+	public static Item PINK_DIAMOND_LEGGINGS;
+	public static Item PINK_DIAMOND_BOOTS;
+
+	public static Item YELLOW_DIAMOND_HELMET;
+	public static Item YELLOW_DIAMOND_CHESTPLATE;
+	public static Item YELLOW_DIAMOND_LEGGINGS;
+	public static Item YELLOW_DIAMOND_BOOTS;
+
+	public static Item ROSE_GOLD_HELMET;
+	public static Item ROSE_GOLD_CHESTPLATE;
+	public static Item ROSE_GOLD_LEGGINGS;
+	public static Item ROSE_GOLD_BOOTS;
+
+	public static Item ROSE_GOLD_INGOT;
+	public static Item RAW_ROSE_GOLD;
+	public static Item PINK_DIAMOND;
+	public static Item YELLOW_DIAMOND;
+
 	public static Item FRAMED_ELYTRA_TRIM;
+
 	public static Item GHAST_RESIN;
 	public static Item TIDE_SHELL;
 	public static Item WINGWEAVE;
+	public static Block TWILIGHT_PRISMARINE;
+
 	public static Item WINGWOVEN_ELYTRA;
 	public static Item GILDED_ELYTRA;
 	public static Item GILDED_WINGWOVEN_ELYTRA;
-	public static Block TWILIGHT_PRISMARINE;
 	public static Item ELYTRA_CHESTPLATE;
 	public static Item HONEYCOMB_BOOTS;
 
-	private static final ResourceKey<EquipmentAsset> WINGWOVEN_ELYTRA_ASSET =
-			ResourceKey.create(
-					EquipmentAssets.ROOT_ID,
-					Identifier.fromNamespaceAndPath(MOD_ID, "wingwoven_elytra")
-			);
-
-	private static final ResourceKey<EquipmentAsset> GILDED_ELYTRA_ASSET =
-			ResourceKey.create(
-					EquipmentAssets.ROOT_ID,
-					Identifier.fromNamespaceAndPath(MOD_ID, "gilded_elytra")
-			);
-
-	private static final ResourceKey<EquipmentAsset> GILDED_WINGWOVEN_ELYTRA_ASSET =
-			ResourceKey.create(
-					EquipmentAssets.ROOT_ID,
-					Identifier.fromNamespaceAndPath(MOD_ID, "gilded_wingwoven_elytra")
-			);
-	private static final ResourceKey<EquipmentAsset> ELYTRA_CHESTPLATE_ASSET =
-			ResourceKey.create(
-					EquipmentAssets.ROOT_ID,
-					Identifier.fromNamespaceAndPath(MOD_ID, "elytra_chestplate")
-			);
-	private static final ResourceKey<EquipmentAsset> HONEYCOMB_ASSET =
-			ResourceKey.create(
-					EquipmentAssets.ROOT_ID,
-					Identifier.fromNamespaceAndPath(MOD_ID, "honeycomb")
-			);
+	public static Item GOLDEN_POTATO;
 
 	private static final Identifier WINGWOVEN_SPEED_MODIFIER_ID =
 			Identifier.fromNamespaceAndPath(MOD_ID, "wingwoven_elytra_speed");
 	private static final Identifier GILDED_ELYTRA_ARMOR_MODIFIER_ID =
 			Identifier.fromNamespaceAndPath(MOD_ID, "gilded_elytra_armor");
-	private static final Identifier ELYTRA_CHESTPLATE_SPEED_MODIFIER_ID =
-			Identifier.fromNamespaceAndPath(MOD_ID, "elytra_chestplate_speed");
 	private static final Identifier ELYTRA_CHESTPLATE_ARMOR_MODIFIER_ID =
 			Identifier.fromNamespaceAndPath(MOD_ID, "elytra_chestplate_armor");
 
@@ -134,33 +127,64 @@ public class Gamefixes implements ModInitializer {
 		GHAST_RESIN = registerItem("ghast_resin", new Item.Properties());
 		TIDE_SHELL = registerItem("tide_shell", new Item.Properties());
 		WINGWEAVE = registerItem("wingweave", new Item.Properties());
+		RAW_ROSE_GOLD = registerItem("raw_rose_gold", new Item.Properties());
 
 		DIAKRETE = registerItem(
 				"diakrete", new Item.Properties().delayedHolderComponent(
-								DataComponents.PROVIDES_TRIM_MATERIAL,
-								ResourceKey.create(
-										Registries.TRIM_MATERIAL,
-										Identifier.fromNamespaceAndPath(MOD_ID, "diakrete")
-								)
+						DataComponents.PROVIDES_TRIM_MATERIAL,
+						ResourceKey.create(
+								Registries.TRIM_MATERIAL,
+								Identifier.fromNamespaceAndPath(MOD_ID, "diakrete")
 						)
+				)
+		);
+		PINK_DIAMOND = registerItem(
+				"pink_diamond", new Item.Properties().delayedHolderComponent(
+						DataComponents.PROVIDES_TRIM_MATERIAL,
+						ResourceKey.create(
+								Registries.TRIM_MATERIAL,
+								Identifier.fromNamespaceAndPath(MOD_ID, "pink_diamond")
+						)
+				)
+		);
+		YELLOW_DIAMOND = registerItem(
+				"yellow_diamond", new Item.Properties().delayedHolderComponent(
+						DataComponents.PROVIDES_TRIM_MATERIAL,
+						ResourceKey.create(
+								Registries.TRIM_MATERIAL,
+								Identifier.fromNamespaceAndPath(MOD_ID, "yellow_diamond")
+						)
+				)
+		);
+		ROSE_GOLD_INGOT = registerItem(
+				"rose_gold_ingot", new Item.Properties().delayedHolderComponent(
+						DataComponents.PROVIDES_TRIM_MATERIAL,
+						ResourceKey.create(
+								Registries.TRIM_MATERIAL,
+								Identifier.fromNamespaceAndPath(MOD_ID, "rose_gold_ingot")
+						)
+				)
 		);
 
-		DIAKRETE_HELMET = registerArmorItem(
-				"diakrete_helmet",
-				ArmorType.HELMET
-		);
-		DIAKRETE_CHESTPLATE = registerArmorItem(
-				"diakrete_chestplate",
-				ArmorType.CHESTPLATE
-		);
-		DIAKRETE_LEGGINGS = registerArmorItem(
-				"diakrete_leggings",
-				ArmorType.LEGGINGS
-		);
-		DIAKRETE_BOOTS = registerArmorItem(
-				"diakrete_boots",
-				ArmorType.BOOTS
-		);
+		DIAKRETE_HELMET = registerArmorItem("diakrete_helmet", ArmorType.HELMET, DiakreteArmorMaterial.INSTANCE, DiakreteArmorMaterial.BASE_DURABILITY);
+		DIAKRETE_CHESTPLATE = registerArmorItem("diakrete_chestplate", ArmorType.CHESTPLATE, DiakreteArmorMaterial.INSTANCE, DiakreteArmorMaterial.BASE_DURABILITY);
+		DIAKRETE_LEGGINGS = registerArmorItem("diakrete_leggings", ArmorType.LEGGINGS, DiakreteArmorMaterial.INSTANCE, DiakreteArmorMaterial.BASE_DURABILITY);
+		DIAKRETE_BOOTS = registerArmorItem("diakrete_boots", ArmorType.BOOTS, DiakreteArmorMaterial.INSTANCE, DiakreteArmorMaterial.BASE_DURABILITY);
+
+		PINK_DIAMOND_HELMET = registerArmorItem("pink_diamond_helmet", ArmorType.HELMET, ArmorMaterials.PINK_DIAMOND, ArmorMaterials.PINK_DIAMOND_BASE_DURABILITY);
+		PINK_DIAMOND_CHESTPLATE = registerArmorItem("pink_diamond_chestplate", ArmorType.CHESTPLATE, ArmorMaterials.PINK_DIAMOND, ArmorMaterials.PINK_DIAMOND_BASE_DURABILITY);
+		PINK_DIAMOND_LEGGINGS = registerArmorItem("pink_diamond_leggings", ArmorType.LEGGINGS, ArmorMaterials.PINK_DIAMOND, ArmorMaterials.PINK_DIAMOND_BASE_DURABILITY);
+		PINK_DIAMOND_BOOTS = registerArmorItem("pink_diamond_boots", ArmorType.BOOTS, ArmorMaterials.PINK_DIAMOND, ArmorMaterials.PINK_DIAMOND_BASE_DURABILITY);
+
+		YELLOW_DIAMOND_HELMET = registerArmorItem("yellow_diamond_helmet", ArmorType.HELMET, ArmorMaterials.YELLOW_DIAMOND, ArmorMaterials.YELLOW_DIAMOND_BASE_DURABILITY);
+		YELLOW_DIAMOND_CHESTPLATE = registerArmorItem("yellow_diamond_chestplate", ArmorType.CHESTPLATE, ArmorMaterials.YELLOW_DIAMOND, ArmorMaterials.YELLOW_DIAMOND_BASE_DURABILITY);
+		YELLOW_DIAMOND_LEGGINGS = registerArmorItem("yellow_diamond_leggings", ArmorType.LEGGINGS, ArmorMaterials.YELLOW_DIAMOND, ArmorMaterials.YELLOW_DIAMOND_BASE_DURABILITY);
+		YELLOW_DIAMOND_BOOTS = registerArmorItem("yellow_diamond_boots", ArmorType.BOOTS, ArmorMaterials.YELLOW_DIAMOND, ArmorMaterials.YELLOW_DIAMOND_BASE_DURABILITY);
+
+		ROSE_GOLD_HELMET = registerArmorItem("rose_gold_helmet", ArmorType.HELMET, ArmorMaterials.ROSE_GOLD, ArmorMaterials.ROSE_GOLD_BASE_DURABILITY);
+		ROSE_GOLD_CHESTPLATE = registerArmorItem("rose_gold_chestplate", ArmorType.CHESTPLATE, ArmorMaterials.ROSE_GOLD, ArmorMaterials.ROSE_GOLD_BASE_DURABILITY);
+		ROSE_GOLD_LEGGINGS = registerArmorItem("rose_gold_leggings", ArmorType.LEGGINGS, ArmorMaterials.ROSE_GOLD, ArmorMaterials.ROSE_GOLD_BASE_DURABILITY);
+		ROSE_GOLD_BOOTS = registerArmorItem("rose_gold_boots", ArmorType.BOOTS, ArmorMaterials.ROSE_GOLD, ArmorMaterials.ROSE_GOLD_BASE_DURABILITY);
 
 		HONEYCOMB_BOOTS = registerHoneycombBoots();
 
@@ -168,7 +192,7 @@ public class Gamefixes implements ModInitializer {
 				"wingwoven_elytra",
 				createGliderProperties(
 						432,
-						WINGWOVEN_ELYTRA_ASSET,
+						ArmorMaterials.WINGWOVEN_ELYTRA_ASSET,
 						true,
 						0.0
 				)
@@ -178,7 +202,7 @@ public class Gamefixes implements ModInitializer {
 				"gilded_elytra",
 				createGliderProperties(
 						864,
-						GILDED_ELYTRA_ASSET,
+						ArmorMaterials.GILDED_ELYTRA_ASSET,
 						false,
 						2.0
 				)
@@ -188,7 +212,7 @@ public class Gamefixes implements ModInitializer {
 				"gilded_wingwoven_elytra",
 				createGliderProperties(
 						864,
-						GILDED_WINGWOVEN_ELYTRA_ASSET,
+						ArmorMaterials.GILDED_WINGWOVEN_ELYTRA_ASSET,
 						true,
 						2.0
 				)
@@ -216,6 +240,14 @@ public class Gamefixes implements ModInitializer {
 				.register(output -> output.accept(REFINED_SULFUR));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
 				.register(output -> output.accept(DIAKRETE));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
+				.register(output -> output.accept(RAW_ROSE_GOLD));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
+				.register(output -> output.accept(ROSE_GOLD_INGOT));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
+				.register(output -> output.accept(PINK_DIAMOND));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
+				.register(output -> output.accept(YELLOW_DIAMOND));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
 				.register(output -> output.accept(DIAKRETE_HELMET));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
@@ -224,6 +256,30 @@ public class Gamefixes implements ModInitializer {
 				.register(output -> output.accept(DIAKRETE_LEGGINGS));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
 				.register(output -> output.accept(DIAKRETE_BOOTS));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(PINK_DIAMOND_HELMET));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(PINK_DIAMOND_CHESTPLATE));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(PINK_DIAMOND_LEGGINGS));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(PINK_DIAMOND_BOOTS));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(YELLOW_DIAMOND_HELMET));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(YELLOW_DIAMOND_CHESTPLATE));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(YELLOW_DIAMOND_LEGGINGS));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(YELLOW_DIAMOND_BOOTS));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(ROSE_GOLD_HELMET));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(ROSE_GOLD_CHESTPLATE));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(ROSE_GOLD_LEGGINGS));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(ROSE_GOLD_BOOTS));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
 				.register(output -> output.accept(FRAMED_ELYTRA_TRIM));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
@@ -324,7 +380,7 @@ public class Gamefixes implements ModInitializer {
 						.component(
 								DataComponents.EQUIPPABLE,
 								Equippable.builder(EquipmentSlot.CHEST)
-										.setAsset(ELYTRA_CHESTPLATE_ASSET)
+										.setAsset(ArmorMaterials.ELYTRA_CHESTPLATE_ASSET)
 										.setEquipSound(SoundEvents.ARMOR_EQUIP_ELYTRA)
 										.build()
 						)
@@ -404,7 +460,9 @@ public class Gamefixes implements ModInitializer {
 
 	private static Item registerArmorItem(
 			String name,
-			ArmorType type
+			ArmorType type,
+			net.minecraft.world.item.equipment.ArmorMaterial material,
+			int baseDurability
 	) {
 		Identifier id =
 				Identifier.parse(
@@ -420,13 +478,11 @@ public class Gamefixes implements ModInitializer {
 		Item.Properties properties =
 				new Item.Properties()
 						.humanoidArmor(
-								DiakreteArmorMaterial.INSTANCE,
+								material,
 								type
 						)
 						.durability(
-								type.getDurability(
-										DiakreteArmorMaterial.BASE_DURABILITY
-								)
+								type.getDurability(baseDurability)
 						)
 						.setId(key);
 
@@ -525,7 +581,7 @@ public class Gamefixes implements ModInitializer {
 						.component(
 								DataComponents.EQUIPPABLE,
 								Equippable.builder(EquipmentSlot.FEET)
-										.setAsset(HONEYCOMB_ASSET)
+										.setAsset(ArmorMaterials.HONEYCOMB_ASSET)
 										.setEquipSound(SoundEvents.ARMOR_EQUIP_LEATHER)
 										.build()
 						)

@@ -5,7 +5,7 @@
       {
         "model": {
           "type": "minecraft:model",
-          "model": "gamefixes:item/diakrete_leggings_diakrete_trim"
+          "model": "gamefixes:item/armor_trims/diakrete/diakrete_leggings_diakrete_trim"
         },
         "when": "gamefixes:diakrete"
       }

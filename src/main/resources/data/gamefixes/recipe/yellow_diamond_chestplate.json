@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "X X",
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": "gamefixes:yellow_diamond"
+  },
+  "result": {
+    "id": "gamefixes:yellow_diamond_chestplate"
+  }
+}

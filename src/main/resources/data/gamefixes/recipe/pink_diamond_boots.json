@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "X X",
+    "X X"
+  ],
+  "key": {
+    "X": "gamefixes:pink_diamond"
+  },
+  "result": {
+    "id": "gamefixes:pink_diamond_boots"
+  }
+}

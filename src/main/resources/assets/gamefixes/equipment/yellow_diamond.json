@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "gamefixes:yellow_diamond"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "gamefixes:yellow_diamond"
+      }
+    ]
+  }
+}

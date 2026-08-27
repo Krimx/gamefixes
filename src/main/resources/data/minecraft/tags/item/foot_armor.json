@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "gamefixes:diakrete_boots"
+    "gamefixes:diakrete_boots",
+    "gamefixes:pink_diamond_boots",
+    "gamefixes:yellow_diamond_boots",
+    "gamefixes:rose_gold_boots"
   ]
 }

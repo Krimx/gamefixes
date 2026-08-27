@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "gamefixes:item/yellow_diamond_boots"
+  }
+}

@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "gamefixes:diakrete_leggings"
+    "gamefixes:diakrete_leggings",
+    "gamefixes:pink_diamond_leggings",
+    "gamefixes:yellow_diamond_leggings",
+    "gamefixes:rose_gold_leggings"
   ]
 }

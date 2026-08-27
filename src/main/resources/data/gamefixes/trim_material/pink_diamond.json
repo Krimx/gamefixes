@@ -1,0 +1,10 @@
+{
+  "asset_name": "pink_diamond",
+  "description": {
+    "color": "#E09AEA",
+    "translate": "trim_material.gamefixes.pink_diamond"
+  },
+  "override_armor_assets": {
+    "gamefixes:pink_diamond": "pink_diamond_darker"
+  }
+}
