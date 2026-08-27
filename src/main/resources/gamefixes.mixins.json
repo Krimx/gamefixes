@@ -16,7 +16,8 @@
 		"BrewingStandBlockEntityMixin",
 		"BrewingStandPotionSlotMixin",
 		"BrewingStandIngredientsSlotMixin",
-		"ConduitBlockEntityMixin"
+		"ConduitBlockEntityMixin",
+		"BiomeSpecificOreMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
