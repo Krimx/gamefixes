@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "gamefixes:rose_gold_ore",
+    "gamefixes:deepslate_rose_gold_ore",
+    "gamefixes:pink_diamond_ore",
+    "gamefixes:deepslate_pink_diamond_ore",
+    "gamefixes:yellow_diamond_ore",
+    "gamefixes:deepslate_yellow_diamond_ore"
+  ]
+}

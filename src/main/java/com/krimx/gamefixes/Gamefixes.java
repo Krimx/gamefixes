@@ -7,11 +7,11 @@ Add any additional intended golden crops
 Overhaul Trial Chamber loot
 Add Mending-containing End City loot
 Give Ghast Resin a gameplay purpose
-Rename and reconcile the Reduced/Condensed Ghast Tear implementation
 Add diakrete armor floating in water
-Add Honeycomb Boots
 Implement the Honeycomb Boots wall-jump mechanic
 Add armadillo chestplate item
+Add variant ores
+Finish new ui screens
  */
 
 package com.krimx.gamefixes;
@@ -42,6 +42,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.slf4j.Logger;
@@ -50,6 +51,8 @@ import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+
+import java.util.Objects;
 
 public class Gamefixes implements ModInitializer {
 
@@ -92,6 +95,17 @@ public class Gamefixes implements ModInitializer {
 	public static Item TIDE_SHELL;
 	public static Item WINGWEAVE;
 	public static Block TWILIGHT_PRISMARINE;
+
+	public static Block PINK_DIAMOND_ORE;
+	public static Block DEEPSLATE_PINK_DIAMOND_ORE;
+	public static Block PINK_DIAMOND_BLOCK;
+	public static Block YELLOW_DIAMOND_ORE;
+	public static Block DEEPSLATE_YELLOW_DIAMOND_ORE;
+	public static Block YELLOW_DIAMOND_BLOCK;
+	public static Block ROSE_GOLD_ORE;
+	public static Block DEEPSLATE_ROSE_GOLD_ORE;
+	public static Block RAW_ROSE_GOLD_BLOCK;
+	public static Block ROSE_GOLD_BLOCK;
 
 	public static Item WINGWOVEN_ELYTRA;
 	public static Item GILDED_ELYTRA;
@@ -219,20 +233,23 @@ public class Gamefixes implements ModInitializer {
 		);
 		ELYTRA_CHESTPLATE = registerElytraChestplate();
 
-		GOLDEN_POTATO = registerItem("golden_potato", new Item.Properties()
-				.food(
-						new FoodProperties.Builder()
-								.nutrition(6)
-								.saturationModifier(9.6F)
-								.build()
-				));
+		GOLDEN_POTATO = registerItem("golden_potato", new Item.Properties().food(new FoodProperties.Builder()
+										.nutrition(6)
+										.saturationModifier(1.2F)
+										.build()));
 
-		TWILIGHT_PRISMARINE = registerBlock(
-				"twilight_prismarine",
-				BlockBehaviour.Properties.of()
-						.strength(2.0F)
-						.sound(SoundType.STONE)
-		);
+		TWILIGHT_PRISMARINE = registerBlock("twilight_prismarine", BlockBehaviour.Properties.ofFullCopy(Blocks.ANCIENT_DEBRIS));
+
+		ROSE_GOLD_ORE = registerBlock("rose_gold_ore", BlockBehaviour.Properties.ofFullCopy(Blocks.GOLD_ORE).requiresCorrectToolForDrops());
+		DEEPSLATE_ROSE_GOLD_ORE = registerBlock("deepslate_rose_gold_ore", BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_GOLD_ORE).requiresCorrectToolForDrops());
+		PINK_DIAMOND_ORE = registerBlock("pink_diamond_ore", BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_ORE).requiresCorrectToolForDrops());
+		DEEPSLATE_PINK_DIAMOND_ORE = registerBlock("deepslate_pink_diamond_ore", BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_DIAMOND_ORE).requiresCorrectToolForDrops());
+		YELLOW_DIAMOND_ORE = registerBlock("yellow_diamond_ore", BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_ORE).requiresCorrectToolForDrops());
+		DEEPSLATE_YELLOW_DIAMOND_ORE = registerBlock("deepslate_yellow_diamond_ore", BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_DIAMOND_ORE).requiresCorrectToolForDrops());
+		YELLOW_DIAMOND_BLOCK = registerBlock("yellow_diamond_block", BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK).requiresCorrectToolForDrops());
+		PINK_DIAMOND_BLOCK = registerBlock("pink_diamond_block", BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK).requiresCorrectToolForDrops());
+		ROSE_GOLD_BLOCK = registerBlock("rose_gold_block", BlockBehaviour.Properties.ofFullCopy(Blocks.GOLD_BLOCK).requiresCorrectToolForDrops());
+		RAW_ROSE_GOLD_BLOCK = registerBlock("raw_rose_gold_block", BlockBehaviour.Properties.ofFullCopy(Blocks.RAW_GOLD_BLOCK).requiresCorrectToolForDrops());
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS)
 				.register(output -> output.accept(GOLDEN_POTATO));
@@ -300,6 +317,26 @@ public class Gamefixes implements ModInitializer {
 				.register(output -> output.accept(HONEYCOMB_BOOTS));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS)
 				.register(output -> output.accept(TWILIGHT_PRISMARINE.asItem()));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS)
+				.register(output -> output.accept(PINK_DIAMOND_BLOCK.asItem()));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS)
+				.register(output -> output.accept(YELLOW_DIAMOND_BLOCK.asItem()));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS)
+				.register(output -> output.accept(ROSE_GOLD_BLOCK.asItem()));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS)
+				.register(output -> output.accept(RAW_ROSE_GOLD_BLOCK.asItem()));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS)
+				.register(output -> output.accept(PINK_DIAMOND_ORE.asItem()));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS)
+				.register(output -> output.accept(DEEPSLATE_PINK_DIAMOND_ORE.asItem()));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS)
+				.register(output -> output.accept(YELLOW_DIAMOND_ORE.asItem()));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS)
+				.register(output -> output.accept(DEEPSLATE_YELLOW_DIAMOND_ORE.asItem()));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS)
+				.register(output -> output.accept(ROSE_GOLD_ORE.asItem()));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS)
+				.register(output -> output.accept(DEEPSLATE_ROSE_GOLD_ORE.asItem()));
 
 		FuelValueEvents.BUILD.register(
 				(builder, context) -> {
