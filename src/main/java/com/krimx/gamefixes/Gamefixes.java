@@ -1,19 +1,3 @@
-/*
-TODO:
-Add specific item inputs to villager research trades
-Finalize the villager research trade pool
-Finish the villager research UI
-Add any additional intended golden crops
-Overhaul Trial Chamber loot
-Add Mending-containing End City loot
-Give Ghast Resin a gameplay purpose
-Add diakrete armor floating in water
-Implement the Honeycomb Boots wall-jump mechanic
-Add armadillo chestplate item
-Add variant ores
-Finish new ui screens
- */
-
 package com.krimx.gamefixes;
 
 import com.krimx.gamefixes.network.MaceNetworking;
@@ -39,11 +23,9 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,8 +33,6 @@ import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
-
-import java.util.Objects;
 
 public class Gamefixes implements ModInitializer {
 
@@ -375,6 +355,7 @@ public class Gamefixes implements ModInitializer {
 		ResearchNetworking.registerCommon();
 		MaceNetworking.registerCommon();
 		ConcreteConversion.initialize();
+		DiakreteArmorFloating.initialize();
 
 		Registry.register(
 				BuiltInRegistries.LOOT_FUNCTION_TYPE,
