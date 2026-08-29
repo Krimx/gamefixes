@@ -9,6 +9,7 @@ import net.minecraft.util.Unit;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.registry.FuelValueEvents;
+import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -71,6 +72,7 @@ public class Gamefixes implements ModInitializer {
 	public static Item YELLOW_DIAMOND;
 
 	public static Item FRAMED_ELYTRA_TRIM;
+	public static Item BLIGHT_ARMOR_TRIM_SMITHING_TEMPLATE;
 
 	public static Item GHAST_RESIN;
 	public static Item TIDE_SHELL;
@@ -119,6 +121,7 @@ public class Gamefixes implements ModInitializer {
 
 		REFINED_SULFUR = registerItem("refined_sulfur", new Item.Properties());
 		FRAMED_ELYTRA_TRIM = registerItem("framed_elytra_trim", new Item.Properties());
+		BLIGHT_ARMOR_TRIM_SMITHING_TEMPLATE = registerItem("blight_armor_trim_smithing_template", new Item.Properties());
 		GHAST_RESIN = registerItem("ghast_resin", new Item.Properties());
 		TIDE_SHELL = registerItem("tide_shell", new Item.Properties());
 		WINGWEAVE = registerItem("wingweave", new Item.Properties());
@@ -157,6 +160,20 @@ public class Gamefixes implements ModInitializer {
 						ResourceKey.create(
 								Registries.TRIM_MATERIAL,
 								Identifier.fromNamespaceAndPath(MOD_ID, "rose_gold_ingot")
+						)
+				)
+		);
+
+		DefaultItemComponentEvents.MODIFY.register(context ->
+				context.modify(Items.ECHO_SHARD, (builder, lookup, item) ->
+						builder.set(
+								DataComponents.PROVIDES_TRIM_MATERIAL,
+								lookup.lookupOrThrow(Registries.TRIM_MATERIAL).getOrThrow(
+										ResourceKey.create(
+												Registries.TRIM_MATERIAL,
+												Identifier.fromNamespaceAndPath(MOD_ID, "sculk")
+										)
+								)
 						)
 				)
 		);
@@ -286,6 +303,8 @@ public class Gamefixes implements ModInitializer {
 				.register(output -> output.accept(TIDE_SHELL));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
 				.register(output -> output.accept(WINGWEAVE));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
+				.register(output -> output.accept(BLIGHT_ARMOR_TRIM_SMITHING_TEMPLATE));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
 				.register(output -> output.accept(WINGWOVEN_ELYTRA));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)

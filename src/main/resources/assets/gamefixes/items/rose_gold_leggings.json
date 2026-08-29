@@ -106,6 +106,13 @@
           "model": "gamefixes:item/armor_trims/rose_gold/rose_gold_leggings_rose_gold_ingot_trim"
         },
         "when": "gamefixes:rose_gold_ingot"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "gamefixes:item/armor_trims/rose_gold/rose_gold_leggings_sculk_trim"
+        },
+        "when": "gamefixes:sculk"
       }
     ],
     "fallback": {

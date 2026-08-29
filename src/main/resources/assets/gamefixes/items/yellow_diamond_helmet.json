@@ -106,6 +106,13 @@
           "model": "gamefixes:item/armor_trims/yellow_diamond/yellow_diamond_helmet_rose_gold_ingot_trim"
         },
         "when": "gamefixes:rose_gold_ingot"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "gamefixes:item/armor_trims/yellow_diamond/yellow_diamond_helmet_sculk_trim"
+        },
+        "when": "gamefixes:sculk"
       }
     ],
     "fallback": {

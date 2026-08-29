@@ -8,6 +8,13 @@
           "model": "gamefixes:item/armor_trims/diakrete/diakrete_leggings_diakrete_trim"
         },
         "when": "gamefixes:diakrete"
+      },
+      {
+        "model": {
+          "type": "minecraft:model",
+          "model": "gamefixes:item/armor_trims/diakrete/diakrete_leggings_sculk_trim"
+        },
+        "when": "gamefixes:sculk"
       }
     ],
     "fallback": {

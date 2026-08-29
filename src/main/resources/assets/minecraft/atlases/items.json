@@ -25,6 +25,8 @@
         "quartz": "minecraft:trims/color_palettes/quartz",
         "redstone": "minecraft:trims/color_palettes/redstone",
         "resin": "minecraft:trims/color_palettes/resin",
+        "sculk": "gamefixes:trims/color_palettes/sculk",
+        "sculk_darker": "gamefixes:trims/color_palettes/sculk_darker",
         "diakrete": "gamefixes:trims/color_palettes/diakrete",
         "pink_diamond": "gamefixes:trims/color_palettes/pink_diamond",
         "yellow_diamond": "gamefixes:trims/color_palettes/yellow_diamond",
