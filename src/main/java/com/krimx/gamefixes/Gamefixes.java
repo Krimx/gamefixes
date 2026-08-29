@@ -35,12 +35,16 @@ import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 
+import net.minecraft.world.item.ItemStack;
+
 public class Gamefixes implements ModInitializer {
 
 	public static final String MOD_ID = "gamefixes";
 
 	public static final Logger LOGGER =
 			LoggerFactory.getLogger(MOD_ID);
+
+	public static final int MAX_STACK_SIZE = 128;
 
 	public static Item REFINED_SULFUR;
 
@@ -178,6 +182,17 @@ public class Gamefixes implements ModInitializer {
 				)
 		);
 
+		DefaultItemComponentEvents.MODIFY.register(context ->
+				context.modify(
+						item -> item.getDefaultMaxStackSize() == 64,
+						(builder, lookup, item) ->
+								builder.set(
+										DataComponents.MAX_STACK_SIZE,
+										128
+								)
+				)
+		);
+
 		DIAKRETE_HELMET = registerArmorItem("diakrete_helmet", ArmorType.HELMET, DiakreteArmorMaterial.INSTANCE, DiakreteArmorMaterial.BASE_DURABILITY);
 		DIAKRETE_CHESTPLATE = registerArmorItem("diakrete_chestplate", ArmorType.CHESTPLATE, DiakreteArmorMaterial.INSTANCE, DiakreteArmorMaterial.BASE_DURABILITY);
 		DIAKRETE_LEGGINGS = registerArmorItem("diakrete_leggings", ArmorType.LEGGINGS, DiakreteArmorMaterial.INSTANCE, DiakreteArmorMaterial.BASE_DURABILITY);
@@ -229,40 +244,95 @@ public class Gamefixes implements ModInitializer {
 						2.0
 				)
 		);
+
 		ELYTRA_CHESTPLATE = registerElytraChestplate();
 
-		GOLDEN_POTATO = registerItem("golden_potato", new Item.Properties().food(new FoodProperties.Builder()
+		PINK_DIAMOND_ORE = registerBlock(
+				"pink_diamond_ore",
+				BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_ORE)
+		);
+
+		DEEPSLATE_PINK_DIAMOND_ORE = registerBlock(
+				"deepslate_pink_diamond_ore",
+				BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_DIAMOND_ORE)
+		);
+
+		PINK_DIAMOND_BLOCK = registerBlock(
+				"pink_diamond_block",
+				BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK)
+		);
+
+		YELLOW_DIAMOND_ORE = registerBlock(
+				"yellow_diamond_ore",
+				BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_ORE)
+		);
+
+		DEEPSLATE_YELLOW_DIAMOND_ORE = registerBlock(
+				"deepslate_yellow_diamond_ore",
+				BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_DIAMOND_ORE)
+		);
+
+		YELLOW_DIAMOND_BLOCK = registerBlock(
+				"yellow_diamond_block",
+				BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK)
+		);
+
+		ROSE_GOLD_ORE = registerBlock(
+				"rose_gold_ore",
+				BlockBehaviour.Properties.ofFullCopy(Blocks.GOLD_ORE)
+		);
+
+		DEEPSLATE_ROSE_GOLD_ORE = registerBlock(
+				"deepslate_rose_gold_ore",
+				BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_GOLD_ORE)
+		);
+
+		RAW_ROSE_GOLD_BLOCK = registerBlock(
+				"raw_rose_gold_block",
+				BlockBehaviour.Properties.ofFullCopy(Blocks.RAW_GOLD_BLOCK)
+		);
+
+		ROSE_GOLD_BLOCK = registerBlock(
+				"rose_gold_block",
+				BlockBehaviour.Properties.ofFullCopy(Blocks.GOLD_BLOCK)
+		);
+
+		TWILIGHT_PRISMARINE = registerBlock(
+				"twilight_prismarine",
+				BlockBehaviour.Properties.ofFullCopy(Blocks.PRISMARINE)
+		);
+
+		GOLDEN_POTATO = registerItem(
+				"golden_potato",
+				new Item.Properties()
+						.food(
+								new FoodProperties.Builder()
 										.nutrition(6)
 										.saturationModifier(1.2F)
-										.build()));
+										.build()
+						)
+		);
 
-		TWILIGHT_PRISMARINE = registerBlock("twilight_prismarine", BlockBehaviour.Properties.ofFullCopy(Blocks.ANCIENT_DEBRIS));
-
-		ROSE_GOLD_ORE = registerBlock("rose_gold_ore", BlockBehaviour.Properties.ofFullCopy(Blocks.GOLD_ORE).requiresCorrectToolForDrops());
-		DEEPSLATE_ROSE_GOLD_ORE = registerBlock("deepslate_rose_gold_ore", BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_GOLD_ORE).requiresCorrectToolForDrops());
-		PINK_DIAMOND_ORE = registerBlock("pink_diamond_ore", BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_ORE).requiresCorrectToolForDrops());
-		DEEPSLATE_PINK_DIAMOND_ORE = registerBlock("deepslate_pink_diamond_ore", BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_DIAMOND_ORE).requiresCorrectToolForDrops());
-		YELLOW_DIAMOND_ORE = registerBlock("yellow_diamond_ore", BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_ORE).requiresCorrectToolForDrops());
-		DEEPSLATE_YELLOW_DIAMOND_ORE = registerBlock("deepslate_yellow_diamond_ore", BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_DIAMOND_ORE).requiresCorrectToolForDrops());
-		YELLOW_DIAMOND_BLOCK = registerBlock("yellow_diamond_block", BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK).requiresCorrectToolForDrops());
-		PINK_DIAMOND_BLOCK = registerBlock("pink_diamond_block", BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK).requiresCorrectToolForDrops());
-		ROSE_GOLD_BLOCK = registerBlock("rose_gold_block", BlockBehaviour.Properties.ofFullCopy(Blocks.GOLD_BLOCK).requiresCorrectToolForDrops());
-		RAW_ROSE_GOLD_BLOCK = registerBlock("raw_rose_gold_block", BlockBehaviour.Properties.ofFullCopy(Blocks.RAW_GOLD_BLOCK).requiresCorrectToolForDrops());
-
-		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS)
-				.register(output -> output.accept(GOLDEN_POTATO));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
 				.register(output -> output.accept(REFINED_SULFUR));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
 				.register(output -> output.accept(DIAKRETE));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
-				.register(output -> output.accept(RAW_ROSE_GOLD));
-		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
-				.register(output -> output.accept(ROSE_GOLD_INGOT));
-		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
 				.register(output -> output.accept(PINK_DIAMOND));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
 				.register(output -> output.accept(YELLOW_DIAMOND));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
+				.register(output -> output.accept(ROSE_GOLD_INGOT));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
+				.register(output -> output.accept(RAW_ROSE_GOLD));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
+				.register(output -> output.accept(PINK_DIAMOND_BLOCK.asItem()));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
+				.register(output -> output.accept(YELLOW_DIAMOND_BLOCK.asItem()));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
+				.register(output -> output.accept(ROSE_GOLD_BLOCK.asItem()));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
+				.register(output -> output.accept(RAW_ROSE_GOLD_BLOCK.asItem()));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
 				.register(output -> output.accept(DIAKRETE_HELMET));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
@@ -533,7 +603,8 @@ public class Gamefixes implements ModInitializer {
 	private static Item registerItem(String name, Item.Properties properties) {
 		Identifier id =
 				Identifier.parse(
-						MOD_ID + ":" + name
+						MOD_ID + ":"
+								+ name
 				);
 
 		ResourceKey<Item> key =
