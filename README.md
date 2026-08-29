@@ -26,6 +26,7 @@ Everything below contains spoilers for the mod. If you like discovering things o
 * New armor trims
 * Sculk as a trim material
 * New looks for guis
+* Charcoal ore
 
 ## Removed
 
