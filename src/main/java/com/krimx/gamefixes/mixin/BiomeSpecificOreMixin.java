@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -217,6 +218,45 @@ public abstract class BiomeSpecificOreMixin {
                 }
 
                 return Gamefixes.ROSE_GOLD_ORE.defaultBlockState();
+            }
+
+            return originalState;
+        }
+
+        /*
+         * =========================================================
+         * COAL -> CHARCOAL
+         * =========================================================
+         */
+        if (originalState.is(Blocks.COAL_ORE)
+                || originalState.is(Blocks.DEEPSLATE_COAL_ORE)) {
+
+            /*
+             * Rose Gold uses the surface biome.
+             *
+             * #minecraft:is_badlands covers the vanilla Badlands,
+             * Eroded Badlands, and Wooded Badlands biomes.
+             */
+            int surfaceY = level.getHeight(
+                    Heightmap.Types.WORLD_SURFACE_WG,
+                    orePos.getX(),
+                    orePos.getZ()
+            );
+
+            BlockPos surfacePos = new BlockPos(
+                    orePos.getX(),
+                    surfaceY,
+                    orePos.getZ()
+            );
+
+            if (level.getBiome(surfacePos).is(Biomes.PALE_GARDEN)) {
+                System.out.println("Should generate charcoal ore");
+
+                if (originalState.is(Blocks.DEEPSLATE_COAL_ORE)) {
+                    return Gamefixes.DEEPSLATE_CHARCOAL_ORE.defaultBlockState();
+                }
+
+                return Gamefixes.CHARCOAL_ORE.defaultBlockState();
             }
 
             return originalState;

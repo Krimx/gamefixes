@@ -93,6 +93,8 @@ public class Gamefixes implements ModInitializer {
 	public static Block DEEPSLATE_ROSE_GOLD_ORE;
 	public static Block RAW_ROSE_GOLD_BLOCK;
 	public static Block ROSE_GOLD_BLOCK;
+	public static Block CHARCOAL_ORE;
+	public static Block DEEPSLATE_CHARCOAL_ORE;
 
 	public static Item WINGWOVEN_ELYTRA;
 	public static Item GILDED_ELYTRA;
@@ -302,6 +304,16 @@ public class Gamefixes implements ModInitializer {
 				BlockBehaviour.Properties.ofFullCopy(Blocks.PRISMARINE)
 		);
 
+		CHARCOAL_ORE = registerBlock(
+				"charcoal_ore",
+				BlockBehaviour.Properties.ofFullCopy(Blocks.COAL_ORE)
+		);
+
+		DEEPSLATE_CHARCOAL_ORE = registerBlock(
+				"deepslate_charcoal_ore",
+				BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_COAL_ORE)
+		);
+
 		GOLDEN_POTATO = registerItem(
 				"golden_potato",
 				new Item.Properties()
@@ -407,6 +419,10 @@ public class Gamefixes implements ModInitializer {
 				.register(output -> output.accept(ROSE_GOLD_ORE.asItem()));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS)
 				.register(output -> output.accept(DEEPSLATE_ROSE_GOLD_ORE.asItem()));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS)
+				.register(output -> output.accept(CHARCOAL_ORE.asItem()));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS)
+				.register(output -> output.accept(DEEPSLATE_CHARCOAL_ORE.asItem()));
 
 		FuelValueEvents.BUILD.register(
 				(builder, context) -> {

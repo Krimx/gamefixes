@@ -43,6 +43,8 @@
     "gamefixes:pink_diamond_ore",
     "gamefixes:deepslate_pink_diamond_ore",
     "gamefixes:yellow_diamond_ore",
-    "gamefixes:deepslate_yellow_diamond_ore"
+    "gamefixes:deepslate_yellow_diamond_ore",
+    "gamefixes:charcoal_ore",
+    "gamefixes:deepslate_charcoal_ore"
   ]
 }
