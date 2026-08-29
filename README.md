@@ -20,6 +20,12 @@ Everything below contains spoilers for the mod. If you like discovering things o
 * Drop concrete powder into water to instantly convert it
 * Tridents can now be found in aquatic archaeology
 * Elytra-Chestplate, for those who got the Zenith in Terraria
+* Diakrete,and diakrete armor
+* Ghast resin
+* Biome-specific variations to vanilla ores
+* New armor trims
+* Sculk as a trim material
+* New looks for guis
 
 ## Removed
 
