@@ -20,7 +20,8 @@
 		"BiomeSpecificOreMixin",
 		"StackSizeContainerMixin",
 		"StackSizeItemStackCodecMixin",
-		"StackSizeItemInstanceMixin"
+		"StackSizeItemInstanceMixin",
+		"CauldronInteractionDispatcherInvoker"
 	],
 	"injectors": {
 		"defaultRequire": 1

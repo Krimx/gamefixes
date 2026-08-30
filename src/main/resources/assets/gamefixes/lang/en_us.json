@@ -51,5 +51,7 @@
   "trim_material.gamefixes.rose_gold_ingot": "Rose Gold",
   "trim_pattern.gamefixes.blight": "Blight",
   "item.gamefixes.blight_armor_trim_smithing_template": "Blight Armor Trim Smithing Template",
-  "trim_material.gamefixes.sculk": "Sculk"
+  "trim_material.gamefixes.sculk": "Sculk",
+  "item.gamefixes.milk_bottle": "Milk Bottle",
+  "block.gamefixes.milk_cauldron": "Milk Cauldron"
 }

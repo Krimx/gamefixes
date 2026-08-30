@@ -34,6 +34,11 @@ import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.component.Consumables;
+import net.minecraft.world.item.component.UseRemainder;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
+import net.minecraft.world.level.biome.Biome;
 
 import net.minecraft.world.item.ItemStack;
 
@@ -103,6 +108,9 @@ public class Gamefixes implements ModInitializer {
 	public static Item HONEYCOMB_BOOTS;
 
 	public static Item GOLDEN_POTATO;
+
+	public static Item MILK_BOTTLE;
+	public static Block MILK_CAULDRON;
 
 	private static final Identifier WINGWOVEN_SPEED_MODIFIER_ID =
 			Identifier.fromNamespaceAndPath(MOD_ID, "wingwoven_elytra_speed");
@@ -314,6 +322,47 @@ public class Gamefixes implements ModInitializer {
 				BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_COAL_ORE)
 		);
 
+		Identifier milkCauldronId =
+				Identifier.fromNamespaceAndPath(
+						MOD_ID,
+						"milk_cauldron"
+				);
+
+		ResourceKey<Block> milkCauldronKey =
+				ResourceKey.create(
+						Registries.BLOCK,
+						milkCauldronId
+				);
+
+		MILK_CAULDRON = Registry.register(
+				BuiltInRegistries.BLOCK,
+				milkCauldronId,
+				new LayeredCauldronBlock(
+						Biome.Precipitation.NONE,
+						MilkCauldronInteractions.createDispatcher(),
+						BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON)
+								.setId(milkCauldronKey)
+				)
+		);
+
+		MilkCauldronInteractions.registerEmptyCauldronInteractions();
+
+		MILK_BOTTLE = registerItem(
+				"milk_bottle",
+				new Item.Properties()
+						.component(DataComponents.MAX_STACK_SIZE, 16)
+						.component(
+								DataComponents.USE_REMAINDER,
+								new UseRemainder(
+										new ItemStackTemplate(Items.GLASS_BOTTLE)
+								)
+						)
+						.component(
+								DataComponents.CONSUMABLE,
+								Consumables.MILK_BUCKET
+						)
+		);
+
 		GOLDEN_POTATO = registerItem(
 				"golden_potato",
 				new Item.Properties()
@@ -327,6 +376,8 @@ public class Gamefixes implements ModInitializer {
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
 				.register(output -> output.accept(REFINED_SULFUR));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS)
+				.register(output -> output.accept(MILK_BOTTLE));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
 				.register(output -> output.accept(DIAKRETE));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
