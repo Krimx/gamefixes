@@ -203,6 +203,18 @@ public class Gamefixes implements ModInitializer {
 				)
 		);
 
+		DefaultItemComponentEvents.MODIFY.register(context ->
+				context.modify(
+						item -> item.getDefaultMaxStackSize() == 1
+								&& item.components().has(DataComponents.CONSUMABLE),
+						(builder, lookup, item) ->
+								builder.set(
+										DataComponents.MAX_STACK_SIZE,
+										16
+								)
+				)
+		);
+
 		DIAKRETE_HELMET = registerArmorItem("diakrete_helmet", ArmorType.HELMET, DiakreteArmorMaterial.INSTANCE, DiakreteArmorMaterial.BASE_DURABILITY);
 		DIAKRETE_CHESTPLATE = registerArmorItem("diakrete_chestplate", ArmorType.CHESTPLATE, DiakreteArmorMaterial.INSTANCE, DiakreteArmorMaterial.BASE_DURABILITY);
 		DIAKRETE_LEGGINGS = registerArmorItem("diakrete_leggings", ArmorType.LEGGINGS, DiakreteArmorMaterial.INSTANCE, DiakreteArmorMaterial.BASE_DURABILITY);
