@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": "gamefixes:flour",
+  "result": {
+    "id": "minecraft:bread"
+  },
+  "experience": 0.35,
+  "cooking_time": 200
+}

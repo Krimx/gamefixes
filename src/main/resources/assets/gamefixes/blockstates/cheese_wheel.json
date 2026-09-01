@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "bites=0": {
+      "model": "gamefixes:block/cheese_wheel"
+    },
+    "bites=1": {
+      "model": "gamefixes:block/cheese_wheel_bites1"
+    },
+    "bites=2": {
+      "model": "gamefixes:block/cheese_wheel_bites2"
+    },
+    "bites=3": {
+      "model": "gamefixes:block/cheese_wheel_bites3"
+    },
+    "bites=4": {
+      "model": "gamefixes:block/cheese_wheel_bites4"
+    },
+    "bites=5": {
+      "model": "gamefixes:block/cheese_wheel_bites5"
+    }
+  }
+}

@@ -9,6 +9,7 @@ import net.minecraft.util.Unit;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.registry.FuelValueEvents;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
@@ -26,6 +27,7 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.slf4j.Logger;
@@ -39,8 +41,23 @@ import net.minecraft.world.item.component.UseRemainder;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.biome.Biome;
-
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.world.item.ItemStack;
+import com.krimx.gamefixes.HomeChunkManager;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 
 public class Gamefixes implements ModInitializer {
 
@@ -111,6 +128,11 @@ public class Gamefixes implements ModInitializer {
 
 	public static Item MILK_BOTTLE;
 	public static Block MILK_CAULDRON;
+	public static Block CHEESE_CAULDRON;
+	public static BlockEntityType<MilkCauldronBlockEntity> MILK_CAULDRON_BLOCK_ENTITY;
+	public static Item CHEESE;
+	public static Item FLOUR;
+	public static Block CHEESE_WHEEL;
 
 	private static final Identifier WINGWOVEN_SPEED_MODIFIER_ID =
 			Identifier.fromNamespaceAndPath(MOD_ID, "wingwoven_elytra_speed");
@@ -349,7 +371,7 @@ public class Gamefixes implements ModInitializer {
 		MILK_CAULDRON = Registry.register(
 				BuiltInRegistries.BLOCK,
 				milkCauldronId,
-				new LayeredCauldronBlock(
+				new MilkCauldronBlock(
 						Biome.Precipitation.NONE,
 						MilkCauldronInteractions.createDispatcher(),
 						BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON)
@@ -357,7 +379,88 @@ public class Gamefixes implements ModInitializer {
 				)
 		);
 
+		MILK_CAULDRON_BLOCK_ENTITY = Registry.register(
+				BuiltInRegistries.BLOCK_ENTITY_TYPE,
+				Identifier.fromNamespaceAndPath(MOD_ID, "milk_cauldron"),
+				FabricBlockEntityTypeBuilder.create(
+						MilkCauldronBlockEntity::new,
+						MILK_CAULDRON
+				).build()
+		);
+
+		Identifier cheeseWheelId =
+				Identifier.fromNamespaceAndPath(
+						MOD_ID,
+						"cheese_wheel"
+				);
+
+		ResourceKey<Block> cheeseWheelKey =
+				ResourceKey.create(
+						Registries.BLOCK,
+						cheeseWheelId
+				);
+
+		CHEESE_WHEEL = Registry.register(
+				BuiltInRegistries.BLOCK,
+				cheeseWheelId,
+				new CheeseWheelBlock(
+						BlockBehaviour.Properties.ofFullCopy(Blocks.CAKE)
+								.setId(cheeseWheelKey)
+				)
+		);
+
+		Registry.register(
+				BuiltInRegistries.ITEM,
+				cheeseWheelId,
+				new BlockItem(
+						CHEESE_WHEEL,
+						new Item.Properties()
+								.setId(
+										ResourceKey.create(
+												Registries.ITEM,
+												cheeseWheelId
+										)
+								)
+				)
+		);
+
 		MilkCauldronInteractions.registerEmptyCauldronInteractions();
+
+		Identifier cheeseCauldronId =
+				Identifier.fromNamespaceAndPath(
+						MOD_ID,
+						"cheese_cauldron"
+				);
+
+		ResourceKey<Block> cheeseCauldronKey =
+				ResourceKey.create(
+						Registries.BLOCK,
+						cheeseCauldronId
+				);
+
+		CHEESE_CAULDRON = Registry.register(
+				BuiltInRegistries.BLOCK,
+				cheeseCauldronId,
+				new LayeredCauldronBlock(
+						Biome.Precipitation.NONE,
+						CheeseCauldronInteractions.createDispatcher(),
+						BlockBehaviour.Properties.ofFullCopy(Blocks.CAULDRON)
+								.setId(cheeseCauldronKey)
+				)
+		);
+
+		CHEESE = registerItem(
+				"cheese",
+				new Item.Properties()
+						.food(
+								new FoodProperties.Builder()
+										.nutrition(4)
+										.saturationModifier(0.8F)
+										.build()
+						)
+		);
+
+		FLOUR = registerItem("flour", new Item.Properties());
 
 		MILK_BOTTLE = registerItem(
 				"milk_bottle",
@@ -390,6 +493,10 @@ public class Gamefixes implements ModInitializer {
 				.register(output -> output.accept(REFINED_SULFUR));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS)
 				.register(output -> output.accept(MILK_BOTTLE));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS)
+				.register(output -> output.accept(CHEESE));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
+				.register(output -> output.accept(FLOUR));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
 				.register(output -> output.accept(DIAKRETE));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
@@ -486,6 +593,8 @@ public class Gamefixes implements ModInitializer {
 				.register(output -> output.accept(CHARCOAL_ORE.asItem()));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS)
 				.register(output -> output.accept(DEEPSLATE_CHARCOAL_ORE.asItem()));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS)
+				.register(output -> output.accept(CHEESE_WHEEL.asItem()));
 
 		FuelValueEvents.BUILD.register(
 				(builder, context) -> {
@@ -524,6 +633,7 @@ public class Gamefixes implements ModInitializer {
 		ResearchNetworking.registerCommon();
 		MaceNetworking.registerCommon();
 		ConcreteConversion.initialize();
+		HomeChunkManager.initialize();
 
 		Registry.register(
 				BuiltInRegistries.LOOT_FUNCTION_TYPE,

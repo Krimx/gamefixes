@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/cake_slice5",
+  "textures": {
+    "particle": "gamefixes:block/cheese",
+    "bottom": "gamefixes:block/cheese_bottom",
+    "top": "gamefixes:block/cheese_top",
+    "side": "gamefixes:block/cheese_side",
+    "inside": "gamefixes:block/cheese_inner"
+  }
+}

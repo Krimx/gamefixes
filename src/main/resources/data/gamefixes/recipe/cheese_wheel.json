@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CCC",
+    "CCC"
+  ],
+  "key": {
+    "C": "gamefixes:cheese"
+  },
+  "result": {
+    "id": "gamefixes:cheese_wheel",
+    "count": 1
+  }
+}

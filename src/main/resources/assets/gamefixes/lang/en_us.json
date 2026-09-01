@@ -53,5 +53,9 @@
   "item.gamefixes.blight_armor_trim_smithing_template": "Blight Armor Trim Smithing Template",
   "trim_material.gamefixes.sculk": "Sculk",
   "item.gamefixes.milk_bottle": "Milk Bottle",
-  "block.gamefixes.milk_cauldron": "Milk Cauldron"
+  "block.gamefixes.milk_cauldron": "Milk Cauldron",
+  "item.gamefixes.cheese": "Cheese",
+  "block.gamefixes.cheese_cauldron": "Cheese Cauldron",
+  "item.gamefixes.flour": "Flour",
+  "item.gamefixes.cheese_wheel": "Cheese Wheel"
 }

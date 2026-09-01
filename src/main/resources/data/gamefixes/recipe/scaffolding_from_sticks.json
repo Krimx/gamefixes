@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "STS",
+    "S S",
+    "S S"
+  ],
+  "key": {
+    "S": "minecraft:stick",
+    "T": "minecraft:string"
+  },
+  "result": {
+  "id": "minecraft:scaffolding",
+  "count": 6
+  }
+}

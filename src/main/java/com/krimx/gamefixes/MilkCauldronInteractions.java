@@ -78,7 +78,7 @@ public final class MilkCauldronInteractions {
             InteractionHand hand,
             ItemStack itemInHand
     ) {
-        return CauldronInteractions.emptyBucket(
+        InteractionResult result = CauldronInteractions.emptyBucket(
                 level,
                 pos,
                 player,
@@ -88,6 +88,8 @@ public final class MilkCauldronInteractions {
                         .setValue(LayeredCauldronBlock.LEVEL, 3),
                 SoundEvents.BUCKET_EMPTY
         );
+
+        return result;
     }
 
     private static InteractionResult fillWithMilkBucket(
@@ -102,7 +104,7 @@ public final class MilkCauldronInteractions {
             return InteractionResult.PASS;
         }
 
-        return CauldronInteractions.emptyBucket(
+        InteractionResult result = CauldronInteractions.emptyBucket(
                 level,
                 pos,
                 player,
@@ -111,6 +113,8 @@ public final class MilkCauldronInteractions {
                 state.setValue(LayeredCauldronBlock.LEVEL, 3),
                 SoundEvents.BUCKET_EMPTY
         );
+
+        return result;
     }
 
     private static InteractionResult fillEmptyCauldronWithMilkBottle(
