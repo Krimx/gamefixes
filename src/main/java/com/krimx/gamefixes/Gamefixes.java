@@ -134,6 +134,8 @@ public class Gamefixes implements ModInitializer {
 	public static Item FLOUR;
 	public static Block CHEESE_WHEEL;
 
+	public static Item LOOT_BAG;
+
 	private static final Identifier WINGWOVEN_SPEED_MODIFIER_ID =
 			Identifier.fromNamespaceAndPath(MOD_ID, "wingwoven_elytra_speed");
 	private static final Identifier GILDED_ELYTRA_ARMOR_MODIFIER_ID =
@@ -162,6 +164,27 @@ public class Gamefixes implements ModInitializer {
 		TIDE_SHELL = registerItem("tide_shell", new Item.Properties());
 		WINGWEAVE = registerItem("wingweave", new Item.Properties());
 		RAW_ROSE_GOLD = registerItem("raw_rose_gold", new Item.Properties());
+
+		Identifier lootBagId =
+				Identifier.fromNamespaceAndPath(
+						MOD_ID,
+						"loot_bag"
+				);
+
+		ResourceKey<Item> lootBagKey =
+				ResourceKey.create(
+						Registries.ITEM,
+						lootBagId
+				);
+
+		LOOT_BAG = Registry.register(
+				BuiltInRegistries.ITEM,
+				lootBagId,
+				new LootBagItem(
+						new Item.Properties()
+								.setId(lootBagKey)
+				)
+		);
 
 		DIAKRETE = registerItem(
 				"diakrete", new Item.Properties().delayedHolderComponent(
@@ -595,6 +618,8 @@ public class Gamefixes implements ModInitializer {
 				.register(output -> output.accept(DEEPSLATE_CHARCOAL_ORE.asItem()));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS)
 				.register(output -> output.accept(CHEESE_WHEEL.asItem()));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
+				.register(output -> output.accept(LOOT_BAG));
 
 		FuelValueEvents.BUILD.register(
 				(builder, context) -> {
@@ -634,6 +659,8 @@ public class Gamefixes implements ModInitializer {
 		MaceNetworking.registerCommon();
 		ConcreteConversion.initialize();
 		HomeChunkManager.initialize();
+		LootBagComponents.initialize();
+		LootBagCraftingRecipe.initialize();
 
 		Registry.register(
 				BuiltInRegistries.LOOT_FUNCTION_TYPE,
