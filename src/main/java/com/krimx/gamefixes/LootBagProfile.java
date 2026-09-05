@@ -1,5 +1,6 @@
 package com.krimx.gamefixes;
 
+import com.krimx.gamefixes.loot_bags.AddLootBagTags;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
@@ -14,6 +15,7 @@ public class LootBagProfile {
     private final Map<Identifier, Integer> scores;
 
     public LootBagProfile(ItemStack bag) {
+
         this.scores = new HashMap<>();
 
         List<Identifier> contents =
@@ -23,6 +25,7 @@ public class LootBagProfile {
                 );
 
         for (Identifier identifier : contents) {
+
             Item item =
                     BuiltInRegistries.ITEM
                             .getOptional(identifier)
@@ -32,54 +35,13 @@ public class LootBagProfile {
                 continue;
             }
 
-            ItemStack stack = new ItemStack(item);
+            for (
+                    Identifier category :
+                    AddLootBagTags.getTags(item)
+            ) {
 
-            if (stack.is(LootBagTags.LOOT_BAG_TRIALS)) {
                 addScore(
-                        Identifier.fromNamespaceAndPath(
-                                Gamefixes.MOD_ID,
-                                "trials"
-                        ),
-                        1
-                );
-            }
-
-            if (stack.is(LootBagTags.LOOT_BAG_NETHER)) {
-                addScore(
-                        Identifier.fromNamespaceAndPath(
-                                Gamefixes.MOD_ID,
-                                "nether"
-                        ),
-                        1
-                );
-            }
-
-            if (stack.is(LootBagTags.LOOT_BAG_END)) {
-                addScore(
-                        Identifier.fromNamespaceAndPath(
-                                Gamefixes.MOD_ID,
-                                "end"
-                        ),
-                        1
-                );
-            }
-
-            if (stack.is(LootBagTags.LOOT_BAG_EXPLOSIVE)) {
-                addScore(
-                        Identifier.fromNamespaceAndPath(
-                                Gamefixes.MOD_ID,
-                                "explosive"
-                        ),
-                        1
-                );
-            }
-
-            if (stack.is(LootBagTags.LOOT_BAG_VALUABLE)) {
-                addScore(
-                        Identifier.fromNamespaceAndPath(
-                                Gamefixes.MOD_ID,
-                                "valuable"
-                        ),
+                        category,
                         1
                 );
             }
@@ -87,6 +49,7 @@ public class LootBagProfile {
     }
 
     public int getScore(Identifier category) {
+
         return scores.getOrDefault(
                 category,
                 0
@@ -97,6 +60,7 @@ public class LootBagProfile {
             Identifier category,
             int amount
     ) {
+
         scores.merge(
                 category,
                 amount,
@@ -105,6 +69,7 @@ public class LootBagProfile {
     }
 
     public Map<Identifier, Integer> getScores() {
+
         return Map.copyOf(scores);
     }
 }

@@ -1,0 +1,25 @@
+Animal affection ~~~~~~~~~~~~~~~~~~~~~
+
+wolves: ~~~~~~~~~~~~~~~~~~
+personality types:
+    -grumpy: will be harder to tame (more bones used), will attack skeletons on its own, harder to raise affection
+    -friendly: will be easier to tame, more willing to get close to player, will not attack things
+    -timid: will avoid players, will not attack skeletons,
+affection (after tame):
+    -feeding, taking on adventures, and spending time with wolf (basically just not sitting it down) will increase its affection score over time
+    -at 0 score, dog is vanilla
+    -at tier 1, dog will attack certain mobs on its own. with an increasing score, it will attack more dangerous mobs on its own
+    -at tier 2, dog will dig up stuff (like sniffers, but just bones and maybe sherds)
+
+cats: ~~~~~~~~~~~~~~~~
+personality types:
+    -grumpy: will run away when approached; must have something particularly enticing to tame
+    -friendly: willing to hang out with player; easier to tame
+    -playful: will randomly choose between running away and approaching
+affection:
+    tier 0: vanilla but without gifts after sleeping
+    tier 1: will not sit on chests
+    tier 2: cat will deliver gifts after sleep (mainly feathers, string, etc, but occasionally something rare)
+
+parrots: ~~~~~~~
+tbh i think theyre fine the way they are
