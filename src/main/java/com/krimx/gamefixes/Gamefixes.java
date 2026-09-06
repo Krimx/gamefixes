@@ -1,6 +1,8 @@
 package com.krimx.gamefixes;
 
 import com.krimx.gamefixes.loot_bags.AddLootBagTags;
+import com.krimx.gamefixes.loot_bags.LootBagOutcomes;
+import com.krimx.gamefixes.loot_bags.LootBagOutcomeExecutors;
 import com.krimx.gamefixes.network.MaceNetworking;
 import com.krimx.gamefixes.network.ResearchNetworking;
 import com.krimx.gamefixes.research.ResearchAttachments;
@@ -663,6 +665,8 @@ public class Gamefixes implements ModInitializer {
 		LootBagComponents.initialize();
 		LootBagCraftingRecipe.initialize();
 		AddLootBagTags.initialize();
+		LootBagOutcomes.initialize();
+		LootBagOutcomeExecutors.initialize();
 
 		Registry.register(
 				BuiltInRegistries.LOOT_FUNCTION_TYPE,
