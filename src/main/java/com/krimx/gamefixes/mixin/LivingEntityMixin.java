@@ -2,6 +2,7 @@ package com.krimx.gamefixes.mixin;
 
 import com.krimx.gamefixes.DiakreteArmorFloating;
 import com.krimx.gamefixes.Gamefixes;
+import com.krimx.gamefixes.HoneycombBootsWallJump;
 import com.krimx.gamefixes.network.MaceNetworking;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -43,6 +44,10 @@ public class LivingEntityMixin {
     @Unique private boolean gamefixes$maceAttackPending = false;
     @Unique private int gamefixes$maceAttackDelay = 0;
     @Unique private float gamefixes$macePendingDamage = 0.0F;
+
+    // --- Honeycomb Boots wall jump ---
+    @Unique private boolean gamefixes$honeycombWallJumpUsed = false;
+    @Unique private boolean gamefixes$honeycombDebugLogged = false;
 
     // --- Mace attack start ---
     @Inject(method = "startUsingItem", at = @At("HEAD"))
@@ -104,6 +109,72 @@ public class LivingEntityMixin {
                 damage,
                 MACE_ATTACK_DELAY_TICKS
         );
+    }
+
+    // --- Reset wall jump when landing ---
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void gamefixes$resetHoneycombWallJump(CallbackInfo ci) {
+        LivingEntity entity = (LivingEntity) (Object) this;
+
+        if (!(entity instanceof Player player)) {
+            return;
+        }
+
+        if (!gamefixes$honeycombDebugLogged) {
+            gamefixes$honeycombDebugLogged = true;
+        }
+
+        if (player.onGround()) {
+            gamefixes$honeycombWallJumpUsed = false;
+        }
+    }
+
+    // --- Jump input / debug ---
+    @Inject(method = "setJumping", at = @At("HEAD"))
+    private void gamefixes$honeycombWallJump(
+            boolean jumping,
+            CallbackInfo ci
+    ) {
+        if (!jumping) {
+            return;
+        }
+
+        LivingEntity entity = (LivingEntity) (Object) this;
+
+        if (!(entity instanceof Player player)) {
+            return;
+        }
+
+        if (!(entity.level() instanceof ServerLevel)) {
+            return;
+        }
+
+        boolean wearingBoots =
+                HoneycombBootsWallJump.isWearingHoneycombBoots(player);
+
+        if (!wearingBoots) {
+            return;
+        }
+
+        if (player.onGround()) {
+            return;
+        }
+
+        if (gamefixes$honeycombWallJumpUsed) {
+            return;
+        }
+
+        if (!player.horizontalCollision) {
+            return;
+        }
+
+        if (!HoneycombBootsWallJump.canWallJump(player)) {
+            return;
+        }
+
+        HoneycombBootsWallJump.performWallJump(player);
+
+        gamefixes$honeycombWallJumpUsed = true;
     }
 
     // --- Pending mace attack ---

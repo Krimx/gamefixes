@@ -1,0 +1,9 @@
+{
+  "layers": {
+    "humanoid_leggings": [
+      {
+        "texture": "gamefixes:glow_squid_leggings"
+      }
+    ]
+  }
+}

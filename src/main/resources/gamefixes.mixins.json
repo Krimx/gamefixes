@@ -21,7 +21,12 @@
 		"StackSizeContainerMixin",
 		"StackSizeItemStackCodecMixin",
 		"StackSizeItemInstanceMixin",
-		"CauldronInteractionDispatcherInvoker"
+		"CauldronInteractionDispatcherInvoker",
+		"ShulkerBoxBlockEntityMixin",
+		"ShulkerBoxMenuMixin",
+		"ChestMenuMixin",
+		"BlockLightEngineMixin",
+		"LightEngineAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1

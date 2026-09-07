@@ -28,6 +28,15 @@ public final class ArmorMaterials {
     public static final ResourceKey<EquipmentAsset> ROSE_GOLD_ARMOR_ASSET =
             equipmentAsset("rose_gold");
 
+    public static final ResourceKey<EquipmentAsset> GLOW_SQUID_LEGGINGS_ASSET =
+            equipmentAsset("glow_squid_leggings");
+
+    public static final ResourceKey<EquipmentAsset> HONEYCOMB_ASSET =
+            ResourceKey.create(
+                    EquipmentAssets.ROOT_ID,
+                    Identifier.fromNamespaceAndPath(Gamefixes.MOD_ID, "honeycomb")
+            );
+
     public static final TagKey<Item> REPAIRS_PINK_DIAMOND_ARMOR =
             repairTag("repairs_pink_diamond_armor");
 
@@ -36,6 +45,12 @@ public final class ArmorMaterials {
 
     public static final TagKey<Item> REPAIRS_ROSE_GOLD_ARMOR =
             repairTag("repairs_rose_gold_armor");
+
+    public static final TagKey<Item> REPAIRS_GLOW_SQUID_LEGGINGS =
+            repairTag("repairs_glow_squid_leggings");
+
+    public static final TagKey<Item> REPAIRS_HONEYCOMB_BOOTS =
+            repairTag("repairs_honeycomb_boots");
 
     public static final ArmorMaterial PINK_DIAMOND =
             new ArmorMaterial(
@@ -88,6 +103,20 @@ public final class ArmorMaterials {
                     ROSE_GOLD_ARMOR_ASSET
             );
 
+    public static final ArmorMaterial HONEYCOMB_BOOTS =
+            new ArmorMaterial(
+                    1,
+                    Map.of(
+                            ArmorType.BOOTS, 1
+                    ),
+                    1,
+                    SoundEvents.ARMOR_EQUIP_LEATHER,
+                    0.0F,
+                    0.0F,
+                    REPAIRS_HONEYCOMB_BOOTS,
+                    HONEYCOMB_ASSET
+            );
+
     public static ResourceKey<EquipmentAsset> equipmentAsset(String name) {
         return ResourceKey.create(
                 EquipmentAssets.ROOT_ID,
@@ -101,8 +130,6 @@ public final class ArmorMaterials {
                 Identifier.fromNamespaceAndPath(Gamefixes.MOD_ID, name)
         );
     }
-
-
 
     public static final ResourceKey<EquipmentAsset> WINGWOVEN_ELYTRA_ASSET =
             ResourceKey.create(
@@ -121,16 +148,14 @@ public final class ArmorMaterials {
                     EquipmentAssets.ROOT_ID,
                     Identifier.fromNamespaceAndPath(Gamefixes.MOD_ID, "gilded_wingwoven_elytra")
             );
+
     public static final ResourceKey<EquipmentAsset> ELYTRA_CHESTPLATE_ASSET =
             ResourceKey.create(
                     EquipmentAssets.ROOT_ID,
                     Identifier.fromNamespaceAndPath(Gamefixes.MOD_ID, "elytra_chestplate")
             );
-    public static final ResourceKey<EquipmentAsset> HONEYCOMB_ASSET =
-            ResourceKey.create(
-                    EquipmentAssets.ROOT_ID,
-                    Identifier.fromNamespaceAndPath(Gamefixes.MOD_ID, "honeycomb")
-            );
+
+
 
     public ArmorMaterials() {
     }

@@ -3,11 +3,13 @@ package com.krimx.gamefixes;
 import com.krimx.gamefixes.loot_bags.AddLootBagTags;
 import com.krimx.gamefixes.loot_bags.LootBagOutcomes;
 import com.krimx.gamefixes.loot_bags.LootBagOutcomeExecutors;
+import com.krimx.gamefixes.network.HoneycombNetworking;
 import com.krimx.gamefixes.network.MaceNetworking;
 import com.krimx.gamefixes.network.ResearchNetworking;
 import com.krimx.gamefixes.research.ResearchAttachments;
 import com.krimx.gamefixes.research.ResearchRegistry;
 import com.krimx.gamefixes.loot.EnchantWithLevelsMendingFunction;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Unit;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
@@ -28,6 +30,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -126,6 +129,7 @@ public class Gamefixes implements ModInitializer {
 	public static Item GILDED_WINGWOVEN_ELYTRA;
 	public static Item ELYTRA_CHESTPLATE;
 	public static Item HONEYCOMB_BOOTS;
+	public static Item GLOW_SQUID_LEGGINGS;
 
 	public static Item GOLDEN_POTATO;
 
@@ -284,6 +288,7 @@ public class Gamefixes implements ModInitializer {
 		ROSE_GOLD_BOOTS = registerArmorItem("rose_gold_boots", ArmorType.BOOTS, ArmorMaterials.ROSE_GOLD, ArmorMaterials.ROSE_GOLD_BASE_DURABILITY);
 
 		HONEYCOMB_BOOTS = registerHoneycombBoots();
+		GLOW_SQUID_LEGGINGS = registerGlowSquidLeggings();
 
 		WINGWOVEN_ELYTRA = registerItem(
 				"wingwoven_elytra",
@@ -593,6 +598,8 @@ public class Gamefixes implements ModInitializer {
 				.register(output -> output.accept(ELYTRA_CHESTPLATE));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
 				.register(output -> output.accept(HONEYCOMB_BOOTS));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(GLOW_SQUID_LEGGINGS));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS)
 				.register(output -> output.accept(TWILIGHT_PRISMARINE.asItem()));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS)
@@ -656,6 +663,12 @@ public class Gamefixes implements ModInitializer {
 				}
 		);
 
+		ServerTickEvents.END_SERVER_TICK.register(server -> {
+			for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+				GlowSquidLeggingsLighting.tick(player);
+			}
+		});
+
 		ResearchAttachments.initialize();
 		ResearchRegistry.initialize();
 		ResearchNetworking.registerCommon();
@@ -667,6 +680,7 @@ public class Gamefixes implements ModInitializer {
 		AddLootBagTags.initialize();
 		LootBagOutcomes.initialize();
 		LootBagOutcomeExecutors.initialize();
+		HoneycombNetworking.initialize();
 
 		Registry.register(
 				BuiltInRegistries.LOOT_FUNCTION_TYPE,
@@ -900,18 +914,63 @@ public class Gamefixes implements ModInitializer {
 		Item.Properties properties =
 				new Item.Properties()
 						.humanoidArmor(
-								DiakreteArmorMaterial.INSTANCE,
+								ArmorMaterials.HONEYCOMB_BOOTS,
 								ArmorType.BOOTS
 						)
-						.durability(
-								ArmorType.BOOTS.getDurability(
-										DiakreteArmorMaterial.BASE_DURABILITY
-								)
-						)
+						.durability(222)
 						.component(
 								DataComponents.EQUIPPABLE,
 								Equippable.builder(EquipmentSlot.FEET)
 										.setAsset(ArmorMaterials.HONEYCOMB_ASSET)
+										.setEquipSound(SoundEvents.ARMOR_EQUIP_LEATHER)
+										.build()
+						)
+						.setId(key);
+
+		return Registry.register(
+				BuiltInRegistries.ITEM,
+				id,
+				new Item(properties)
+		);
+	}
+
+	private static Item registerGlowSquidLeggings() {
+		Identifier id =
+				Identifier.parse(
+						MOD_ID + ":glow_squid_leggings"
+				);
+
+		ResourceKey<Item> key =
+				ResourceKey.create(
+						Registries.ITEM,
+						id
+				);
+
+		ArmorMaterial material =
+				new ArmorMaterial(
+						24,
+						java.util.Map.of(
+								ArmorType.LEGGINGS, 2
+						),
+						1,
+						SoundEvents.ARMOR_EQUIP_LEATHER,
+						0.0F,
+						0.0F,
+						ArmorMaterials.REPAIRS_GLOW_SQUID_LEGGINGS,
+						ArmorMaterials.GLOW_SQUID_LEGGINGS_ASSET
+				);
+
+		Item.Properties properties =
+				new Item.Properties()
+						.humanoidArmor(
+								material,
+								ArmorType.LEGGINGS
+						)
+						.durability(216)
+						.component(
+								DataComponents.EQUIPPABLE,
+								Equippable.builder(EquipmentSlot.LEGS)
+										.setAsset(ArmorMaterials.GLOW_SQUID_LEGGINGS_ASSET)
 										.setEquipSound(SoundEvents.ARMOR_EQUIP_LEATHER)
 										.build()
 						)
