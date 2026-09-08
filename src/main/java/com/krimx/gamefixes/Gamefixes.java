@@ -35,6 +35,7 @@ import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FarmlandBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +65,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import com.krimx.gamefixes.block.HydratedFarmlandBlock;
 
 public class Gamefixes implements ModInitializer {
 
@@ -75,6 +77,7 @@ public class Gamefixes implements ModInitializer {
 	public static final int MAX_STACK_SIZE = 128;
 
 	public static Item REFINED_SULFUR;
+	public static Item POLLEN;
 
 	public static Item DIAKRETE;
 	public static Item DIAKRETE_HELMET;
@@ -123,6 +126,8 @@ public class Gamefixes implements ModInitializer {
 	public static Block ROSE_GOLD_BLOCK;
 	public static Block CHARCOAL_ORE;
 	public static Block DEEPSLATE_CHARCOAL_ORE;
+	public static Block ABUNDANT_FARMLAND;
+	public static Block HYDRATED_FARMLAND;
 
 	public static Item WINGWOVEN_ELYTRA;
 	public static Item GILDED_ELYTRA;
@@ -165,6 +170,7 @@ public class Gamefixes implements ModInitializer {
 	public void onInitialize() {
 
 		REFINED_SULFUR = registerItem("refined_sulfur", new Item.Properties());
+		POLLEN = registerItem("pollen", new Item.Properties());
 		FRAMED_ELYTRA_TRIM = registerItem("framed_elytra_trim", new Item.Properties());
 		BLIGHT_ARMOR_TRIM_SMITHING_TEMPLATE = registerItem("blight_armor_trim_smithing_template", new Item.Properties());
 		GHAST_RESIN = registerItem("ghast_resin", new Item.Properties());
@@ -387,6 +393,16 @@ public class Gamefixes implements ModInitializer {
 				BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_COAL_ORE)
 		);
 
+		ABUNDANT_FARMLAND = registerFarmlandBlock(
+				"abundant_farmland",
+				BlockBehaviour.Properties.ofFullCopy(Blocks.FARMLAND)
+		);
+
+		HYDRATED_FARMLAND = registerHydratedFarmlandBlock(
+				"hydrated_farmland",
+				BlockBehaviour.Properties.ofFullCopy(Blocks.FARMLAND)
+		);
+
 		Identifier milkCauldronId =
 				Identifier.fromNamespaceAndPath(
 						MOD_ID,
@@ -522,6 +538,8 @@ public class Gamefixes implements ModInitializer {
 
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
 				.register(output -> output.accept(REFINED_SULFUR));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
+				.register(output -> output.accept(POLLEN));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS)
 				.register(output -> output.accept(MILK_BOTTLE));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS)
@@ -899,6 +917,46 @@ public class Gamefixes implements ModInitializer {
 		return block;
 	}
 
+	private static Block registerFarmlandBlock(
+			String name,
+			BlockBehaviour.Properties properties
+	) {
+		Identifier id = Identifier.parse(MOD_ID + ":" + name);
+
+		ResourceKey<Block> blockKey =
+				ResourceKey.create(
+						Registries.BLOCK,
+						id
+				);
+
+		properties = properties.setId(blockKey);
+
+		Block block = Registry.register(
+				BuiltInRegistries.BLOCK,
+				id,
+				new FarmlandBlock(properties)
+		);
+
+		ResourceKey<Item> itemKey =
+				ResourceKey.create(
+						Registries.ITEM,
+						id
+				);
+
+		Registry.register(
+				BuiltInRegistries.ITEM,
+				id,
+				new BlockItem(
+						block,
+						new Item.Properties()
+								.useBlockDescriptionPrefix()
+								.setId(itemKey)
+				)
+		);
+
+		return block;
+	}
+
 	private static Item registerHoneycombBoots() {
 		Identifier id =
 				Identifier.parse(
@@ -981,5 +1039,45 @@ public class Gamefixes implements ModInitializer {
 				id,
 				new Item(properties)
 		);
+	}
+
+	private static Block registerHydratedFarmlandBlock(
+			String name,
+			BlockBehaviour.Properties properties
+	) {
+		Identifier id = Identifier.parse(MOD_ID + ":" + name);
+
+		ResourceKey<Block> blockKey =
+				ResourceKey.create(
+						Registries.BLOCK,
+						id
+				);
+
+		properties = properties.setId(blockKey);
+
+		Block block = Registry.register(
+				BuiltInRegistries.BLOCK,
+				id,
+				new HydratedFarmlandBlock(properties)
+		);
+
+		ResourceKey<Item> itemKey =
+				ResourceKey.create(
+						Registries.ITEM,
+						id
+				);
+
+		Registry.register(
+				BuiltInRegistries.ITEM,
+				id,
+				new BlockItem(
+						block,
+						new Item.Properties()
+								.useBlockDescriptionPrefix()
+								.setId(itemKey)
+				)
+		);
+
+		return block;
 	}
 }

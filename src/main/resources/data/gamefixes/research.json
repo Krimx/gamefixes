@@ -20,6 +20,10 @@
       },
       "trade": {
         "emerald_cost": 10,
+        "item_cost": {
+          "item": "minecraft:book",
+          "count": 1
+        },
         "max_uses": 12,
         "villager_xp": 15,
         "price_multiplier": 0.05
@@ -45,6 +49,10 @@
       },
       "trade": {
         "emerald_cost": 10,
+        "item_cost": {
+          "item": "minecraft:book",
+          "count": 1
+        },
         "max_uses": 12,
         "villager_xp": 15,
         "price_multiplier": 0.05
@@ -70,6 +78,10 @@
       },
       "trade": {
         "emerald_cost": 10,
+        "item_cost": {
+          "item": "minecraft:book",
+          "count": 1
+        },
         "max_uses": 12,
         "villager_xp": 15,
         "price_multiplier": 0.05
@@ -333,6 +345,66 @@
         "emerald_cost": 3,
         "item_cost": {
           "item": "minecraft:phantom_membrane",
+          "count": 1
+        },
+        "max_uses": 12,
+        "villager_xp": 15,
+        "price_multiplier": 0.05
+      }
+    }
+  },
+  "minecraft:farmer": {
+    "hydration": {
+      "name": "Hydration",
+      "inputs": [
+        {
+          "item": "minecraft:sponge",
+          "count": 1
+        },
+        {
+          "item": "minecraft:book",
+          "count": 1
+        }
+      ],
+      "output": {
+        "item": "minecraft:enchanted_book",
+        "enchantment": "gamefixes:hydration",
+        "level": 1,
+        "count": 1
+      },
+      "trade": {
+        "emerald_cost": 16,
+        "item_cost": {
+          "item": "minecraft:book",
+          "count": 1
+        },
+        "max_uses": 12,
+        "villager_xp": 15,
+        "price_multiplier": 0.05
+      }
+    },
+    "abundance": {
+      "name": "Abundance",
+      "inputs": [
+        {
+          "item": "gamefixes:pollen",
+          "count": 1
+        },
+        {
+          "item": "minecraft:book",
+          "count": 1
+        }
+      ],
+      "output": {
+        "item": "minecraft:enchanted_book",
+        "enchantment": "gamefixes:abundance",
+        "level": 1,
+        "count": 1
+      },
+      "trade": {
+        "emerald_cost": 16,
+        "item_cost": {
+          "item": "minecraft:book",
           "count": 1
         },
         "max_uses": 12,

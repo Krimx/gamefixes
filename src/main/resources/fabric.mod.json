@@ -20,6 +20,9 @@
 		],
 		"client": [
 			"com.krimx.gamefixes.client.GamefixesClient"
+		],
+		"fabric-datagen": [
+			"com.krimx.gamefixes.datagen.GamefixesDataGenerator"
 		]
 	},
 	"mixins": [
