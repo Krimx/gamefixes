@@ -1,0 +1,28 @@
+{
+  "parent": "gamefixes:root",
+  "criteria": {
+    "craft_blast_furnace": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:blast_furnace"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": "Use 8 clay balls to make a blast furnace",
+    "icon": {
+      "id": "minecraft:blast_furnace"
+    },
+    "title": "Clay Furnace"
+  },
+  "requirements": [
+    [
+      "craft_blast_furnace"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

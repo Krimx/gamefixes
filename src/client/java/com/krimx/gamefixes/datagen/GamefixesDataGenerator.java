@@ -21,6 +21,10 @@ public class GamefixesDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider(
                 GamefixesEnchantmentTagProvider::new
         );
+
+        pack.addProvider(
+                GamefixesAdvancementGenerator::new
+        );
     }
 
     @Override
