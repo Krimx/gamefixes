@@ -1,0 +1,61 @@
+{
+  "parent": "gamefixes:diakrete",
+  "criteria": {
+    "craft_diakrete_boots": {
+      "conditions": {
+        "items": [
+          {
+            "items": "gamefixes:diakrete_boots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "craft_diakrete_chestplate": {
+      "conditions": {
+        "items": [
+          {
+            "items": "gamefixes:diakrete_chestplate"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "craft_diakrete_helmet": {
+      "conditions": {
+        "items": [
+          {
+            "items": "gamefixes:diakrete_helmet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "craft_diakrete_leggings": {
+      "conditions": {
+        "items": [
+          {
+            "items": "gamefixes:diakrete_leggings"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": "Make a piece of diakrete armor.",
+    "icon": {
+      "id": "gamefixes:diakrete_chestplate"
+    },
+    "title": "Light Work"
+  },
+  "requirements": [
+    [
+      "craft_diakrete_helmet",
+      "craft_diakrete_chestplate",
+      "craft_diakrete_leggings",
+      "craft_diakrete_boots"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

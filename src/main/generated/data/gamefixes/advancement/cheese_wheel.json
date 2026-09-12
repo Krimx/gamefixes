@@ -1,0 +1,28 @@
+{
+  "parent": "gamefixes:cheese",
+  "criteria": {
+    "make_cheese_wheel": {
+      "conditions": {
+        "items": [
+          {
+            "items": "gamefixes:cheese_wheel"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": "Combine cheese slices into a cheese wheel",
+    "icon": {
+      "id": "gamefixes:cheese_wheel"
+    },
+    "title": "Aged to prerfection!"
+  },
+  "requirements": [
+    [
+      "make_cheese_wheel"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

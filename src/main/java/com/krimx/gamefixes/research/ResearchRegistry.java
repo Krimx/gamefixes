@@ -1,5 +1,6 @@
 package com.krimx.gamefixes.research;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -18,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -200,48 +202,35 @@ public final class ResearchRegistry
                         .get(1)
                         .getAsJsonObject();
 
-        String firstInputString =
-                inputA.get("item")
-                        .getAsString();
+        InputDefinition firstInputDefinition =
+                parseInput(inputA);
 
-        boolean firstInputTag =
-                firstInputString.startsWith("#");
+        InputDefinition secondInputDefinition =
+                parseInput(inputB);
 
         Identifier firstInput =
-                Identifier.parse(
-                        firstInputTag
-                                ? firstInputString.substring(1)
-                                : firstInputString
-                );
+                firstInputDefinition.id();
+
+        boolean firstInputTag =
+                firstInputDefinition.tag();
+
+        boolean firstInputEnchantment =
+                firstInputDefinition.enchantment();
 
         int firstInputCount =
-                inputA.get("count")
-                        .getAsInt();
-
-        String secondInputString =
-                inputB.get("item")
-                        .getAsString();
-
-        boolean secondInputTag =
-                secondInputString.startsWith("#");
+                firstInputDefinition.count();
 
         Identifier secondInput =
-                Identifier.parse(
-                        secondInputTag
-                                ? secondInputString.substring(1)
-                                : secondInputString
-                );
+                secondInputDefinition.id();
+
+        boolean secondInputTag =
+                secondInputDefinition.tag();
+
+        boolean secondInputEnchantment =
+                secondInputDefinition.enchantment();
 
         int secondInputCount =
-                inputB.get("count")
-                        .getAsInt();
-
-        if (firstInputCount <= 0
-                || secondInputCount <= 0) {
-            throw new IllegalArgumentException(
-                    "Research input counts must be greater than zero."
-            );
-        }
+                secondInputDefinition.count();
 
         JsonObject output =
                 json.getAsJsonObject("output");
@@ -255,7 +244,7 @@ public final class ResearchRegistry
         int outputCount =
                 output.has("count")
                         ? output.get("count")
-                                .getAsInt()
+                        .getAsInt()
                         : 1;
 
         Identifier outputEnchantment = null;
@@ -271,9 +260,13 @@ public final class ResearchRegistry
             outputEnchantmentLevel =
                     output.has("level")
                             ? output.get("level")
-                                    .getAsInt()
+                            .getAsInt()
                             : 1;
         }
+
+        List<ResearchProject.PotionEffectDefinition>
+                outputPotionEffects =
+                parsePotionEffects(output);
 
         JsonObject trade =
                 json.getAsJsonObject("trade");
@@ -344,10 +337,12 @@ public final class ResearchRegistry
 
                 firstInput,
                 firstInputTag,
+                firstInputEnchantment,
                 firstInputCount,
 
                 secondInput,
                 secondInputTag,
+                secondInputEnchantment,
                 secondInputCount,
 
                 outputItem,
@@ -355,6 +350,8 @@ public final class ResearchRegistry
 
                 outputEnchantment,
                 outputEnchantmentLevel,
+
+                outputPotionEffects,
 
                 emeraldCost,
                 itemCost,
@@ -364,6 +361,174 @@ public final class ResearchRegistry
                 villagerXp,
                 priceMultiplier
         );
+    }
+
+    private List<ResearchProject.PotionEffectDefinition>
+    parsePotionEffects(JsonObject output) {
+
+        if (!output.has("potion")) {
+            return List.of();
+        }
+
+        JsonObject potion =
+                output.getAsJsonObject("potion");
+
+        if (!potion.has("effects")
+                || !potion.get("effects").isJsonArray()) {
+            throw new IllegalArgumentException(
+                    "Potion output must contain an 'effects' array."
+            );
+        }
+
+        JsonArray effects =
+                potion.getAsJsonArray("effects");
+
+        if (effects.isEmpty()) {
+            throw new IllegalArgumentException(
+                    "Potion output must contain at least one effect."
+            );
+        }
+
+        List<ResearchProject.PotionEffectDefinition>
+                definitions =
+                new java.util.ArrayList<>();
+
+        for (JsonElement effectElement : effects) {
+            if (!effectElement.isJsonObject()) {
+                throw new IllegalArgumentException(
+                        "Potion effect definition must be an object."
+                );
+            }
+
+            JsonObject effectObject =
+                    effectElement.getAsJsonObject();
+
+            if (!effectObject.has("effect")) {
+                throw new IllegalArgumentException(
+                        "Potion effect definition must contain an 'effect'."
+                );
+            }
+
+            Identifier effect =
+                    Identifier.parse(
+                            effectObject
+                                    .get("effect")
+                                    .getAsString()
+                    );
+
+            int duration =
+                    effectObject.has("duration")
+                            ? effectObject
+                            .get("duration")
+                            .getAsInt()
+                            : 0;
+
+            int amplifier =
+                    effectObject.has("amplifier")
+                            ? effectObject
+                            .get("amplifier")
+                            .getAsInt()
+                            : 0;
+
+            if (!BuiltInRegistries.MOB_EFFECT.containsKey(effect)) {
+                throw new IllegalArgumentException(
+                        "Unknown potion effect: "
+                                + effect
+                );
+            }
+
+            if (duration <= 0) {
+                throw new IllegalArgumentException(
+                        "Potion effect duration must be greater than zero."
+                );
+            }
+
+            if (amplifier < 0) {
+                throw new IllegalArgumentException(
+                        "Potion effect amplifier cannot be negative."
+                );
+            }
+
+            definitions.add(
+                    new ResearchProject.PotionEffectDefinition(
+                            effect,
+                            duration,
+                            amplifier
+                    )
+            );
+        }
+
+        return List.copyOf(definitions);
+    }
+
+    private InputDefinition parseInput(JsonObject input) {
+        boolean enchantment =
+                input.has("enchantment");
+
+        if (!input.has("item") && !enchantment) {
+            throw new IllegalArgumentException(
+                    "Research input must contain either 'item' or 'enchantment'."
+            );
+        }
+
+        if (input.has("item") && enchantment) {
+            throw new IllegalArgumentException(
+                    "Research input cannot contain both 'item' and 'enchantment'."
+            );
+        }
+
+        String inputString =
+                input.get(
+                        enchantment
+                                ? "enchantment"
+                                : "item"
+                ).getAsString();
+
+        boolean tag =
+                !enchantment
+                        && inputString.startsWith("#");
+
+        Identifier inputId =
+                Identifier.parse(
+                        tag
+                                ? inputString.substring(1)
+                                : inputString
+                );
+
+        int count =
+                input.has("count")
+                        ? input.get("count").getAsInt()
+                        : 1;
+
+        if (count <= 0) {
+            throw new IllegalArgumentException(
+                    "Research input counts must be greater than zero."
+            );
+        }
+
+        if (!enchantment
+                && !tag
+                && !BuiltInRegistries.ITEM.containsKey(inputId)) {
+            throw new IllegalArgumentException(
+                    "Unknown research item: "
+                            + inputId
+            );
+        }
+
+        return new InputDefinition(
+                inputId,
+                tag,
+                enchantment,
+                count
+        );
+    }
+
+    private record InputDefinition(
+            Identifier id,
+            boolean tag,
+            boolean enchantment,
+            int count
+    ) {
     }
 
     public static ResearchProject get(String id) {

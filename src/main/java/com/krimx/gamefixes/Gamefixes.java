@@ -1,5 +1,6 @@
 package com.krimx.gamefixes;
 
+import com.krimx.gamefixes.advancement.ModCriteria;
 import com.krimx.gamefixes.loot_bags.AddLootBagTags;
 import com.krimx.gamefixes.loot_bags.LootBagOutcomes;
 import com.krimx.gamefixes.loot_bags.LootBagOutcomeExecutors;
@@ -12,7 +13,7 @@ import com.krimx.gamefixes.loot.EnchantWithLevelsMendingFunction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Unit;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.fabricmc.fabric.api.event.player.ItemEvents;
 import net.fabricmc.fabric.api.registry.FuelValueEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
@@ -208,6 +209,7 @@ public class Gamefixes implements ModInitializer {
 						)
 				)
 		);
+
 		PINK_DIAMOND = registerItem(
 				"pink_diamond", new Item.Properties().delayedHolderComponent(
 						DataComponents.PROVIDES_TRIM_MATERIAL,
@@ -217,6 +219,7 @@ public class Gamefixes implements ModInitializer {
 						)
 				)
 		);
+
 		YELLOW_DIAMOND = registerItem(
 				"yellow_diamond", new Item.Properties().delayedHolderComponent(
 						DataComponents.PROVIDES_TRIM_MATERIAL,
@@ -226,6 +229,7 @@ public class Gamefixes implements ModInitializer {
 						)
 				)
 		);
+
 		ROSE_GOLD_INGOT = registerItem(
 				"rose_gold_ingot", new Item.Properties().delayedHolderComponent(
 						DataComponents.PROVIDES_TRIM_MATERIAL,
@@ -664,15 +668,15 @@ public class Gamefixes implements ModInitializer {
 				}
 		);
 
-		UseItemCallback.EVENT.register(
-				(player, level, hand) -> {
+		ItemEvents.USE.register(
+				(level, player, hand) -> {
 
 					ItemStack stack =
 							player.getItemInHand(hand);
 
 					if (!(stack.getItem()
 							instanceof MaceItem)) {
-						return InteractionResult.PASS;
+						return null;
 					}
 
 					player.startUsingItem(hand);
@@ -699,6 +703,7 @@ public class Gamefixes implements ModInitializer {
 		LootBagOutcomes.initialize();
 		LootBagOutcomeExecutors.initialize();
 		HoneycombNetworking.initialize();
+		ModCriteria.init();
 
 		Registry.register(
 				BuiltInRegistries.LOOT_FUNCTION_TYPE,

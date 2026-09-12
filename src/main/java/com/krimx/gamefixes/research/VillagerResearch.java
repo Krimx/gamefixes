@@ -1,16 +1,21 @@
 package com.krimx.gamefixes.research;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
-import net.minecraft.world.item.enchantment.Enchantment;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public final class VillagerResearch {
@@ -154,9 +159,56 @@ public final class VillagerResearch {
                         project.getOutputCount()
                 );
 
+        if (project.hasPotionEffects()) {
+            List<MobEffectInstance> effects =
+                    new ArrayList<>();
+
+            for (
+                    ResearchProject.PotionEffectDefinition
+                            effectDefinition
+                    : project.getOutputPotionEffects()
+            ) {
+                Holder<MobEffect> effect =
+                        villager.registryAccess()
+                                .lookupOrThrow(
+                                        Registries.MOB_EFFECT
+                                )
+                                .get(
+                                        ResourceKey.create(
+                                                Registries.MOB_EFFECT,
+                                                effectDefinition.effect()
+                                        )
+                                )
+                                .orElseThrow(
+                                        () -> new IllegalArgumentException(
+                                                "Unknown potion effect: "
+                                                        + effectDefinition.effect()
+                                        )
+                                );
+
+                effects.add(
+                        new MobEffectInstance(
+                                effect,
+                                effectDefinition.duration(),
+                                effectDefinition.amplifier()
+                        )
+                );
+            }
+
+            result.set(
+                    DataComponents.POTION_CONTENTS,
+                    new PotionContents(
+                            Optional.empty(),
+                            Optional.empty(),
+                            List.copyOf(effects),
+                            Optional.empty()
+                    )
+            );
+        }
+
         if (project.getOutputEnchantmentId() != null) {
 
-            Holder<Enchantment> enchantment =
+            var enchantment =
                     villager.registryAccess()
                             .lookupOrThrow(
                                     Registries.ENCHANTMENT

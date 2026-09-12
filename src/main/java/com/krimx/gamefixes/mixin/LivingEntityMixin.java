@@ -27,27 +27,48 @@ import java.util.List;
 public class LivingEntityMixin {
 
     // --- Attack ---
-    @Unique private static final double MACE_ATTACK_RADIUS = 1.8D;
-    @Unique private static final int MACE_MAX_TARGETS = 8;
-    @Unique private static final double MACE_KNOCKBACK_STRENGTH = 0.8D;
-    @Unique private static final int MACE_ATTACK_DELAY_TICKS = 6;
+    @Unique
+    private static final double MACE_ATTACK_RADIUS = 2.5D;
+
+    @Unique
+    private static final int MACE_MAX_TARGETS = 8;
+
+    @Unique
+    private static final double MACE_KNOCKBACK_STRENGTH = 0.8D;
+
+    @Unique
+    private static final int MACE_ATTACK_DELAY_TICKS = 6;
 
     // --- Swing sound ---
-    @Unique private static final float MACE_SWING_VOLUME = 1.0F;
-    @Unique private static final float MACE_SWING_PITCH = 1.0F;
+    @Unique
+    private static final float MACE_SWING_VOLUME = 1.0F;
+
+    @Unique
+    private static final float MACE_SWING_PITCH = 1.0F;
 
     // --- Charge ---
-    @Unique private int gamefixes$maceStartTick = 0;
-    @Unique private boolean gamefixes$maceCharging = false;
+    @Unique
+    private int gamefixes$maceStartTick = 0;
+
+    @Unique
+    private boolean gamefixes$maceCharging = false;
 
     // --- Pending attack ---
-    @Unique private boolean gamefixes$maceAttackPending = false;
-    @Unique private int gamefixes$maceAttackDelay = 0;
-    @Unique private float gamefixes$macePendingDamage = 0.0F;
+    @Unique
+    private boolean gamefixes$maceAttackPending = false;
+
+    @Unique
+    private int gamefixes$maceAttackDelay = 0;
+
+    @Unique
+    private float gamefixes$macePendingDamage = 0.0F;
 
     // --- Honeycomb Boots wall jump ---
-    @Unique private boolean gamefixes$honeycombWallJumpUsed = false;
-    @Unique private boolean gamefixes$honeycombDebugLogged = false;
+    @Unique
+    private boolean gamefixes$honeycombWallJumpUsed = false;
+
+    @Unique
+    private boolean gamefixes$honeycombDebugLogged = false;
 
     // --- Mace attack start ---
     @Inject(method = "startUsingItem", at = @At("HEAD"))
@@ -57,16 +78,38 @@ public class LivingEntityMixin {
     ) {
         LivingEntity entity = (LivingEntity) (Object) this;
 
-        if (!(entity.level() instanceof ServerLevel)) return;
+        Gamefixes.LOGGER.info(
+                "startUsingItem fired: {} hand={} item={}",
+                entity.getName().getString(),
+                hand,
+                entity.getItemInHand(hand).getItem()
+        );
+
+        if (!(entity.level() instanceof ServerLevel)) {
+            return;
+        }
+
+        if (!(entity instanceof ServerPlayer player)) {
+            return;
+        }
 
         ItemStack stack = entity.getItemInHand(hand);
-        if (!(stack.getItem() instanceof MaceItem)) return;
+
+        if (!(stack.getItem() instanceof MaceItem)) {
+            return;
+        }
 
         gamefixes$maceStartTick = entity.tickCount;
         gamefixes$maceCharging = true;
         gamefixes$maceAttackPending = false;
 
-        MaceNetworking.sendChargeStart((ServerPlayer) entity);
+        Gamefixes.LOGGER.info(
+                "Mace charging started on server: {} | startTick={}",
+                player.getName().getString(),
+                gamefixes$maceStartTick
+        );
+
+        MaceNetworking.sendChargeStart(player);
     }
 
     // --- Mace release ---
@@ -74,9 +117,27 @@ public class LivingEntityMixin {
     private void gamefixes$maceRelease(CallbackInfo ci) {
         LivingEntity entity = (LivingEntity) (Object) this;
 
-        if (!(entity instanceof Player player)) return;
-        if (!gamefixes$maceCharging) return;
-        if (!(entity.level() instanceof ServerLevel serverLevel)) return;
+        Gamefixes.LOGGER.info(
+                "releaseUsingItem fired: {} | server={} | charging={}",
+                entity.getName().getString(),
+                !entity.level().isClientSide(),
+                gamefixes$maceCharging
+        );
+
+        if (!(entity instanceof ServerPlayer player)) {
+            return;
+        }
+
+        if (!gamefixes$maceCharging) {
+            Gamefixes.LOGGER.info(
+                    "Mace release aborted: server charging state is false"
+            );
+            return;
+        }
+
+        if (!(entity.level() instanceof ServerLevel serverLevel)) {
+            return;
+        }
 
         int ticksHeld =
                 entity.tickCount - gamefixes$maceStartTick;
@@ -86,9 +147,9 @@ public class LivingEntityMixin {
         float damage = calculateDamage(ticksHeld);
 
         // Start the visual swing.
-        MaceNetworking.sendSwing((ServerPlayer) player);
+        MaceNetworking.sendSwing(player);
 
-        // Play the swing sound to nearby clients.
+        // Play the swing sound.
         serverLevel.playSound(
                 null,
                 player.blockPosition(),
@@ -182,13 +243,28 @@ public class LivingEntityMixin {
     private void gamefixes$maceAttackTick(CallbackInfo ci) {
         LivingEntity entity = (LivingEntity) (Object) this;
 
-        if (!gamefixes$maceAttackPending) return;
-        if (!(entity instanceof Player player)) return;
-        if (!(entity.level() instanceof ServerLevel serverLevel)) return;
+        if (!gamefixes$maceAttackPending) {
+            return;
+        }
 
-        if (--gamefixes$maceAttackDelay > 0) return;
+        if (!(entity instanceof ServerPlayer player)) {
+            return;
+        }
+
+        if (!(entity.level() instanceof ServerLevel serverLevel)) {
+            return;
+        }
+
+        if (--gamefixes$maceAttackDelay > 0) {
+            return;
+        }
 
         gamefixes$maceAttackPending = false;
+
+        Gamefixes.LOGGER.info(
+                "Mace impact timer reached zero for {}",
+                player.getName().getString()
+        );
 
         performMaceAttack(
                 serverLevel,
@@ -253,9 +329,13 @@ public class LivingEntityMixin {
     @Unique
     private static void performMaceAttack(
             ServerLevel serverLevel,
-            Player player,
+            ServerPlayer player,
             float damage
     ) {
+        /*
+         * Use a larger 3D search box so the impact isn't dependent
+         * on the target being at exactly the player's Y level.
+         */
         AABB searchBox =
                 player.getBoundingBox()
                         .inflate(MACE_ATTACK_RADIUS);
@@ -264,19 +344,33 @@ public class LivingEntityMixin {
                 serverLevel.getEntitiesOfClass(
                         LivingEntity.class,
                         searchBox,
-                        target -> target != player
+                        target ->
+                                target != player
+                                        && target.isAlive()
+                                        && !target.isSpectator()
                 );
 
         int hits = 0;
 
         for (LivingEntity target : candidates) {
-            if (hits >= MACE_MAX_TARGETS) break;
+            if (hits >= MACE_MAX_TARGETS) {
+                break;
+            }
 
+            /*
+             * Measure the closest point on the target's entire
+             * bounding box to the player.
+             */
             AABB box = target.getBoundingBox();
 
             double closestX = Math.max(
                     box.minX,
                     Math.min(player.getX(), box.maxX)
+            );
+
+            double closestY = Math.max(
+                    box.minY,
+                    Math.min(player.getY(), box.maxY)
             );
 
             double closestZ = Math.max(
@@ -285,29 +379,50 @@ public class LivingEntityMixin {
             );
 
             double dx = closestX - player.getX();
+            double dy = closestY - player.getY();
             double dz = closestZ - player.getZ();
 
-            if (dx * dx + dz * dz >
+            double distanceSquared =
+                    dx * dx +
+                            dy * dy +
+                            dz * dz;
+
+            if (distanceSquared >
                     MACE_ATTACK_RADIUS * MACE_ATTACK_RADIUS) {
                 continue;
             }
 
+            /*
+             * Use the normal player attack damage source for now.
+             * We can switch this to the vanilla mace damage pipeline
+             * once the attack state itself is confirmed to be working.
+             */
             if (!target.hurtServer(
                     serverLevel,
                     serverLevel.damageSources().playerAttack(player),
                     damage
             )) {
+                Gamefixes.LOGGER.info(
+                        "Mace failed to hurt target: {}",
+                        target.getName().getString()
+                );
+
                 continue;
             }
 
             hits++;
 
-            double knockbackX = target.getX() - player.getX();
-            double knockbackZ = target.getZ() - player.getZ();
-            double length = Math.sqrt(
-                    knockbackX * knockbackX +
-                            knockbackZ * knockbackZ
-            );
+            double knockbackX =
+                    target.getX() - player.getX();
+
+            double knockbackZ =
+                    target.getZ() - player.getZ();
+
+            double length =
+                    Math.sqrt(
+                            knockbackX * knockbackX +
+                                    knockbackZ * knockbackZ
+                    );
 
             if (length > 0.0001D) {
                 knockbackX /= length;
@@ -326,8 +441,9 @@ public class LivingEntityMixin {
         }
 
         Gamefixes.LOGGER.info(
-                "Mace impact: {} damage, {} target(s) hit",
+                "Mace impact: {} damage, {} candidate(s), {} target(s) hit",
                 damage,
+                candidates.size(),
                 hits
         );
     }

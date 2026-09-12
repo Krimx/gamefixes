@@ -32,8 +32,9 @@ dependencies {
 }
 
 fabricApi {
-	configureDataGeneration() {
+	configureDataGeneration {
 		client = true
+		addToResources = true
 	}
 }
 
@@ -78,7 +79,7 @@ publishing {
 	}
 
 	// See https://docs.gradle.org/current/userguide/publishing_maven.html
-	// for information on setting up publishing.
+	// for more information about publishing.
 	repositories {
 		// Add repositories here if needed for publishing.
 		// Notice: This block does NOT have the same function as the one above.

@@ -1,0 +1,32 @@
+{
+  "parent": "gamefixes:root",
+  "criteria": {
+    "research_diakrete": {
+      "conditions": {
+        "research": "minecraft:cleric/diakrete"
+      },
+      "trigger": "gamefixes:research"
+    }
+  },
+  "display": {
+    "description": "Show the cleric how to make a very light diamond.",
+    "icon": {
+      "id": "minecraft:breeze_rod"
+    },
+    "title": "Project Habakkuk"
+  },
+  "requirements": [
+    [
+      "research_diakrete"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "gamefixes:diakrete_helmet",
+      "gamefixes:diakrete_chestplate",
+      "gamefixes:diakrete_leggings",
+      "gamefixes:diakrete_boots"
+    ]
+  },
+  "sends_telemetry_event": true
+}

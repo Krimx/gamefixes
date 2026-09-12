@@ -1,0 +1,24 @@
+{
+  "parent": "gamefixes:root",
+  "criteria": {
+    "research_wingweave": {
+      "conditions": {
+        "research": "minecraft:shepherd/wingweave"
+      },
+      "trigger": "gamefixes:research"
+    }
+  },
+  "display": {
+    "description": "What could a shepherd possibly do with phantom membrane?",
+    "icon": {
+      "id": "gamefixes:wingweave"
+    },
+    "title": "This sheep jumped over the moon"
+  },
+  "requirements": [
+    [
+      "research_wingweave"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

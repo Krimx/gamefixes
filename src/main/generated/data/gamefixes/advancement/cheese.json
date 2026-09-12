@@ -1,0 +1,28 @@
+{
+  "parent": "gamefixes:root",
+  "criteria": {
+    "make_cheese": {
+      "conditions": {
+        "items": [
+          {
+            "items": "gamefixes:cheese"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": "Heat up a cauldron and put some milk in it.",
+    "icon": {
+      "id": "gamefixes:cheese"
+    },
+    "title": "Grate Expectations"
+  },
+  "requirements": [
+    [
+      "make_cheese"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

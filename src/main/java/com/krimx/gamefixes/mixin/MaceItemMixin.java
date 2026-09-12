@@ -12,7 +12,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Item.class)
 public class MaceItemMixin {
 
-    @Inject(method = "getUseDuration", at = @At("HEAD"), cancellable = true)
+    @Inject(
+            method = "getUseDuration",
+            at = @At("HEAD"),
+            cancellable = true
+    )
     private void gamefixes$maceUseDuration(
             ItemStack stack,
             LivingEntity user,

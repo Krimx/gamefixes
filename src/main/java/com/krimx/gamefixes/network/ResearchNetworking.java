@@ -13,6 +13,7 @@ import net.minecraft.world.inventory.MerchantMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
+import com.krimx.gamefixes.advancement.ModCriteria;
 
 public class ResearchNetworking {
 
@@ -317,6 +318,11 @@ public class ResearchNetworking {
                             villager,
                             researchSlot,
                             project
+                    );
+
+                    ModCriteria.RESEARCH.trigger(
+                            player,
+                            project.getId()
                     );
 
                     /*

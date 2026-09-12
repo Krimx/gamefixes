@@ -1,0 +1,28 @@
+{
+  "parent": "gamefixes:root",
+  "criteria": {
+    "brew_ghast_resin": {
+      "conditions": {
+        "items": [
+          {
+            "items": "gamefixes:ghast_resin"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": "What happens when you try to brew resin?",
+    "icon": {
+      "id": "minecraft:ghast_tear"
+    },
+    "title": "Rapid Polymerization"
+  },
+  "requirements": [
+    [
+      "brew_ghast_resin"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

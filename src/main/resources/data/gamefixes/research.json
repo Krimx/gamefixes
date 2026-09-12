@@ -152,33 +152,6 @@
         "price_multiplier": 0.05
       }
     },
-    "wingweave": {
-      "name": "Wingweave",
-      "inputs": [
-        {
-          "item": "minecraft:phantom_membrane",
-          "count": 1
-        },
-        {
-          "item": "minecraft:feather",
-          "count": 1
-        }
-      ],
-      "output": {
-        "item": "gamefixes:wingweave",
-        "count": 1
-      },
-      "trade": {
-        "emerald_cost": 5,
-        "item_cost": {
-          "item": "minecraft:phantom_membrane",
-          "count": 1
-        },
-        "max_uses": 12,
-        "villager_xp": 15,
-        "price_multiplier": 0.05
-      }
-    },
     "levitation": {
       "name": "Levitation",
       "inputs": [
@@ -405,6 +378,35 @@
         "emerald_cost": 16,
         "item_cost": {
           "item": "minecraft:book",
+          "count": 1
+        },
+        "max_uses": 12,
+        "villager_xp": 15,
+        "price_multiplier": 0.05
+      }
+    }
+  },
+  "minecraft:armorer": {
+    "blight": {
+      "name": "Blight",
+      "inputs": [
+        {
+          "item": "minecraft:echo_shard",
+          "count": 1
+        },
+        {
+          "item": "#gamefixes:trim_templates",
+          "count": 1
+        }
+      ],
+      "output": {
+        "item": "gamefixes:blight_armor_trim_smithing_template",
+        "count": 1
+      },
+      "trade": {
+        "emerald_cost": 3,
+        "item_cost": {
+          "item": "minecraft:echo_shard",
           "count": 1
         },
         "max_uses": 12,

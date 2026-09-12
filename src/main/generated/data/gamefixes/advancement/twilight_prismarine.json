@@ -1,0 +1,28 @@
+{
+  "parent": "gamefixes:root",
+  "criteria": {
+    "get_twilight_prismarine": {
+      "conditions": {
+        "items": [
+          {
+            "items": "gamefixes:twilight_prismarine"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": "Discover the transformative properties of the conduit.",
+    "icon": {
+      "id": "minecraft:conduit"
+    },
+    "title": "Twilight Zone"
+  },
+  "requirements": [
+    [
+      "get_twilight_prismarine"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
