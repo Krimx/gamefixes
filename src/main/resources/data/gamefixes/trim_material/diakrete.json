@@ -1,5 +1,5 @@
 {
-  "asset_name": "diakrete",
+  "palette_id": "gamefixes:trim/diakrete",
   "description": {
     "color": "#9189d2",
     "translate": "trim_material.gamefixes.diakrete"

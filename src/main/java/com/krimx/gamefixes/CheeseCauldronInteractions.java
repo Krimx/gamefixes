@@ -3,6 +3,7 @@ package com.krimx.gamefixes;
 import com.krimx.gamefixes.mixin.CauldronInteractionDispatcherInvoker;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.cauldron.CauldronInteraction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -52,8 +53,9 @@ public final class CheeseCauldronInteractions {
         int cheeseCount = 6 + level.getRandom().nextInt(3);
         ItemStack cheese = new ItemStack(Gamefixes.CHEESE, cheeseCount);
 
-        if (!player.getInventory().add(cheese)) {
-            player.drop(cheese, false);
+        if (!player.getInventory().add(cheese)
+                && level instanceof ServerLevel serverLevel) {
+            player.spawnAtLocation(serverLevel, cheese);
         }
 
         level.setBlock(

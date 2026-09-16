@@ -5,13 +5,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.BlockReplacement;
 import net.minecraft.world.level.levelgen.feature.OreFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,6 +31,10 @@ public abstract class BiomeSpecificOreMixin {
 
     /*
      * Store the world being used for this ore-generation pass.
+     *
+     * Minecraft 26.3 moved OreFeature configuration into the
+     * feature itself. doPlace() therefore no longer receives an
+     * OreConfiguration argument.
      */
     @Inject(
             method = "doPlace",
@@ -40,7 +43,6 @@ public abstract class BiomeSpecificOreMixin {
     private void gamefixes$storeWorldGenContext(
             WorldGenLevel level,
             RandomSource random,
-            OreConfiguration config,
             double x0,
             double x1,
             double z0,
@@ -59,15 +61,7 @@ public abstract class BiomeSpecificOreMixin {
     }
 
     /*
-     * There should only be ONE redirect of this call on OreFeature.
-     *
-     * The previous Pink Diamond, Rose Gold, and Yellow Diamond
-     * mixins each tried to redirect this same call independently.
-     * That caused the Yellow Diamond mixin to fail its injection
-     * check once the target was already being handled elsewhere.
-     *
-     * This single mixin stores the current ore position for all
-     * three custom ore checks.
+     * Store the position currently being tested by OreFeature.
      */
     @Redirect(
             method = "doPlace",
@@ -88,20 +82,24 @@ public abstract class BiomeSpecificOreMixin {
     }
 
     /*
-     * Replace vanilla diamond and gold target states according
-     * to the biome rules for the custom ores.
+     * Minecraft 26.3 replaced OreConfiguration.TargetBlockState
+     * with BlockReplacement.
+     *
+     * OreFeature now obtains the replacement block through the
+     * BlockReplacement.state() record accessor, so redirect that
+     * accessor instead of the old TargetBlockState.state field.
      */
     @Redirect(
             method = "doPlace",
             at = @At(
-                    value = "FIELD",
-                    target = "Lnet/minecraft/world/level/levelgen/feature/configurations/OreConfiguration$TargetBlockState;state:Lnet/minecraft/world/level/block/state/BlockState;"
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/levelgen/feature/BlockReplacement;state()Lnet/minecraft/world/level/block/state/BlockState;"
             )
     )
     private BlockState gamefixes$replaceCustomOre(
-            OreConfiguration.TargetBlockState targetState
+            BlockReplacement targetState
     ) {
-        BlockState originalState = targetState.state;
+        BlockState originalState = targetState.state();
 
         WorldGenLevel level = GAMEFIXES_LEVEL.get();
         BlockPos orePos = GAMEFIXES_ORE_POS.get();
@@ -118,12 +116,6 @@ public abstract class BiomeSpecificOreMixin {
         if (originalState.is(Blocks.DIAMOND_ORE)
                 || originalState.is(Blocks.DEEPSLATE_DIAMOND_ORE)) {
 
-            /*
-             * Find the world-generation surface at this X/Z.
-             *
-             * This lets Pink Diamond and Yellow Diamond use the
-             * surface biome even though the actual ore is underground.
-             */
             int surfaceY = level.getHeight(
                     Heightmap.Types.WORLD_SURFACE_WG,
                     orePos.getX(),
@@ -192,12 +184,6 @@ public abstract class BiomeSpecificOreMixin {
         if (originalState.is(Blocks.GOLD_ORE)
                 || originalState.is(Blocks.DEEPSLATE_GOLD_ORE)) {
 
-            /*
-             * Rose Gold uses the surface biome.
-             *
-             * #minecraft:is_badlands covers the vanilla Badlands,
-             * Eroded Badlands, and Wooded Badlands biomes.
-             */
             int surfaceY = level.getHeight(
                     Heightmap.Types.WORLD_SURFACE_WG,
                     orePos.getX(),
@@ -210,6 +196,12 @@ public abstract class BiomeSpecificOreMixin {
                     orePos.getZ()
             );
 
+            /*
+             * Rose Gold uses the surface biome.
+             *
+             * #minecraft:is_badlands covers the vanilla Badlands,
+             * Eroded Badlands, and Wooded Badlands biomes.
+             */
             if (level.getBiome(surfacePos).is(BiomeTags.IS_BADLANDS)) {
                 System.out.println("Should generate rose gold");
 
@@ -231,12 +223,6 @@ public abstract class BiomeSpecificOreMixin {
         if (originalState.is(Blocks.COAL_ORE)
                 || originalState.is(Blocks.DEEPSLATE_COAL_ORE)) {
 
-            /*
-             * Rose Gold uses the surface biome.
-             *
-             * #minecraft:is_badlands covers the vanilla Badlands,
-             * Eroded Badlands, and Wooded Badlands biomes.
-             */
             int surfaceY = level.getHeight(
                     Heightmap.Types.WORLD_SURFACE_WG,
                     orePos.getX(),
@@ -278,7 +264,6 @@ public abstract class BiomeSpecificOreMixin {
     private void gamefixes$clearWorldGenContext(
             WorldGenLevel level,
             RandomSource random,
-            OreConfiguration config,
             double x0,
             double x1,
             double z0,

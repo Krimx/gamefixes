@@ -1,13 +1,13 @@
 package com.krimx.gamefixes.advancement;
 
-import java.util.Optional;
-
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
-import net.minecraft.advancements.predicates.ContextAwarePredicate;
 import net.minecraft.advancements.triggers.SimpleCriterionTrigger;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+
+import java.util.Optional;
 
 public class ResearchCriterion
         extends SimpleCriterionTrigger<ResearchCriterion.Conditions> {
@@ -25,19 +25,22 @@ public class ResearchCriterion
     }
 
     public record Conditions(
-            Optional<ContextAwarePredicate> player,
+            Optional<Holder<LootItemCondition>> player,
             String researchId
     ) implements SimpleCriterionTrigger.SimpleInstance {
 
         public static final Codec<Conditions> CODEC =
                 RecordCodecBuilder.create(instance -> instance.group(
-                        ContextAwarePredicate.CODEC
+                        LootItemCondition.CODEC
                                 .optionalFieldOf("player")
                                 .forGetter(Conditions::player),
-
                         Codec.STRING
                                 .fieldOf("research")
                                 .forGetter(Conditions::researchId)
                 ).apply(instance, Conditions::new));
+
+        public Conditions(String researchId) {
+            this(Optional.empty(), researchId);
+        }
     }
 }

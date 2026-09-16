@@ -1,5 +1,8 @@
 package com.krimx.gamefixes;
 
+import java.util.Map;
+import java.util.function.Function;
+
 import com.krimx.gamefixes.advancement.ModCriteria;
 import com.krimx.gamefixes.loot_bags.AddLootBagTags;
 import com.krimx.gamefixes.loot_bags.LootBagOutcomes;
@@ -14,13 +17,15 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Unit;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.ItemEvents;
-import net.fabricmc.fabric.api.registry.FuelValueEvents;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
+import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.minecraft.core.Registry;
+import net.minecraft.tags.TagKey;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
@@ -42,6 +47,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.world.item.equipment.EquipmentAsset;
+import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.component.Consumables;
@@ -67,6 +73,9 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import com.krimx.gamefixes.block.HydratedFarmlandBlock;
+import com.krimx.gamefixes.block.CattailBlock;
+import com.krimx.gamefixes.block.TwilightPrismarineBlock;
+import com.krimx.gamefixes.block.entity.TwilightPrismarineBlockEntity;
 
 public class Gamefixes implements ModInitializer {
 
@@ -114,6 +123,7 @@ public class Gamefixes implements ModInitializer {
 	public static Item TIDE_SHELL;
 	public static Item WINGWEAVE;
 	public static Block TWILIGHT_PRISMARINE;
+	public static BlockEntityType<TwilightPrismarineBlockEntity> TWILIGHT_PRISMARINE_BLOCK_ENTITY;
 
 	public static Block PINK_DIAMOND_ORE;
 	public static Block DEEPSLATE_PINK_DIAMOND_ORE;
@@ -129,6 +139,8 @@ public class Gamefixes implements ModInitializer {
 	public static Block DEEPSLATE_CHARCOAL_ORE;
 	public static Block ABUNDANT_FARMLAND;
 	public static Block HYDRATED_FARMLAND;
+	public static Block CATTAIL;
+	public static SimpleParticleType MOSQUITO_PARTICLE;
 
 	public static Item WINGWOVEN_ELYTRA;
 	public static Item GILDED_ELYTRA;
@@ -136,6 +148,7 @@ public class Gamefixes implements ModInitializer {
 	public static Item ELYTRA_CHESTPLATE;
 	public static Item HONEYCOMB_BOOTS;
 	public static Item GLOW_SQUID_LEGGINGS;
+	public static Item ARMADILLO_CHESTPLATE;
 
 	public static Item GOLDEN_POTATO;
 
@@ -156,6 +169,18 @@ public class Gamefixes implements ModInitializer {
 	private static final Identifier ELYTRA_CHESTPLATE_ARMOR_MODIFIER_ID =
 			Identifier.fromNamespaceAndPath(MOD_ID, "elytra_chestplate_armor");
 
+	private static final ResourceKey<EquipmentAsset> ARMADILLO_CHESTPLATE_ASSET =
+			ResourceKey.create(
+					EquipmentAssets.ROOT_ID,
+					Identifier.fromNamespaceAndPath(MOD_ID, "armadillo_chestplate")
+			);
+
+	private static final TagKey<Item> REPAIRS_ARMADILLO_CHESTPLATE =
+			TagKey.create(
+					BuiltInRegistries.ITEM.key(),
+					Identifier.fromNamespaceAndPath(MOD_ID, "repairs_armadillo_chestplate")
+			);
+
 	private static final ThreadLocal<Boolean> ALLOW_MENDING =
 			ThreadLocal.withInitial(() -> false);
 
@@ -169,6 +194,13 @@ public class Gamefixes implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+
+		MOSQUITO_PARTICLE = FabricParticleTypes.simple();
+		Registry.register(
+				BuiltInRegistries.PARTICLE_TYPE,
+				Identifier.fromNamespaceAndPath(MOD_ID, "mosquito"),
+				MOSQUITO_PARTICLE
+		);
 
 		REFINED_SULFUR = registerItem("refined_sulfur", new Item.Properties());
 		POLLEN = registerItem("pollen", new Item.Properties());
@@ -299,6 +331,7 @@ public class Gamefixes implements ModInitializer {
 
 		HONEYCOMB_BOOTS = registerHoneycombBoots();
 		GLOW_SQUID_LEGGINGS = registerGlowSquidLeggings();
+		ARMADILLO_CHESTPLATE = registerArmadilloChestplate();
 
 		WINGWOVEN_ELYTRA = registerItem(
 				"wingwoven_elytra",
@@ -384,7 +417,17 @@ public class Gamefixes implements ModInitializer {
 
 		TWILIGHT_PRISMARINE = registerBlock(
 				"twilight_prismarine",
-				BlockBehaviour.Properties.ofFullCopy(Blocks.PRISMARINE)
+				BlockBehaviour.Properties.ofFullCopy(Blocks.PRISMARINE),
+				TwilightPrismarineBlock::new
+		);
+
+		TWILIGHT_PRISMARINE_BLOCK_ENTITY = Registry.register(
+				BuiltInRegistries.BLOCK_ENTITY_TYPE,
+				Identifier.fromNamespaceAndPath(MOD_ID, "twilight_prismarine"),
+				FabricBlockEntityTypeBuilder.create(
+						TwilightPrismarineBlockEntity::new,
+						TWILIGHT_PRISMARINE
+				).build()
 		);
 
 		CHARCOAL_ORE = registerBlock(
@@ -405,6 +448,44 @@ public class Gamefixes implements ModInitializer {
 		HYDRATED_FARMLAND = registerHydratedFarmlandBlock(
 				"hydrated_farmland",
 				BlockBehaviour.Properties.ofFullCopy(Blocks.FARMLAND)
+		);
+
+		Identifier cattailId =
+				Identifier.fromNamespaceAndPath(
+						MOD_ID,
+						"cattail"
+				);
+
+		ResourceKey<Block> cattailKey =
+				ResourceKey.create(
+						Registries.BLOCK,
+						cattailId
+				);
+
+		CATTAIL = Registry.register(
+				BuiltInRegistries.BLOCK,
+				cattailId,
+				new CattailBlock(
+						BlockBehaviour.Properties.ofFullCopy(Blocks.TALL_GRASS)
+								.setId(cattailKey)
+				)
+		);
+
+		ResourceKey<Item> cattailItemKey =
+				ResourceKey.create(
+						Registries.ITEM,
+						cattailId
+				);
+
+		Registry.register(
+				BuiltInRegistries.ITEM,
+				cattailId,
+				new BlockItem(
+						CATTAIL,
+						new Item.Properties()
+								.useBlockDescriptionPrefix()
+								.setId(cattailItemKey)
+				)
 		);
 
 		Identifier milkCauldronId =
@@ -622,6 +703,8 @@ public class Gamefixes implements ModInitializer {
 				.register(output -> output.accept(HONEYCOMB_BOOTS));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
 				.register(output -> output.accept(GLOW_SQUID_LEGGINGS));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(ARMADILLO_CHESTPLATE));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.BUILDING_BLOCKS)
 				.register(output -> output.accept(TWILIGHT_PRISMARINE.asItem()));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS)
@@ -650,23 +733,11 @@ public class Gamefixes implements ModInitializer {
 				.register(output -> output.accept(DEEPSLATE_CHARCOAL_ORE.asItem()));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS)
 				.register(output -> output.accept(CHEESE_WHEEL.asItem()));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.NATURAL_BLOCKS)
+				.register(output -> output.accept(CATTAIL.asItem()));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
 				.register(output -> output.accept(LOOT_BAG));
 
-		FuelValueEvents.BUILD.register(
-				(builder, context) -> {
-
-					builder.add(
-							Items.MAGMA_BLOCK,
-							1600
-					);
-
-					builder.add(
-							REFINED_SULFUR,
-							1200
-					);
-				}
-		);
 
 		ItemEvents.USE.register(
 				(level, player, hand) -> {
@@ -862,8 +933,7 @@ public class Gamefixes implements ModInitializer {
 	private static Item registerItem(String name, Item.Properties properties) {
 		Identifier id =
 				Identifier.parse(
-						MOD_ID + ":"
-								+ name
+						MOD_ID + ":" + name
 				);
 
 		ResourceKey<Item> key =
@@ -886,6 +956,14 @@ public class Gamefixes implements ModInitializer {
 			String name,
 			BlockBehaviour.Properties properties
 	) {
+		return registerBlock(name, properties, Block::new);
+	}
+
+	private static Block registerBlock(
+			String name,
+			BlockBehaviour.Properties properties,
+			Function<BlockBehaviour.Properties, ? extends Block> blockFactory
+	) {
 		Identifier id = Identifier.parse(MOD_ID + ":" + name);
 
 		ResourceKey<Block> blockKey =
@@ -899,7 +977,7 @@ public class Gamefixes implements ModInitializer {
 		Block block = Registry.register(
 				BuiltInRegistries.BLOCK,
 				id,
-				new Block(properties)
+				blockFactory.apply(properties)
 		);
 
 		ResourceKey<Item> itemKey =
@@ -939,7 +1017,7 @@ public class Gamefixes implements ModInitializer {
 		Block block = Registry.register(
 				BuiltInRegistries.BLOCK,
 				id,
-				new FarmlandBlock(properties)
+				new FarmlandBlock(Blocks.FARMLAND, properties)
 		);
 
 		ResourceKey<Item> itemKey =
@@ -987,6 +1065,50 @@ public class Gamefixes implements ModInitializer {
 										.setAsset(ArmorMaterials.HONEYCOMB_ASSET)
 										.setEquipSound(SoundEvents.ARMOR_EQUIP_LEATHER)
 										.build()
+						)
+						.setId(key);
+
+		return Registry.register(
+				BuiltInRegistries.ITEM,
+				id,
+				new Item(properties)
+		);
+	}
+
+	private static Item registerArmadilloChestplate() {
+		Identifier id =
+				Identifier.parse(
+						MOD_ID + ":armadillo_chestplate"
+				);
+
+		ResourceKey<Item> key =
+				ResourceKey.create(
+						Registries.ITEM,
+						id
+				);
+
+		ArmorMaterial material =
+				new ArmorMaterial(
+						15,
+						Map.of(
+								ArmorType.CHESTPLATE, 6
+						),
+						9,
+						SoundEvents.ARMOR_EQUIP_LEATHER,
+						0.0F,
+						0.0F,
+						REPAIRS_ARMADILLO_CHESTPLATE,
+						ARMADILLO_CHESTPLATE_ASSET
+				);
+
+		Item.Properties properties =
+				new Item.Properties()
+						.humanoidArmor(
+								material,
+								ArmorType.CHESTPLATE
+						)
+						.durability(
+								ArmorType.CHESTPLATE.getDurability(15)
 						)
 						.setId(key);
 
@@ -1063,7 +1185,7 @@ public class Gamefixes implements ModInitializer {
 		Block block = Registry.register(
 				BuiltInRegistries.BLOCK,
 				id,
-				new HydratedFarmlandBlock(properties)
+				new HydratedFarmlandBlock(Blocks.FARMLAND, properties)
 		);
 
 		ResourceKey<Item> itemKey =

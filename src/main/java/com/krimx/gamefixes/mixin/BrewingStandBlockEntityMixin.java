@@ -2,10 +2,8 @@ package com.krimx.gamefixes.mixin;
 
 import com.krimx.gamefixes.CustomBrewingRecipes;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.alchemy.PotionBrewing;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BrewingStandBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,8 +20,8 @@ public abstract class BrewingStandBlockEntityMixin {
             cancellable = true
     )
     private static void gamefixes$allowCustomBrewing(
-            PotionBrewing potionBrewing,
-            NonNullList<ItemStack> items,
+            ServerLevel level,
+            BrewingStandBlockEntity entity,
             CallbackInfoReturnable<Boolean> cir
     ) {
         /*
@@ -34,23 +32,13 @@ public abstract class BrewingStandBlockEntityMixin {
             return;
         }
 
-        /*
-         * Slot layout:
-         *
-         * 0 = first brewing input
-         * 1 = second brewing input
-         * 2 = third brewing input
-         * 3 = ingredient
-         * 4 = fuel
-         */
         ItemStack[] inputs = {
-                items.get(0),
-                items.get(1),
-                items.get(2)
+                entity.getItem(0),
+                entity.getItem(1),
+                entity.getItem(2)
         };
 
-        ItemStack ingredient =
-                items.get(3);
+        ItemStack ingredient = entity.getItem(3);
 
         if (CustomBrewingRecipes.canBrew(
                 inputs,
@@ -66,13 +54,12 @@ public abstract class BrewingStandBlockEntityMixin {
             cancellable = true
     )
     private static void gamefixes$doCustomBrewing(
-            Level level,
+            ServerLevel level,
             BlockPos pos,
-            NonNullList<ItemStack> items,
+            BrewingStandBlockEntity entity,
             CallbackInfo ci
     ) {
-        ItemStack ingredient =
-                items.get(3);
+        ItemStack ingredient = entity.getItem(3);
 
         if (ingredient.isEmpty()) {
             return;
@@ -86,7 +73,7 @@ public abstract class BrewingStandBlockEntityMixin {
 
         for (int slot = 0; slot < 3; slot++) {
             if (CustomBrewingRecipes.find(
-                    items.get(slot),
+                    entity.getItem(slot),
                     ingredient
             ) != null) {
                 hasCustomRecipe = true;
@@ -108,9 +95,7 @@ public abstract class BrewingStandBlockEntityMixin {
          * to contain the same item.
          */
         for (int slot = 0; slot < 3; slot++) {
-
-            ItemStack input =
-                    items.get(slot);
+            ItemStack input = entity.getItem(slot);
 
             CustomBrewingRecipes.Recipe recipe =
                     CustomBrewingRecipes.find(
@@ -129,11 +114,8 @@ public abstract class BrewingStandBlockEntityMixin {
 
             /*
              * Put the result in the same slot.
-             *
-             * One input item produces one result stack,
-             * exactly like one potion slot being processed.
              */
-            items.set(
+            entity.setItem(
                     slot,
                     new ItemStack(
                             recipe.output(),
@@ -143,9 +125,7 @@ public abstract class BrewingStandBlockEntityMixin {
         }
 
         /*
-         * The ingredient is consumed once per brewing cycle,
-         * regardless of whether one, two, or three input slots
-         * were processed.
+         * The ingredient is consumed once per brewing cycle.
          */
         ingredient.shrink(1);
 

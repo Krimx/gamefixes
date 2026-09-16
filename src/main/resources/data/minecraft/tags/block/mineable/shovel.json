@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "gamefixes:abundant_farmland",
+    "gamefixes:hydrated_farmland"
+  ]
+}

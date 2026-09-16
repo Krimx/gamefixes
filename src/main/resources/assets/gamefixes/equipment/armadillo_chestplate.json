@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "gamefixes:armadillo_chestplate"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "gamefixes:armadillo_chestplate"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "gamefixes:armadillo_chestplate"
+      }
+    ]
+  }
+}

@@ -5,8 +5,9 @@ import com.krimx.gamefixes.enchantment.ModEnchantments;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
@@ -14,25 +15,21 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.function.Consumer;
-
-@Mixin(HoeItem.class)
+@Mixin(Item.class)
 public class HoeItemMixin {
 
-    @Redirect(
+    @Inject(
             method = "useOn",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V"
-            )
+            at = @At("HEAD"),
+            cancellable = true
     )
     private void gamefixes$specialFarmland(
-            Consumer<UseOnContext> action,
-            Object contextObject
+            UseOnContext context,
+            CallbackInfoReturnable<InteractionResult> cir
     ) {
-        UseOnContext context = (UseOnContext) contextObject;
         ItemStack stack = context.getItemInHand();
 
         var enchantmentsRegistry =
@@ -62,55 +59,46 @@ public class HoeItemMixin {
         boolean hasHydration =
                 enchantments.getLevel(hydration) > 0;
 
+        if (!hasAbundance && !hasHydration) {
+            return;
+        }
+
+        boolean isHoe =
+                stack.is(net.minecraft.tags.ItemTags.HOES);
+
+        if (!isHoe) {
+            return;
+        }
+
+        var level = context.getLevel();
+        var pos = context.getClickedPos();
+
         boolean canBecomeFarmland =
-                context.getLevel()
-                        .getBlockState(context.getClickedPos())
-                        .is(Blocks.GRASS_BLOCK)
-                        || context.getLevel()
-                        .getBlockState(context.getClickedPos())
-                        .is(Blocks.DIRT_PATH)
-                        || context.getLevel()
-                        .getBlockState(context.getClickedPos())
-                        .is(Blocks.DIRT);
+                level.getBlockState(pos).is(Blocks.GRASS_BLOCK)
+                        || level.getBlockState(pos).is(Blocks.DIRT_PATH)
+                        || level.getBlockState(pos).is(Blocks.DIRT);
 
-        if (canBecomeFarmland && hasHydration) {
-            context.getLevel().setBlock(
-                    context.getClickedPos(),
-                    Gamefixes.HYDRATED_FARMLAND.defaultBlockState(),
-                    11
-            );
-
-            context.getLevel().gameEvent(
-                    GameEvent.BLOCK_CHANGE,
-                    context.getClickedPos(),
-                    GameEvent.Context.of(
-                            context.getPlayer(),
-                            Gamefixes.HYDRATED_FARMLAND.defaultBlockState()
-                    )
-            );
-
+        if (!canBecomeFarmland) {
             return;
         }
 
-        if (canBecomeFarmland && hasAbundance) {
-            context.getLevel().setBlock(
-                    context.getClickedPos(),
-                    Gamefixes.ABUNDANT_FARMLAND.defaultBlockState(),
-                    11
-            );
+        var farmland = hasHydration
+                ? Gamefixes.HYDRATED_FARMLAND.defaultBlockState()
+                : Gamefixes.ABUNDANT_FARMLAND.defaultBlockState();
 
-            context.getLevel().gameEvent(
+        if (!level.isClientSide()) {
+            level.setBlock(pos, farmland, 11);
+
+            level.gameEvent(
                     GameEvent.BLOCK_CHANGE,
-                    context.getClickedPos(),
+                    pos,
                     GameEvent.Context.of(
                             context.getPlayer(),
-                            Gamefixes.ABUNDANT_FARMLAND.defaultBlockState()
+                            farmland
                     )
             );
-
-            return;
         }
 
-        action.accept(context);
+        cir.setReturnValue(InteractionResult.SUCCESS);
     }
 }

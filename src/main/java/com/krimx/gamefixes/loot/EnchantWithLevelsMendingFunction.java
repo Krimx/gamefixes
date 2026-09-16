@@ -4,10 +4,11 @@ import com.krimx.gamefixes.Gamefixes;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.codec.RegistryCodecs;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
@@ -16,36 +17,35 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 
-import java.util.List;
 import java.util.Optional;
 
 public class EnchantWithLevelsMendingFunction extends LootItemConditionalFunction {
 
     public static final MapCodec<EnchantWithLevelsMendingFunction> MAP_CODEC =
             RecordCodecBuilder.mapCodec((i) -> commonFields(i).and(i.group(
-                    NumberProviders.CODEC.fieldOf("levels").forGetter((f) -> f.levels),
-                    RegistryCodecs.homogeneousList(Registries.ENCHANTMENT)
+                    ContextIntProviders.CODEC.fieldOf("levels").forGetter((f) -> f.levels),
+                    RegistryCodecs.holderSet(Registries.ENCHANTMENT)
                             .optionalFieldOf("options")
                             .forGetter((f) -> f.options),
                     Codec.BOOL.optionalFieldOf("include_additional_cost_component", false)
                             .forGetter((f) -> f.includeAdditionalCostComponent)
             )).apply(i, EnchantWithLevelsMendingFunction::new));
 
-    private final NumberProvider levels;
+    private final Holder<ContextIntProvider> levels;
     private final Optional<HolderSet<Enchantment>> options;
     private final boolean includeAdditionalCostComponent;
 
     private EnchantWithLevelsMendingFunction(
-            List<LootItemCondition> predicates,
-            NumberProvider levels,
+            Optional<Holder<LootItemCondition>> predicate,
+            Holder<ContextIntProvider> levels,
             Optional<HolderSet<Enchantment>> options,
             boolean includeAdditionalCostComponent
     ) {
-        super(predicates);
+        super(predicate);
         this.levels = levels;
         this.options = options;
         this.includeAdditionalCostComponent = includeAdditionalCostComponent;
@@ -60,7 +60,7 @@ public class EnchantWithLevelsMendingFunction extends LootItemConditionalFunctio
     protected ItemStack run(ItemStack itemStack, LootContext context) {
         RandomSource random = context.getRandom();
         RegistryAccess registryAccess = context.getLevel().registryAccess();
-        int enchantmentCost = this.levels.getInt(context);
+        int enchantmentCost = this.levels.value().getInt(context);
 
         Gamefixes.setMendingAllowed(true);
 

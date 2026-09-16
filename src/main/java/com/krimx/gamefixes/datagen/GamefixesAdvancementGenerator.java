@@ -10,10 +10,12 @@ import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricAdvancementProvider;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.AdvancementType;
 import net.minecraft.advancements.triggers.InventoryChangeTrigger;
+import net.minecraft.core.ClientAsset;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.network.chat.Component;
@@ -39,16 +41,22 @@ public class GamefixesAdvancementGenerator extends FabricAdvancementProvider {
     ) {
         AdvancementHolder root = Advancement.Builder.advancement()
                 .display(
-                        Items.CRAFTING_TABLE,
-                        Component.literal("Minecraft Rehaul"),
-                        Component.literal(""),
-                        Identifier.withDefaultNamespace(
-                                "gui/advancements/backgrounds/adventure"
-                        ),
-                        AdvancementType.TASK,
-                        false,
-                        false,
-                        true
+                        new DisplayInfo(
+                                new ItemStackTemplate(Items.CRAFTING_TABLE),
+                                Component.literal("Minecraft Rehaul"),
+                                Component.literal(""),
+                                Optional.of(
+                                        new ClientAsset.ResourceTexture(
+                                                Identifier.withDefaultNamespace(
+                                                        "gui/advancements/backgrounds/adventure"
+                                                )
+                                        )
+                                ),
+                                AdvancementType.TASK,
+                                false,
+                                false,
+                                true
+                        )
                 )
                 .addCriterion(
                         "root",
@@ -72,7 +80,6 @@ public class GamefixesAdvancementGenerator extends FabricAdvancementProvider {
                         Component.literal(
                                 "Use 8 clay balls to make a blast furnace"
                         ),
-                        null,
                         AdvancementType.TASK,
                         true,
                         true,
@@ -100,7 +107,6 @@ public class GamefixesAdvancementGenerator extends FabricAdvancementProvider {
                         Component.literal(
                                 "Make a copper tool"
                         ),
-                        null,
                         AdvancementType.TASK,
                         true,
                         true,
@@ -149,7 +155,6 @@ public class GamefixesAdvancementGenerator extends FabricAdvancementProvider {
                         Component.literal(
                                 "What could a shepherd possibly do with phantom membrane?"
                         ),
-                        null,
                         AdvancementType.TASK,
                         true,
                         true,
@@ -158,10 +163,7 @@ public class GamefixesAdvancementGenerator extends FabricAdvancementProvider {
                 .addCriterion(
                         "research_wingweave",
                         ModCriteria.RESEARCH.createCriterion(
-                                new ResearchCriterion.Conditions(
-                                        Optional.empty(),
-                                        "minecraft:shepherd/wingweave"
-                                )
+                                new ResearchCriterion.Conditions("minecraft:shepherd/wingweave")
                         )
                 )
                 .save(
@@ -180,7 +182,6 @@ public class GamefixesAdvancementGenerator extends FabricAdvancementProvider {
                         Component.literal(
                                 "What happens when you try to brew resin?"
                         ),
-                        null,
                         AdvancementType.TASK,
                         true,
                         true,
@@ -208,7 +209,6 @@ public class GamefixesAdvancementGenerator extends FabricAdvancementProvider {
                         Component.literal(
                                 "Show the cleric how to make a very light diamond."
                         ),
-                        null,
                         AdvancementType.TASK,
                         true,
                         true,
@@ -217,10 +217,7 @@ public class GamefixesAdvancementGenerator extends FabricAdvancementProvider {
                 .addCriterion(
                         "research_diakrete",
                         ModCriteria.RESEARCH.createCriterion(
-                                new ResearchCriterion.Conditions(
-                                        Optional.empty(),
-                                        "minecraft:cleric/diakrete"
-                                )
+                                new ResearchCriterion.Conditions("minecraft:cleric/diakrete")
                         )
                 )
                 .rewards(
@@ -270,7 +267,6 @@ public class GamefixesAdvancementGenerator extends FabricAdvancementProvider {
                         Component.literal(
                                 "Heat up a cauldron and put some milk in it."
                         ),
-                        null,
                         AdvancementType.TASK,
                         true,
                         true,
@@ -293,12 +289,11 @@ public class GamefixesAdvancementGenerator extends FabricAdvancementProvider {
         AdvancementHolder cheeseWheel = Advancement.Builder.advancement()
                 .parent(cheese)
                 .display(
-                        Gamefixes.CHEESE_WHEEL,
+                        Gamefixes.CHEESE_WHEEL.asItem(),
                         Component.literal("Aged to prerfection!"),
                         Component.literal(
                                 "Combine cheese slices into a cheese wheel"
                         ),
-                        null,
                         AdvancementType.TASK,
                         true,
                         true,
@@ -326,7 +321,6 @@ public class GamefixesAdvancementGenerator extends FabricAdvancementProvider {
                         Component.literal(
                                 "Discover the transformative properties of the conduit."
                         ),
-                        null,
                         AdvancementType.TASK,
                         true,
                         true,
@@ -354,7 +348,6 @@ public class GamefixesAdvancementGenerator extends FabricAdvancementProvider {
                         Component.literal(
                                 "Make a piece of diakrete armor."
                         ),
-                        null,
                         AdvancementType.TASK,
                         true,
                         true,

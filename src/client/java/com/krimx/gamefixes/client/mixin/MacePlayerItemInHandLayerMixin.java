@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MaceItem;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -47,14 +48,25 @@ public class MacePlayerItemInHandLayerMixin {
             int light,
             CallbackInfo ci
     ) {
-        if (!(stack.getItem() instanceof MaceItem)) return;
-        if (arm != HumanoidArm.RIGHT) return;
+        if (!(stack.getItem() instanceof MaceItem)) {
+            return;
+        }
+
+        if (arm != HumanoidArm.RIGHT) {
+            return;
+        }
 
         Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.level == null) return;
+
+        if (minecraft.level == null) {
+            return;
+        }
 
         var entity = minecraft.level.getEntity(state.id);
-        if (entity == null) return;
+
+        if (entity == null) {
+            return;
+        }
 
         float frameInterp = minecraft.getDeltaTracker()
                 .getGameTimeDeltaPartialTick(true);
@@ -64,8 +76,8 @@ public class MacePlayerItemInHandLayerMixin {
                 frameInterp
         );
 
-        if (progress < 0.0F ||
-                !MaceThirdPersonAnimation.isOrbiting(progress)) {
+        if (progress < 0.0F
+                || !MaceThirdPersonAnimation.isOrbiting(progress)) {
             return;
         }
 
@@ -89,7 +101,9 @@ public class MacePlayerItemInHandLayerMixin {
         );
 
         // Orbit around the player's vertical axis.
-        poseStack.mulPose(Axis.YP.rotation(angle));
+        poseStack.mulPose(
+                new Matrix4f().rotate(Axis.YP.rotation(angle))
+        );
 
         // Move outward from the player.
         poseStack.translate(
@@ -100,16 +114,16 @@ public class MacePlayerItemInHandLayerMixin {
 
         // Lay the mace horizontally.
         poseStack.mulPose(
-                Axis.ZP.rotationDegrees(
-                        MACE_SIDE_ROTATION
+                new Matrix4f().rotate(
+                        Axis.ZP.rotationDegrees(MACE_SIDE_ROTATION)
                 )
         );
 
         // Rotate around the remaining model axis to point
         // the heavy head outward.
         poseStack.mulPose(
-                Axis.XP.rotationDegrees(
-                        MACE_OUTWARD_ROTATION
+                new Matrix4f().rotate(
+                        Axis.XP.rotationDegrees(MACE_OUTWARD_ROTATION)
                 )
         );
 

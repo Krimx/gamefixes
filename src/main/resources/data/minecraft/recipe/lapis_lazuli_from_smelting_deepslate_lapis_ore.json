@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": "#gamefixes:disabled_recipe_ingredient",
+  "result": {
+    "id": "minecraft:lapis_lazuli"
+  },
+  "experience": 0.0,
+  "cookingtime": 200
+}

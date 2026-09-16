@@ -436,7 +436,6 @@ public class LivingEntityMixin {
                         )
                 );
 
-                target.hurtMarked = true;
             }
         }
 

@@ -1,6 +1,9 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "gamefixes:block/twilight_prismarine"
+    "type": "minecraft:special",
+    "base": "gamefixes:item/twilight_prismarine",
+    "model": {
+      "type": "gamefixes:twilight_prismarine"
+    }
   }
 }
