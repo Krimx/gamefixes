@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": "minecraft:stick",
+    "X": "gamefixes:rose_gold_ingot"
+  },
+  "pattern": ["  X", " # ", "#  "],
+  "result": {
+    "id": "gamefixes:rose_gold_spear"
+  }
+}

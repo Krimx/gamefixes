@@ -111,6 +111,27 @@ public class Gamefixes implements ModInitializer {
 	public static Item ROSE_GOLD_LEGGINGS;
 	public static Item ROSE_GOLD_BOOTS;
 
+	public static Item PINK_DIAMOND_SWORD;
+	public static Item PINK_DIAMOND_PICKAXE;
+	public static Item PINK_DIAMOND_AXE;
+	public static Item PINK_DIAMOND_SHOVEL;
+	public static Item PINK_DIAMOND_HOE;
+	public static Item PINK_DIAMOND_SPEAR;
+
+	public static Item YELLOW_DIAMOND_SWORD;
+	public static Item YELLOW_DIAMOND_PICKAXE;
+	public static Item YELLOW_DIAMOND_AXE;
+	public static Item YELLOW_DIAMOND_SHOVEL;
+	public static Item YELLOW_DIAMOND_HOE;
+	public static Item YELLOW_DIAMOND_SPEAR;
+
+	public static Item ROSE_GOLD_SWORD;
+	public static Item ROSE_GOLD_PICKAXE;
+	public static Item ROSE_GOLD_AXE;
+	public static Item ROSE_GOLD_SHOVEL;
+	public static Item ROSE_GOLD_HOE;
+	public static Item ROSE_GOLD_SPEAR;
+
 	public static Item ROSE_GOLD_INGOT;
 	public static Item RAW_ROSE_GOLD;
 	public static Item PINK_DIAMOND;
@@ -180,6 +201,29 @@ public class Gamefixes implements ModInitializer {
 					BuiltInRegistries.ITEM.key(),
 					Identifier.fromNamespaceAndPath(MOD_ID, "repairs_armadillo_chestplate")
 			);
+
+	private static final TagKey<Item> REPAIRS_PINK_DIAMOND_TOOLS =
+			TagKey.create(
+					BuiltInRegistries.ITEM.key(),
+					Identifier.fromNamespaceAndPath(MOD_ID, "repairs_pink_diamond_tools")
+			);
+	private static final TagKey<Item> REPAIRS_YELLOW_DIAMOND_TOOLS =
+			TagKey.create(
+					BuiltInRegistries.ITEM.key(),
+					Identifier.fromNamespaceAndPath(MOD_ID, "repairs_yellow_diamond_tools")
+			);
+	private static final TagKey<Item> REPAIRS_ROSE_GOLD_TOOLS =
+			TagKey.create(
+					BuiltInRegistries.ITEM.key(),
+					Identifier.fromNamespaceAndPath(MOD_ID, "repairs_rose_gold_tools")
+			);
+
+	private static final ToolMaterial PINK_DIAMOND_TOOL_MATERIAL =
+			copyToolMaterial(ToolMaterial.DIAMOND, REPAIRS_PINK_DIAMOND_TOOLS);
+	private static final ToolMaterial YELLOW_DIAMOND_TOOL_MATERIAL =
+			copyToolMaterial(ToolMaterial.DIAMOND, REPAIRS_YELLOW_DIAMOND_TOOLS);
+	private static final ToolMaterial ROSE_GOLD_TOOL_MATERIAL =
+			copyToolMaterial(ToolMaterial.GOLD, REPAIRS_ROSE_GOLD_TOOLS);
 
 	private static final ThreadLocal<Boolean> ALLOW_MENDING =
 			ThreadLocal.withInitial(() -> false);
@@ -328,6 +372,27 @@ public class Gamefixes implements ModInitializer {
 		ROSE_GOLD_CHESTPLATE = registerArmorItem("rose_gold_chestplate", ArmorType.CHESTPLATE, ArmorMaterials.ROSE_GOLD, ArmorMaterials.ROSE_GOLD_BASE_DURABILITY);
 		ROSE_GOLD_LEGGINGS = registerArmorItem("rose_gold_leggings", ArmorType.LEGGINGS, ArmorMaterials.ROSE_GOLD, ArmorMaterials.ROSE_GOLD_BASE_DURABILITY);
 		ROSE_GOLD_BOOTS = registerArmorItem("rose_gold_boots", ArmorType.BOOTS, ArmorMaterials.ROSE_GOLD, ArmorMaterials.ROSE_GOLD_BASE_DURABILITY);
+
+		PINK_DIAMOND_SWORD = registerItem("pink_diamond_sword", new Item.Properties().sword(PINK_DIAMOND_TOOL_MATERIAL, 3.0F, -2.4F));
+		PINK_DIAMOND_PICKAXE = registerItem("pink_diamond_pickaxe", new Item.Properties().pickaxe(PINK_DIAMOND_TOOL_MATERIAL, 1.0F, -2.8F));
+		PINK_DIAMOND_AXE = registerItem("pink_diamond_axe", new Item.Properties().axe(PINK_DIAMOND_TOOL_MATERIAL, 5.0F, -3.0F));
+		PINK_DIAMOND_SHOVEL = registerItem("pink_diamond_shovel", new Item.Properties().shovel(PINK_DIAMOND_TOOL_MATERIAL, 1.5F, -3.0F));
+		PINK_DIAMOND_HOE = registerItem("pink_diamond_hoe", new Item.Properties().hoe(PINK_DIAMOND_TOOL_MATERIAL, -3.0F, 0.0F));
+		PINK_DIAMOND_SPEAR = registerItem("pink_diamond_spear", new Item.Properties().spear(PINK_DIAMOND_TOOL_MATERIAL, 1.05F, 1.075F, 0.5F, 3.0F, 10.0F, 6.5F, 5.1F, 10.0F, 4.6F));
+
+		YELLOW_DIAMOND_SWORD = registerItem("yellow_diamond_sword", new Item.Properties().sword(YELLOW_DIAMOND_TOOL_MATERIAL, 3.0F, -2.4F));
+		YELLOW_DIAMOND_PICKAXE = registerItem("yellow_diamond_pickaxe", new Item.Properties().pickaxe(YELLOW_DIAMOND_TOOL_MATERIAL, 1.0F, -2.8F));
+		YELLOW_DIAMOND_AXE = registerItem("yellow_diamond_axe", new Item.Properties().axe(YELLOW_DIAMOND_TOOL_MATERIAL, 5.0F, -3.0F));
+		YELLOW_DIAMOND_SHOVEL = registerItem("yellow_diamond_shovel", new Item.Properties().shovel(YELLOW_DIAMOND_TOOL_MATERIAL, 1.5F, -3.0F));
+		YELLOW_DIAMOND_HOE = registerItem("yellow_diamond_hoe", new Item.Properties().hoe(YELLOW_DIAMOND_TOOL_MATERIAL, -3.0F, 0.0F));
+		YELLOW_DIAMOND_SPEAR = registerItem("yellow_diamond_spear", new Item.Properties().spear(YELLOW_DIAMOND_TOOL_MATERIAL, 1.05F, 1.075F, 0.5F, 3.0F, 10.0F, 6.5F, 5.1F, 10.0F, 4.6F));
+
+		ROSE_GOLD_SWORD = registerItem("rose_gold_sword", new Item.Properties().sword(ROSE_GOLD_TOOL_MATERIAL, 3.0F, -2.4F));
+		ROSE_GOLD_PICKAXE = registerItem("rose_gold_pickaxe", new Item.Properties().pickaxe(ROSE_GOLD_TOOL_MATERIAL, 1.0F, -2.8F));
+		ROSE_GOLD_AXE = registerItem("rose_gold_axe", new Item.Properties().axe(ROSE_GOLD_TOOL_MATERIAL, 6.0F, -3.0F));
+		ROSE_GOLD_SHOVEL = registerItem("rose_gold_shovel", new Item.Properties().shovel(ROSE_GOLD_TOOL_MATERIAL, 1.5F, -3.0F));
+		ROSE_GOLD_HOE = registerItem("rose_gold_hoe", new Item.Properties().hoe(ROSE_GOLD_TOOL_MATERIAL, 0.0F, -3.0F));
+		ROSE_GOLD_SPEAR = registerItem("rose_gold_spear", new Item.Properties().spear(ROSE_GOLD_TOOL_MATERIAL, 0.95F, 0.7F, 0.7F, 3.5F, 13.0F, 8.5F, 5.1F, 13.75F, 4.6F));
 
 		HONEYCOMB_BOOTS = registerHoneycombBoots();
 		GLOW_SQUID_LEGGINGS = registerGlowSquidLeggings();
@@ -629,6 +694,8 @@ public class Gamefixes implements ModInitializer {
 				.register(output -> output.accept(MILK_BOTTLE));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS)
 				.register(output -> output.accept(CHEESE));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS)
+				.register(output -> output.accept(GOLDEN_POTATO));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
 				.register(output -> output.accept(FLOUR));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
@@ -681,6 +748,33 @@ public class Gamefixes implements ModInitializer {
 				.register(output -> output.accept(ROSE_GOLD_LEGGINGS));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
 				.register(output -> output.accept(ROSE_GOLD_BOOTS));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(PINK_DIAMOND_SWORD));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(YELLOW_DIAMOND_SWORD));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(ROSE_GOLD_SWORD));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(PINK_DIAMOND_SPEAR));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(YELLOW_DIAMOND_SPEAR));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.COMBAT)
+				.register(output -> output.accept(ROSE_GOLD_SPEAR));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES)
+				.register(output -> {
+					output.accept(PINK_DIAMOND_PICKAXE);
+					output.accept(PINK_DIAMOND_AXE);
+					output.accept(PINK_DIAMOND_SHOVEL);
+					output.accept(PINK_DIAMOND_HOE);
+					output.accept(YELLOW_DIAMOND_PICKAXE);
+					output.accept(YELLOW_DIAMOND_AXE);
+					output.accept(YELLOW_DIAMOND_SHOVEL);
+					output.accept(YELLOW_DIAMOND_HOE);
+					output.accept(ROSE_GOLD_PICKAXE);
+					output.accept(ROSE_GOLD_AXE);
+					output.accept(ROSE_GOLD_SHOVEL);
+					output.accept(ROSE_GOLD_HOE);
+				});
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
 				.register(output -> output.accept(FRAMED_ELYTRA_TRIM));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
@@ -949,6 +1043,17 @@ public class Gamefixes implements ModInitializer {
 				BuiltInRegistries.ITEM,
 				id,
 				new Item(properties)
+		);
+	}
+
+	private static ToolMaterial copyToolMaterial(ToolMaterial vanillaMaterial, TagKey<Item> repairItems) {
+		return new ToolMaterial(
+				vanillaMaterial.incorrectBlocksForDrops(),
+				vanillaMaterial.durability(),
+				vanillaMaterial.speed(),
+				vanillaMaterial.attackDamageBonus(),
+				vanillaMaterial.enchantmentValue(),
+				repairItems
 		);
 	}
 

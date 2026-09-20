@@ -12,6 +12,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FarmlandBlock;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -72,11 +73,15 @@ public class HoeItemMixin {
 
         var level = context.getLevel();
         var pos = context.getClickedPos();
+        var currentState = level.getBlockState(pos);
 
         boolean canBecomeFarmland =
-                level.getBlockState(pos).is(Blocks.GRASS_BLOCK)
-                        || level.getBlockState(pos).is(Blocks.DIRT_PATH)
-                        || level.getBlockState(pos).is(Blocks.DIRT);
+                currentState.is(Blocks.GRASS_BLOCK)
+                        || currentState.is(Blocks.DIRT_PATH)
+                        || currentState.is(Blocks.DIRT)
+                        || currentState.is(Blocks.FARMLAND)
+                        || currentState.is(Gamefixes.ABUNDANT_FARMLAND)
+                        || currentState.is(Gamefixes.HYDRATED_FARMLAND);
 
         if (!canBecomeFarmland) {
             return;
@@ -85,6 +90,36 @@ public class HoeItemMixin {
         var farmland = hasHydration
                 ? Gamefixes.HYDRATED_FARMLAND.defaultBlockState()
                 : Gamefixes.ABUNDANT_FARMLAND.defaultBlockState();
+
+        /*
+         * Preserve the current moisture level when converting
+         * between farmland types.
+         *
+         * Dirt, grass, and dirt paths don't have a moisture property,
+         * so they simply use the default state of the new farmland.
+         */
+        if (currentState.getBlock() instanceof FarmlandBlock
+                && farmland.hasProperty(FarmlandBlock.MOISTURE)) {
+
+            farmland = farmland.setValue(
+                    FarmlandBlock.MOISTURE,
+                    currentState.getValue(FarmlandBlock.MOISTURE)
+            );
+        }
+
+        /*
+         * If the hoe is being used on farmland of the same type,
+         * there is nothing to change.
+         */
+        if (currentState.is(Gamefixes.ABUNDANT_FARMLAND)
+                && hasAbundance) {
+            return;
+        }
+
+        if (currentState.is(Gamefixes.HYDRATED_FARMLAND)
+                && hasHydration) {
+            return;
+        }
 
         if (!level.isClientSide()) {
             level.setBlock(pos, farmland, 11);

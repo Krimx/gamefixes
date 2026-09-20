@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": "minecraft:stick",
+    "X": "gamefixes:pink_diamond"
+  },
+  "pattern": ["  X", " # ", "#  "],
+  "result": {
+    "id": "gamefixes:pink_diamond_spear"
+  }
+}
