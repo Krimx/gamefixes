@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import com.krimx.gamefixes.advancement.ModCriteria;
+import com.krimx.gamefixes.farming.FarmingExperience;
 import com.krimx.gamefixes.loot_bags.AddLootBagTags;
 import com.krimx.gamefixes.loot_bags.LootBagOutcomes;
 import com.krimx.gamefixes.loot_bags.LootBagOutcomeExecutors;
@@ -39,6 +40,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FarmlandBlock;
@@ -56,6 +58,7 @@ import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.biome.Biome;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.world.item.ItemStack;
 import com.krimx.gamefixes.HomeChunkManager;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -831,6 +834,21 @@ public class Gamefixes implements ModInitializer {
 				.register(output -> output.accept(CATTAIL.asItem()));
 		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.INGREDIENTS)
 				.register(output -> output.accept(LOOT_BAG));
+
+
+		PlayerBlockBreakEvents.AFTER.register(
+				(level, player, pos, state, blockEntity) -> {
+					if (state.getBlock() instanceof CropBlock crop
+							&& crop.isMaxAge(state)
+							&& !player.isCreative()) {
+						FarmingExperience.award(
+								level,
+								pos,
+								player.getMainHandItem()
+						);
+					}
+				}
+		);
 
 
 		ItemEvents.USE.register(
