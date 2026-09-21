@@ -2,6 +2,7 @@ package com.krimx.gamefixes.client.mixin;
 
 import com.krimx.gamefixes.access.MerchantMenuAccess;
 import com.krimx.gamefixes.network.AttemptResearchPayload;
+import com.krimx.gamefixes.network.SelectResearchSlotPayload;
 import com.mojang.blaze3d.platform.cursor.CursorTypes;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -919,26 +920,40 @@ public abstract class MerchantScreenMixin {
             boolean doubleClick,
             CallbackInfoReturnable<Boolean> cir
     ) {
+        System.out.println("[GameFixes DEBUG] mouseClicked START x=" + event.x() + " y=" + event.y() + " button=" + event.button());
+
         MerchantScreen screen =
                 (MerchantScreen) (Object) this;
 
         if (!(screen.getMenu()
                 instanceof MerchantMenuAccess access)) {
+            System.out.println("[GameFixes DEBUG] mouseClicked STOP: menu is not MerchantMenuAccess");
             return;
         }
 
+        System.out.println("[GameFixes DEBUG] mouseClicked MENU: researchSlots="
+                + access.gamefixes$getResearchSlots()
+                + " researchMode=" + access.gamefixes$isResearchMode()
+                + " selectedSlot=" + access.gamefixes$getSelectedResearchSlot());
+
         if (event.button() != 0) {
-            return;
+            System.out.println("[GameFixes DEBUG] mouseClicked: button was " + event.button() + ", continuing anyway for debugging");
         }
 
         /*
          * Research button.
          */
-        if (gamefixes$isResearchButtonHovered(
-                event.x(),
-                event.y()
-        )) {
+        boolean researchButtonHovered =
+                gamefixes$isResearchButtonHovered(
+                        event.x(),
+                        event.y()
+                );
 
+        System.out.println("[GameFixes DEBUG] research button hovered=" + researchButtonHovered);
+
+        if (researchButtonHovered) {
+
+            System.out.println("[GameFixes DEBUG] RESEARCH BUTTON CLICKED");
             gamefixes$attemptResearch();
 
             cir.setReturnValue(true);
@@ -950,6 +965,8 @@ public abstract class MerchantScreenMixin {
          */
         int researchSlots =
                 access.gamefixes$getResearchSlots();
+
+        System.out.println("[GameFixes DEBUG] checking research rows: count=" + researchSlots);
 
         if (researchSlots > 0) {
 
@@ -997,6 +1014,13 @@ public abstract class MerchantScreenMixin {
                         yo + 17
                                 + visibleRow * ROW_HEIGHT;
 
+                System.out.println("[GameFixes DEBUG] research row=" + researchSlot
+                        + " logicalIndex=" + logicalIndex
+                        + " visibleRow=" + visibleRow
+                        + " rowY=" + rowY
+                        + " mouseX=" + event.x()
+                        + " mouseY=" + event.y());
+
                 if (event.x() >= xo + LIST_X
                         && event.x()
                         < xo + LIST_X + LIST_WIDTH
@@ -1004,8 +1028,25 @@ public abstract class MerchantScreenMixin {
                         && event.y()
                         < rowY + ROW_HEIGHT) {
 
+                    System.out.println("[GameFixes DEBUG] RESEARCH ROW CLICKED slot=" + researchSlot);
+
                     access.gamefixes$setSelectedResearchSlot(
                             researchSlot
+                    );
+
+                    System.out.println("[GameFixes DEBUG] sending SelectResearchSlotPayload container="
+                            + screen.getMenu().containerId + " slot=" + researchSlot);
+
+                    /*
+                     * Keep the server-side selected research slot in
+                     * sync with the client. The server validates this
+                     * selection before accepting a research attempt.
+                     */
+                    ClientPlayNetworking.send(
+                            new SelectResearchSlotPayload(
+                                    screen.getMenu().containerId,
+                                    researchSlot
+                            )
                     );
 
                     access.gamefixes$setResearchMode(

@@ -50,8 +50,14 @@
         {
           "type": "minecraft:item",
           "condition": {
-            "type": "minecraft:random_chance",
-            "chance": 0.01
+            "type": "minecraft:table_bonus",
+            "enchantment": "minecraft:fortune",
+            "chances": [
+              0.01,
+              0.02,
+              0.0333333,
+              0.05
+            ]
           },
           "name": "minecraft:golden_carrot"
         }

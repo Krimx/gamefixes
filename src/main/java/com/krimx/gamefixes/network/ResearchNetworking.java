@@ -45,25 +45,33 @@ public class ResearchNetworking {
                 SelectResearchSlotPayload.TYPE,
                 (payload, context) -> {
 
+                    System.out.println("[GameFixes DEBUG] SERVER received SelectResearchSlotPayload container="
+                            + payload.containerId() + " slot=" + payload.slot());
+
                     ServerPlayer player =
                             context.player();
 
                     if (player.containerMenu.containerId
                             != payload.containerId()) {
+                        System.out.println("[GameFixes DEBUG] SERVER selection STOP: container mismatch actual="
+                                + player.containerMenu.containerId + " payload=" + payload.containerId());
                         return;
                     }
 
                     if (!(player.containerMenu
                             instanceof MerchantMenu merchantMenu)) {
+                        System.out.println("[GameFixes DEBUG] SERVER selection STOP: menu is not MerchantMenu");
                         return;
                     }
 
                     if (!(merchantMenu
                             instanceof MerchantMenuAccess access)) {
+                        System.out.println("[GameFixes DEBUG] SERVER selection STOP: menu is not MerchantMenuAccess");
                         return;
                     }
 
                     if (!merchantMenu.stillValid(player)) {
+                        System.out.println("[GameFixes DEBUG] SERVER selection STOP: menu is no longer valid");
                         return;
                     }
 
@@ -73,11 +81,14 @@ public class ResearchNetworking {
                     if (slot < 0
                             || slot
                             >= access.gamefixes$getResearchSlots()) {
+                        System.out.println("[GameFixes DEBUG] SERVER selection STOP: invalid slot=" + slot
+                                + " researchSlots=" + access.gamefixes$getResearchSlots());
                         return;
                     }
 
                     if (!(access.gamefixes$getTrader()
                             instanceof Villager villager)) {
+                        System.out.println("[GameFixes DEBUG] SERVER selection STOP: trader is not Villager");
                         return;
                     }
 
@@ -86,12 +97,15 @@ public class ResearchNetworking {
                                     villager,
                                     slot
                             )) {
+                        System.out.println("[GameFixes DEBUG] SERVER selection STOP: research slot unavailable slot=" + slot);
                         return;
                     }
 
                     access.gamefixes$setSelectedResearchSlot(
                             slot
                     );
+
+                    System.out.println("[GameFixes DEBUG] SERVER selection ACCEPTED slot=" + slot);
                 }
         );
 
@@ -105,6 +119,9 @@ public class ResearchNetworking {
                 AttemptResearchPayload.TYPE,
                 (payload, context) -> {
 
+                    System.out.println("[GameFixes DEBUG] SERVER received AttemptResearchPayload container="
+                            + payload.containerId() + " researchSlot=" + payload.researchSlot());
+
                     ServerPlayer player =
                             context.player();
 
@@ -116,16 +133,20 @@ public class ResearchNetworking {
 
                     if (player.containerMenu.containerId
                             != payload.containerId()) {
+                        System.out.println("[GameFixes DEBUG] SERVER attempt STOP: container mismatch actual="
+                                + player.containerMenu.containerId + " payload=" + payload.containerId());
                         return;
                     }
 
                     if (!(player.containerMenu
                             instanceof MerchantMenu merchantMenu)) {
+                        System.out.println("[GameFixes DEBUG] SERVER attempt STOP: menu is not MerchantMenu");
                         return;
                     }
 
                     if (!(merchantMenu
                             instanceof MerchantMenuAccess access)) {
+                        System.out.println("[GameFixes DEBUG] SERVER attempt STOP: menu is not MerchantMenuAccess");
                         return;
                     }
 
@@ -137,14 +158,17 @@ public class ResearchNetworking {
 
                     if (!(access.gamefixes$getTrader()
                             instanceof Villager villager)) {
+                        System.out.println("[GameFixes DEBUG] SERVER attempt STOP: trader is not Villager");
                         return;
                     }
 
                     if (!merchantMenu.stillValid(player)) {
+                        System.out.println("[GameFixes DEBUG] SERVER attempt STOP: menu is no longer valid");
                         return;
                     }
 
                     if (!villager.isAlive()) {
+                        System.out.println("[GameFixes DEBUG] SERVER attempt STOP: villager is not alive");
                         return;
                     }
 
@@ -160,6 +184,8 @@ public class ResearchNetworking {
                     if (researchSlot < 0
                             || researchSlot
                             >= access.gamefixes$getResearchSlots()) {
+                        System.out.println("[GameFixes DEBUG] SERVER attempt STOP: invalid research slot=" + researchSlot
+                                + " researchSlots=" + access.gamefixes$getResearchSlots());
                         return;
                     }
 
@@ -168,6 +194,7 @@ public class ResearchNetworking {
                                     villager,
                                     researchSlot
                             )) {
+                        System.out.println("[GameFixes DEBUG] SERVER attempt STOP: research slot unavailable slot=" + researchSlot);
                         return;
                     }
 
@@ -187,8 +214,13 @@ public class ResearchNetworking {
                                     .getSlot(1)
                                     .getItem();
 
+                    System.out.println("[GameFixes DEBUG] SERVER attempt INPUTS first=" + firstInput
+                            + " second=" + secondInput);
+
                     if (firstInput.isEmpty()
                             || secondInput.isEmpty()) {
+
+                        System.out.println("[GameFixes DEBUG] SERVER attempt STOP: one or both inputs empty");
 
                         access.gamefixes$setResearchFailed(
                                 true
@@ -209,11 +241,16 @@ public class ResearchNetworking {
                                     secondInput
                             );
 
+                    System.out.println("[GameFixes DEBUG] SERVER attempt project="
+                            + (project == null ? "null" : project.getId()));
+
                     if (project == null
                             || !VillagerResearch.canResearch(
                             villager,
                             project
                     )) {
+
+                        System.out.println("[GameFixes DEBUG] SERVER attempt STOP: no project or cannot research");
 
                         access.gamefixes$setResearchFailed(
                                 true
@@ -232,6 +269,8 @@ public class ResearchNetworking {
                             < project.getFirstInputCount()
                             || secondInput.getCount()
                             < project.getSecondInputCount()) {
+
+                        System.out.println("[GameFixes DEBUG] SERVER attempt STOP: insufficient input counts");
 
                         access.gamefixes$setResearchFailed(
                                 true
@@ -268,6 +307,7 @@ public class ResearchNetworking {
                                     - completedResearchCount;
 
                     if (normalTradeCount < 0) {
+                        System.out.println("[GameFixes DEBUG] SERVER attempt STOP: normalTradeCount < 0");
                         return;
                     }
 
@@ -428,6 +468,8 @@ public class ResearchNetworking {
                     access.gamefixes$setResearchMode(
                             false
                     );
+
+                    System.out.println("[GameFixes DEBUG] SERVER attempt ACCEPTED/COMPLETED slot=" + researchSlot);
                 }
         );
     }

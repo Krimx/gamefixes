@@ -92,13 +92,13 @@
         {
           "type": "minecraft:item",
           "modifier": {
-            "type": "minecraft:enchant_with_levels",
+            "type": "gamefixes:enchant_with_levels_mending",
             "levels": {
               "type": "minecraft:uniform",
               "max": 39,
               "min": 20
             },
-            "options": "#gamefixes:on_random_loot_no_mending"
+            "options": "#minecraft:on_random_loot"
           },
           "name": "minecraft:diamond_sword",
           "weight": 3
@@ -106,13 +106,13 @@
         {
           "type": "minecraft:item",
           "modifier": {
-            "type": "minecraft:enchant_with_levels",
+            "type": "gamefixes:enchant_with_levels_mending",
             "levels": {
               "type": "minecraft:uniform",
               "max": 39,
               "min": 20
             },
-            "options": "#gamefixes:on_random_loot_no_mending"
+            "options": "#minecraft:on_random_loot"
           },
           "name": "minecraft:diamond_spear",
           "weight": 3
@@ -120,13 +120,13 @@
         {
           "type": "minecraft:item",
           "modifier": {
-            "type": "minecraft:enchant_with_levels",
+            "type": "gamefixes:enchant_with_levels_mending",
             "levels": {
               "type": "minecraft:uniform",
               "max": 39,
               "min": 20
             },
-            "options": "#gamefixes:on_random_loot_no_mending"
+            "options": "#minecraft:on_random_loot"
           },
           "name": "minecraft:diamond_boots",
           "weight": 3
@@ -134,13 +134,13 @@
         {
           "type": "minecraft:item",
           "modifier": {
-            "type": "minecraft:enchant_with_levels",
+            "type": "gamefixes:enchant_with_levels_mending",
             "levels": {
               "type": "minecraft:uniform",
               "max": 39,
               "min": 20
             },
-            "options": "#gamefixes:on_random_loot_no_mending"
+            "options": "#minecraft:on_random_loot"
           },
           "name": "minecraft:diamond_chestplate",
           "weight": 3
@@ -148,13 +148,13 @@
         {
           "type": "minecraft:item",
           "modifier": {
-            "type": "minecraft:enchant_with_levels",
+            "type": "gamefixes:enchant_with_levels_mending",
             "levels": {
               "type": "minecraft:uniform",
               "max": 39,
               "min": 20
             },
-            "options": "#gamefixes:on_random_loot_no_mending"
+            "options": "#minecraft:on_random_loot"
           },
           "name": "minecraft:diamond_leggings",
           "weight": 3
@@ -162,13 +162,13 @@
         {
           "type": "minecraft:item",
           "modifier": {
-            "type": "minecraft:enchant_with_levels",
+            "type": "gamefixes:enchant_with_levels_mending",
             "levels": {
               "type": "minecraft:uniform",
               "max": 39,
               "min": 20
             },
-            "options": "#gamefixes:on_random_loot_no_mending"
+            "options": "#minecraft:on_random_loot"
           },
           "name": "minecraft:diamond_helmet",
           "weight": 3
@@ -176,13 +176,13 @@
         {
           "type": "minecraft:item",
           "modifier": {
-            "type": "minecraft:enchant_with_levels",
+            "type": "gamefixes:enchant_with_levels_mending",
             "levels": {
               "type": "minecraft:uniform",
               "max": 39,
               "min": 20
             },
-            "options": "#gamefixes:on_random_loot_no_mending"
+            "options": "#minecraft:on_random_loot"
           },
           "name": "minecraft:diamond_pickaxe",
           "weight": 3
@@ -190,13 +190,13 @@
         {
           "type": "minecraft:item",
           "modifier": {
-            "type": "minecraft:enchant_with_levels",
+            "type": "gamefixes:enchant_with_levels_mending",
             "levels": {
               "type": "minecraft:uniform",
               "max": 39,
               "min": 20
             },
-            "options": "#gamefixes:on_random_loot_no_mending"
+            "options": "#minecraft:on_random_loot"
           },
           "name": "minecraft:diamond_shovel",
           "weight": 3
@@ -204,13 +204,13 @@
         {
           "type": "minecraft:item",
           "modifier": {
-            "type": "minecraft:enchant_with_levels",
+            "type": "gamefixes:enchant_with_levels_mending",
             "levels": {
               "type": "minecraft:uniform",
               "max": 39,
               "min": 20
             },
-            "options": "#gamefixes:on_random_loot_no_mending"
+            "options": "#minecraft:on_random_loot"
           },
           "name": "minecraft:iron_sword",
           "weight": 3
@@ -218,13 +218,13 @@
         {
           "type": "minecraft:item",
           "modifier": {
-            "type": "minecraft:enchant_with_levels",
+            "type": "gamefixes:enchant_with_levels_mending",
             "levels": {
               "type": "minecraft:uniform",
               "max": 39,
               "min": 20
             },
-            "options": "#gamefixes:on_random_loot_no_mending"
+            "options": "#minecraft:on_random_loot"
           },
           "name": "minecraft:iron_boots",
           "weight": 3
@@ -232,13 +232,13 @@
         {
           "type": "minecraft:item",
           "modifier": {
-            "type": "minecraft:enchant_with_levels",
+            "type": "gamefixes:enchant_with_levels_mending",
             "levels": {
               "type": "minecraft:uniform",
               "max": 39,
               "min": 20
             },
-            "options": "#gamefixes:on_random_loot_no_mending"
+            "options": "#minecraft:on_random_loot"
           },
           "name": "minecraft:iron_chestplate",
           "weight": 3
@@ -246,13 +246,13 @@
         {
           "type": "minecraft:item",
           "modifier": {
-            "type": "minecraft:enchant_with_levels",
+            "type": "gamefixes:enchant_with_levels_mending",
             "levels": {
               "type": "minecraft:uniform",
               "max": 39,
               "min": 20
             },
-            "options": "#gamefixes:on_random_loot_no_mending"
+            "options": "#minecraft:on_random_loot"
           },
           "name": "minecraft:iron_leggings",
           "weight": 3
@@ -260,13 +260,13 @@
         {
           "type": "minecraft:item",
           "modifier": {
-            "type": "minecraft:enchant_with_levels",
+            "type": "gamefixes:enchant_with_levels_mending",
             "levels": {
               "type": "minecraft:uniform",
               "max": 39,
               "min": 20
             },
-            "options": "#gamefixes:on_random_loot_no_mending"
+            "options": "#minecraft:on_random_loot"
           },
           "name": "minecraft:iron_helmet",
           "weight": 3
@@ -274,13 +274,13 @@
         {
           "type": "minecraft:item",
           "modifier": {
-            "type": "minecraft:enchant_with_levels",
+            "type": "gamefixes:enchant_with_levels_mending",
             "levels": {
               "type": "minecraft:uniform",
               "max": 39,
               "min": 20
             },
-            "options": "#gamefixes:on_random_loot_no_mending"
+            "options": "#minecraft:on_random_loot"
           },
           "name": "minecraft:iron_pickaxe",
           "weight": 3
@@ -288,13 +288,13 @@
         {
           "type": "minecraft:item",
           "modifier": {
-            "type": "minecraft:enchant_with_levels",
+            "type": "gamefixes:enchant_with_levels_mending",
             "levels": {
               "type": "minecraft:uniform",
               "max": 39,
               "min": 20
             },
-            "options": "#gamefixes:on_random_loot_no_mending"
+            "options": "#minecraft:on_random_loot"
           },
           "name": "minecraft:iron_shovel",
           "weight": 3
